@@ -8,17 +8,24 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final TextEditingController _firstNumberController = TextEditingController();
-  final TextEditingController _secondNumberController = TextEditingController();
-  final TextEditingController _thirdNumberController = TextEditingController();
+  final TextEditingController _ageController = TextEditingController();
+  final TextEditingController _weightController = TextEditingController();
+  final TextEditingController _heightController = TextEditingController();
+  final TextEditingController _muacController = TextEditingController();
+  final TextEditingController _headCircumferenceController =
+      TextEditingController();
+  final TextEditingController _skinfoldThicknessController =
+      TextEditingController();
 
-  double _result = 0.0;
-
+ 
   @override
   void dispose() {
-    _firstNumberController.dispose();
-    _secondNumberController.dispose();
-    _thirdNumberController.dispose();
+    _ageController.dispose();
+    _weightController.dispose();
+    _heightController.dispose();
+    _muacController.dispose();
+    _headCircumferenceController.dispose();
+    _skinfoldThicknessController.dispose();
     super.dispose();
   }
 
@@ -28,122 +35,171 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         title: const Text('Calculate'),
       ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: ConstrainedBox(
-            constraints: BoxConstraints(
-              minWidth: MediaQuery.of(context).size.width,
-              minHeight: MediaQuery.of(context).size.height -
-                  AppBar().preferredSize.height -
-                  MediaQuery.of(context).padding.top -
-                  MediaQuery.of(context).padding.bottom,
-            ),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
-              child: Column(
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
+          child: Column(
+            //mainAxisAlignment: MainAxisAlignment.center,
+            //crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width / 3,
-                        child: const Text('First Number: '),
-                      ),
-                      const SizedBox(width: 10),
-                      Flexible(
-                        child: TextField(
-                          controller: _firstNumberController,
-                          keyboardType: TextInputType.number,
-                          decoration: const InputDecoration(
-                            border: OutlineInputBorder(),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 20),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width / 3,
-                        child: const Text('Second Number: '),
-                      ),
-                      const SizedBox(width: 10),
-                      Flexible(
-                        child: TextField(
-                          controller: _secondNumberController,
-                          keyboardType: TextInputType.number,
-                          decoration: const InputDecoration(
-                            border: OutlineInputBorder(),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 20),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width / 3,
-                        child: const Text('Third Number: '),
-                      ),
-                      const SizedBox(width: 10),
-                      Flexible(
-                        child: TextField(
-                          controller: _thirdNumberController,
-                          keyboardType: TextInputType.number,
-                          decoration: const InputDecoration(
-                            border: OutlineInputBorder(),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 40),
                   SizedBox(
-                    width: MediaQuery.of(context).size.width / 2,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        double firstNumber =
-                            double.tryParse(_firstNumberController.text) ?? 0.0;
-                        double secondNumber =
-                            double.tryParse(_secondNumberController.text) ??
-                                0.0;
-                        double thirdNumber =
-                            double.tryParse(_thirdNumberController.text) ?? 0.0;
-                        setState(
-                          () {
-                            _result = firstNumber + secondNumber + thirdNumber;
-                          },
-                        );
-                      },
-                      child: const Padding(
-                        padding: EdgeInsets.symmetric(vertical: 10),
-                        child: Text(
-                          'Calculate',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ),
+                    width: MediaQuery.of(context).size.width / 3,
+                    child: const Text('Age: '),
                   ),
-                  const SizedBox(height: 20),
-                  Text(
-                    'Result: $_result',
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
+                  const SizedBox(width: 10),
+                  Flexible(
+                    child: TextField(
+                      controller: _ageController,
+                      keyboardType: TextInputType.number,
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                      ),
                     ),
                   ),
                 ],
               ),
-            ),
+              const SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width / 3,
+                    child: const Text('Weight (Kg): '),
+                  ),
+                  const SizedBox(width: 10),
+                  Flexible(
+                    child: TextField(
+                      controller: _weightController,
+                      keyboardType: TextInputType.number,
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width / 3,
+                    child: const Text('Height (cm): '),
+                  ),
+                  const SizedBox(width: 10),
+                  Flexible(
+                    child: TextField(
+                      controller: _heightController,
+                      keyboardType: TextInputType.number,
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width / 3,
+                    child: const Text('MUAC (cm): '),
+                  ),
+                  const SizedBox(width: 10),
+                  Flexible(
+                    child: TextField(
+                      controller: _muacController,
+                      keyboardType: TextInputType.number,
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width / 3,
+                    child: const Text('head circumference (cm): '),
+                  ),
+                  const SizedBox(width: 10),
+                  Flexible(
+                    child: TextField(
+                      controller: _headCircumferenceController,
+                      keyboardType: TextInputType.number,
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width / 3,
+                    child: const Text('SkinFold thickness (mm): '),
+                  ),
+                  const SizedBox(width: 10),
+                  Flexible(
+                    child: TextField(
+                      controller: _skinfoldThicknessController,
+                      keyboardType: TextInputType.number,
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 40),
+              SizedBox(
+                width: MediaQuery.of(context).size.width / 2,
+                child: ElevatedButton(
+                  onPressed: () {
+                    // double firstNumber =
+                    //     double.tryParse(_firstNumberController.text) ?? 0.0;
+                    // double secondNumber =
+                    //     double.tryParse(_secondNumberController.text) ??
+                    //         0.0;
+                    // double thirdNumber =
+                    //     double.tryParse(_thirdNumberController.text) ?? 0.0;
+                    // setState(
+                    //   () {
+                    //     _result = firstNumber + secondNumber + thirdNumber;
+                    //   },
+                    // );
+                  },
+                  child: const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 10),
+                    child: Text(
+                      'Calculate',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20),
+             const  Text(
+                'Result: ',
+                style:  TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
           ),
         ),
       ),

@@ -24,7 +24,7 @@ class _RegisterPageState extends State<RegisterPage> {
             icon: Icon(
               Icons.chevron_left_rounded,
               color: Theme.of(context).colorScheme.primary,
-              size: 45,
+              size: height * 0.05,
             ),
             onPressed: () {
               Navigator.of(context).pop();
@@ -34,13 +34,13 @@ class _RegisterPageState extends State<RegisterPage> {
         body: SingleChildScrollView(
           child: Column(
             children: [
-              const Padding(
-                padding: EdgeInsets.all(20.0),
+               Padding(
+                padding:const  EdgeInsets.all(20.0),
                 child: Text(
                   "Sign In/ Sign Up",
                   style: TextStyle(
                     fontWeight: FontWeight.w600,
-                    fontSize: 30,
+                    fontSize: height * 0.035,
                     color: Colors.black,
                   ),
                 ),
@@ -64,11 +64,11 @@ class _RegisterPageState extends State<RegisterPage> {
                         },
         
                         autofocus: false,
-                        style: const TextStyle(
-                            fontSize: 16,
+                        style:  TextStyle(
+                            fontSize: height * 0.02,
                             color: Colors.black,
                             fontWeight: FontWeight.w500),
-                        keyboardType: TextInputType.number,
+                        //keyboardType: TextInputType.number,
                         cursorColor: Theme.of(context).colorScheme.primary,
                         textInputAction: TextInputAction.done,
                         // controller: phonenum,
@@ -104,8 +104,48 @@ class _RegisterPageState extends State<RegisterPage> {
                         },
         
                         autofocus: false,
-                        style: const TextStyle(
-                            fontSize: 16,
+                        style:  TextStyle(
+                            fontSize: height * 0.02,
+                            color: Colors.black,
+                            fontWeight: FontWeight.w500),
+                        keyboardType: TextInputType.number,
+                        cursorColor: Theme.of(context).colorScheme.primary,
+                        textInputAction: TextInputAction.done,
+                        // controller: phonenum,
+                        decoration: InputDecoration(
+                          contentPadding:
+                              const EdgeInsets.fromLTRB(20, 15, 20, 15),
+                          hintText: "Phone number",
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: const BorderSide(
+                              width: 0.2,
+                              color: Color.fromRGBO(230, 154, 141, 1),
+                            ),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color: Theme.of(context).colorScheme.primary,
+                                width: 2),
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: height * 0.02,
+                      ),
+                      TextFormField(
+                        validator: (value) {
+                          if (value!.isEmpty || value.length != 10) {
+                            return "Enter correct number";
+                          } else {
+                            return null;
+                          }
+                        },
+        
+                        autofocus: false,
+                        style:  TextStyle(
+                            fontSize:height * 0.02 ,
                             color: Colors.black,
                             fontWeight: FontWeight.w500),
                         keyboardType: TextInputType.number,
@@ -144,11 +184,10 @@ class _RegisterPageState extends State<RegisterPage> {
                         },
         
                         autofocus: false,
-                        style: const TextStyle(
-                            fontSize: 16,
+                        style:  TextStyle(
+                            fontSize: height * 0.02,
                             color: Colors.black,
                             fontWeight: FontWeight.w500),
-                        keyboardType: TextInputType.number,
                         cursorColor: Theme.of(context).colorScheme.primary,
                         textInputAction: TextInputAction.done,
                         // controller: phonenum,
@@ -184,11 +223,11 @@ class _RegisterPageState extends State<RegisterPage> {
                         },
         
                         autofocus: false,
-                        style: const TextStyle(
-                            fontSize: 16,
+                        style:  TextStyle(
+                            fontSize: height * 0.02,
                             color: Colors.black,
                             fontWeight: FontWeight.w500),
-                        keyboardType: TextInputType.number,
+                        keyboardType: TextInputType.emailAddress,
                         cursorColor: Theme.of(context).colorScheme.primary,
                         textInputAction: TextInputAction.done,
                         // controller: phonenum,
@@ -224,8 +263,8 @@ class _RegisterPageState extends State<RegisterPage> {
                         },
         
                         autofocus: false,
-                        style: const TextStyle(
-                            fontSize: 16,
+                        style:  TextStyle(
+                            fontSize: height * 0.02,
                             color: Colors.black,
                             fontWeight: FontWeight.w500),
                         keyboardType: TextInputType.number,
@@ -264,11 +303,10 @@ class _RegisterPageState extends State<RegisterPage> {
                         },
         
                         autofocus: false,
-                        style: const TextStyle(
-                            fontSize: 16,
+                        style:  TextStyle(
+                            fontSize: height * 0.02,
                             color: Colors.black,
                             fontWeight: FontWeight.w500),
-                        keyboardType: TextInputType.number,
                         maxLines: 3,
                         cursorColor: Theme.of(context).colorScheme.primary,
                         textInputAction: TextInputAction.done,
