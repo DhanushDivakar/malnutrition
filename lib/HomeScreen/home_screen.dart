@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
+
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  TextEditingController _firstNumberController = TextEditingController();
-  TextEditingController _secondNumberController = TextEditingController();
-  TextEditingController _thirdNumberController = TextEditingController();
+  final TextEditingController _firstNumberController = TextEditingController();
+  final TextEditingController _secondNumberController = TextEditingController();
+  final TextEditingController _thirdNumberController = TextEditingController();
 
   double _result = 0.0;
 
@@ -24,14 +26,17 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title:const Text('Calculate'),
+        title: const Text('Calculate'),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
           child: ConstrainedBox(
             constraints: BoxConstraints(
               minWidth: MediaQuery.of(context).size.width,
-              minHeight: MediaQuery.of(context).size.height - AppBar().preferredSize.height - MediaQuery.of(context).padding.top - MediaQuery.of(context).padding.bottom,
+              minHeight: MediaQuery.of(context).size.height -
+                  AppBar().preferredSize.height -
+                  MediaQuery.of(context).padding.top -
+                  MediaQuery.of(context).padding.bottom,
             ),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
@@ -44,73 +49,79 @@ class _HomeScreenState extends State<HomeScreen> {
                     children: [
                       SizedBox(
                         width: MediaQuery.of(context).size.width / 3,
-                        child: Text('First Number: '),
+                        child: const Text('First Number: '),
                       ),
-                      SizedBox(width: 10),
+                      const SizedBox(width: 10),
                       Flexible(
                         child: TextField(
                           controller: _firstNumberController,
                           keyboardType: TextInputType.number,
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             border: OutlineInputBorder(),
                           ),
                         ),
                       ),
                     ],
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       SizedBox(
                         width: MediaQuery.of(context).size.width / 3,
-                        child: Text('Second Number: '),
+                        child: const Text('Second Number: '),
                       ),
-                      SizedBox(width: 10),
+                      const SizedBox(width: 10),
                       Flexible(
                         child: TextField(
                           controller: _secondNumberController,
                           keyboardType: TextInputType.number,
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             border: OutlineInputBorder(),
                           ),
                         ),
                       ),
                     ],
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       SizedBox(
                         width: MediaQuery.of(context).size.width / 3,
-                        child: Text('Third Number: '),
+                        child: const Text('Third Number: '),
                       ),
-                      SizedBox(width: 10),
+                      const SizedBox(width: 10),
                       Flexible(
                         child: TextField(
                           controller: _thirdNumberController,
                           keyboardType: TextInputType.number,
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             border: OutlineInputBorder(),
                           ),
                         ),
                       ),
                     ],
                   ),
-                  SizedBox(height: 40),
+                  const SizedBox(height: 40),
                   SizedBox(
                     width: MediaQuery.of(context).size.width / 2,
                     child: ElevatedButton(
                       onPressed: () {
-                        double firstNumber = double.tryParse(_firstNumberController.text) ?? 0.0;
-                        double secondNumber = double.tryParse(_secondNumberController.text) ?? 0.0;
-                        double thirdNumber = double.tryParse(_thirdNumberController.text) ?? 0.0;
-                        setState(() {
-                          _result = firstNumber + secondNumber + thirdNumber;
-                        });
+                        double firstNumber =
+                            double.tryParse(_firstNumberController.text) ?? 0.0;
+                        double secondNumber =
+                            double.tryParse(_secondNumberController.text) ??
+                                0.0;
+                        double thirdNumber =
+                            double.tryParse(_thirdNumberController.text) ?? 0.0;
+                        setState(
+                          () {
+                            _result = firstNumber + secondNumber + thirdNumber;
+                          },
+                        );
                       },
-                      child: Padding(
+                      child: const Padding(
                         padding: EdgeInsets.symmetric(vertical: 10),
                         child: Text(
                           'Calculate',
@@ -122,22 +133,20 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   Text(
                     'Result: $_result',
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                 ],
-              )
-            )
-          )
-        )
-      )
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
-
-
