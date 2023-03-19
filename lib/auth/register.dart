@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+class RegisterPage extends StatefulWidget {
+  const RegisterPage({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<RegisterPage> createState() => _RegisterPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _RegisterPageState extends State<RegisterPage> {
    bool showLoading = false;
   @override
   Widget build(BuildContext context) {
@@ -20,16 +20,16 @@ class _LoginPageState extends State<LoginPage> {
         appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        // leading: IconButton(
-        //   icon: Icon(
-        //     Icons.chevron_left_rounded,
-        //     color: Theme.of(context).colorScheme.primary,
-        //     size: 45,
-        //   ),
-        //   onPressed: () {
-        //     Navigator.of(context).pop();
-        //   },
-        // ),
+        leading: IconButton(
+          icon: Icon(
+            Icons.chevron_left_rounded,
+            color: Theme.of(context).colorScheme.primary,
+            size: 45,
+          ),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
       ),
         body: Column(
         children: [
@@ -48,68 +48,89 @@ class _LoginPageState extends State<LoginPage> {
             padding: const EdgeInsets.all(20.0),
             child: Form(
               //key: formKey,
-              child: TextFormField(
-                validator: (value) {
-                  if (value!.isEmpty || value.length != 10) {
-                    return "Enter correct number";
-                  } else {
-                    return null;
-                  }
-                },
-                maxLength: 10,
-                autofocus: false,
-                style: const TextStyle(
-                    fontSize: 16,
-                    color: Colors.black,
-                    fontWeight: FontWeight.w500),
-                keyboardType: TextInputType.number,
-                cursorColor: Theme.of(context).colorScheme.primary,
-                textInputAction: TextInputAction.done,
-               // controller: phonenum,
-                decoration: InputDecoration(
-                  contentPadding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
-                  hintText: "Phone Number",
-                  prefixIcon: Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 20),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        IntrinsicHeight(
-                          child: Row(
-                            children: [
-                              SizedBox(
-                                height: 20,
-                                width: 20,
-                                child: Image.network('https://upload.wikimedia.org/wikipedia/en/thumb/4/41/Flag_of_India.svg/800px-Flag_of_India.svg.png')
-                              ),
-                              const VerticalDivider(
-                                color: Colors.black26,
-                                thickness: 1,
-                              ),
-                              const Text(
-                                "(+91)",
-                                style: TextStyle(
-                                    color: Colors.black, fontSize: 15),
-                              ),
-                            ],
-                          ),
+              child: Column(
+                children: [
+                  
+                  SizedBox(
+                    height: height * 0.02,
+                  ),
+                   TextFormField(
+                    validator: (value) {
+                      if (value!.isEmpty || value.length != 10) {
+                        return "Enter correct number";
+                      } else {
+                        return null;
+                      }
+                    },
+                   
+                    autofocus: false,
+                    style: const TextStyle(
+                        fontSize: 16,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w500),
+                    keyboardType: TextInputType.number,
+                    cursorColor: Theme.of(context).colorScheme.primary,
+                    textInputAction: TextInputAction.done,
+                   // controller: phonenum,
+                    decoration: InputDecoration(
+                      contentPadding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
+                      hintText: "Name",
+                      
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: const BorderSide(
+                          width: 0.2,
+                          color: Color.fromRGBO(230, 154, 141, 1),
                         ),
-                      ],
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                            color: Theme.of(context).colorScheme.primary, width: 2),
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
                     ),
                   ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: const BorderSide(
-                      width: 0.2,
-                      color: Color.fromRGBO(230, 154, 141, 1),
+                  SizedBox(
+                    height: height * 0.02,
+                  ),
+                  TextFormField(
+                    validator: (value) {
+                      if (value!.isEmpty || value.length != 10) {
+                        return "Enter correct number";
+                      } else {
+                        return null;
+                      }
+                    },
+                   
+                    autofocus: false,
+                    style: const TextStyle(
+                        fontSize: 16,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w500),
+                    keyboardType: TextInputType.number,
+                    cursorColor: Theme.of(context).colorScheme.primary,
+                    textInputAction: TextInputAction.done,
+                   // controller: phonenum,
+                    decoration: InputDecoration(
+                      contentPadding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
+                      hintText: "Name",
+                      
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: const BorderSide(
+                          width: 0.2,
+                          color: Color.fromRGBO(230, 154, 141, 1),
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                            color: Theme.of(context).colorScheme.primary, width: 2),
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
                     ),
                   ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                        color: Theme.of(context).colorScheme.primary, width: 2),
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                ),
+                   
+                ],
               ),
             ),
           ),

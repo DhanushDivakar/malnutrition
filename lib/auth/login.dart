@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:malnutrition/auth/register.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -124,6 +125,7 @@ class _LoginPageState extends State<LoginPage> {
                 minWidth: MediaQuery.of(context).size.width,
                 onPressed: () async {
                    FocusScope.of(context).unfocus();
+                   Navigator.push(context, MaterialPageRoute(builder: (context) => const RegisterPage()));
                   // final isValid = formKey.currentState!.validate();
                   // if (isValid) {
                   //   setState(() {
