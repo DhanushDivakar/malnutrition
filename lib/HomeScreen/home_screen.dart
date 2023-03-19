@@ -24,7 +24,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Calculator'),
+        title:const Text('Calculate'),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -139,3 +139,5 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
+
+
