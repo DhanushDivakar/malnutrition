@@ -17,7 +17,8 @@ class _HomeScreenState extends State<HomeScreen> {
   final TextEditingController _skinfoldThicknessController =
       TextEditingController();
 
- 
+  String malnutritionStatus = '';
+
   @override
   void dispose() {
     _ageController.dispose();
@@ -31,9 +32,12 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final height = MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Calculate'),
+        elevation: 0.5,
+        title: const Text('Malnutrition Chekcer'),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -47,7 +51,12 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   SizedBox(
                     width: MediaQuery.of(context).size.width / 3,
-                    child: const Text('Age: '),
+                    child: Text(
+                      'Age: ',
+                      style: TextStyle(
+                        fontSize: height * 0.025,
+                      ),
+                    ),
                   ),
                   const SizedBox(width: 10),
                   Flexible(
@@ -67,7 +76,12 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   SizedBox(
                     width: MediaQuery.of(context).size.width / 3,
-                    child: const Text('Weight (Kg): '),
+                    child: Text(
+                      'Weight (Kg): ',
+                      style: TextStyle(
+                        fontSize: height * 0.025,
+                      ),
+                    ),
                   ),
                   const SizedBox(width: 10),
                   Flexible(
@@ -87,7 +101,12 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   SizedBox(
                     width: MediaQuery.of(context).size.width / 3,
-                    child: const Text('Height (cm): '),
+                    child: Text(
+                      'Height (cm): ',
+                      style: TextStyle(
+                        fontSize: height * 0.025,
+                      ),
+                    ),
                   ),
                   const SizedBox(width: 10),
                   Flexible(
@@ -107,7 +126,12 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   SizedBox(
                     width: MediaQuery.of(context).size.width / 3,
-                    child: const Text('MUAC (cm): '),
+                    child: Text(
+                      'MUAC (cm): ',
+                      style: TextStyle(
+                        fontSize: height * 0.025,
+                      ),
+                    ),
                   ),
                   const SizedBox(width: 10),
                   Flexible(
@@ -122,12 +146,42 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
               const SizedBox(height: 20),
+              // Row(
+              //   mainAxisAlignment: MainAxisAlignment.center,
+              //   children: [
+              //     SizedBox(
+              //       width: MediaQuery.of(context).size.width / 3,
+              //       child: Text(
+              //         'BMI: ',
+              //         style: TextStyle(
+              //           fontSize: height * 0.025,
+              //         ),
+              //       ),
+              //     ),
+              //     const SizedBox(width: 10),
+              //     Flexible(
+              //       child: TextField(
+              //         controller: _bmiController,
+              //         keyboardType: TextInputType.number,
+              //         decoration: const InputDecoration(
+              //           border: OutlineInputBorder(),
+              //         ),
+              //       ),
+              //     ),
+              //   ],
+              // ),
+              const SizedBox(height: 20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   SizedBox(
                     width: MediaQuery.of(context).size.width / 3,
-                    child: const Text('head circumference (cm): '),
+                    child: Text(
+                      'head circumference (cm): ',
+                      style: TextStyle(
+                        fontSize: height * 0.025,
+                      ),
+                    ),
                   ),
                   const SizedBox(width: 10),
                   Flexible(
@@ -147,7 +201,12 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   SizedBox(
                     width: MediaQuery.of(context).size.width / 3,
-                    child: const Text('SkinFold thickness (mm): '),
+                    child: Text(
+                      'SkinFold thickness (mm): ',
+                      style: TextStyle(
+                        fontSize: height * 0.025,
+                      ),
+                    ),
                   ),
                   const SizedBox(width: 10),
                   Flexible(
@@ -166,18 +225,30 @@ class _HomeScreenState extends State<HomeScreen> {
                 width: MediaQuery.of(context).size.width / 2,
                 child: ElevatedButton(
                   onPressed: () {
-                    // double firstNumber =
-                    //     double.tryParse(_firstNumberController.text) ?? 0.0;
-                    // double secondNumber =
-                    //     double.tryParse(_secondNumberController.text) ??
-                    //         0.0;
-                    // double thirdNumber =
-                    //     double.tryParse(_thirdNumberController.text) ?? 0.0;
-                    // setState(
-                    //   () {
-                    //     _result = firstNumber + secondNumber + thirdNumber;
-                    //   },
-                    // );
+                    double age = double.tryParse(_ageController.text) ?? 0.0;
+                    double weight =
+                        double.tryParse(_weightController.text) ?? 0.0;
+                    double height =
+                        double.tryParse(_heightController.text) ?? 0.0;
+                    double muac = double.tryParse(_muacController.text) ?? 0.0;
+                    double headCircumference =
+                        double.tryParse(_headCircumferenceController.text) ??
+                            0.0;
+                    double skinfoldThickness =
+                        double.tryParse(_skinfoldThicknessController.text) ??
+                            0.0;
+
+                    // Calculate BMI
+                    double heightInMeters = height / 100;
+                    double bmi = weight / (heightInMeters * heightInMeters);
+                    print(bmi);
+                   
+                        
+                    setState(() {
+                        malnutritionStatus = getMalnutritionStatus(
+                        age, bmi, muac, headCircumference, skinfoldThickness);
+                      
+                    });
                   },
                   child: const Padding(
                     padding: EdgeInsets.symmetric(vertical: 10),
@@ -192,9 +263,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
               const SizedBox(height: 20),
-             const  Text(
-                'Result: ',
-                style:  TextStyle(
+              Text(
+                'Result:  $malnutritionStatus ',
+                style: const TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
                 ),
@@ -205,4 +276,49 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
+}
+
+String getMalnutritionStatus(double age, double bmi, double muac,
+    double headCircumference, double skinfoldThickness) {
+  String status = '';
+
+  if (age < 6) {
+    if (bmi < 16) {
+      status = 'Severe Acute Malnutrition';
+    } else if (bmi >= 16 && bmi < 17) {
+      status = 'Moderate Acute Malnutrition';
+    } else if (bmi >= 17 && bmi < 18.5) {
+      status = 'Mild Acute Malnutrition';
+    } else {
+      status = 'Normal';
+    }
+  } else {
+    if (bmi < 18.5) {
+      if (muac < 12.5) {
+        status = 'Severe Chronic Malnutrition';
+      } else if (muac >= 12.5 && muac < 13.5) {
+        status = 'Moderate Chronic Malnutrition';
+      } else if (muac >= 13.5 && muac < 14.5) {
+        status = 'Mild Chronic Malnutrition';
+      } else {
+        status = 'Normal';
+      }
+    } else {
+      if (headCircumference < 31) {
+        status = 'Microcephaly';
+      } else if (headCircumference >= 31 && headCircumference < 34) {
+        status = 'Normal Head Circumference';
+      } else {
+        status = 'Macrocephaly';
+      }
+
+      if (skinfoldThickness >= 10) {
+        status += ' with Excess Fat';
+      } else {
+        status += ' with Normal Fat';
+      }
+    }
+  }
+
+  return status;
 }
