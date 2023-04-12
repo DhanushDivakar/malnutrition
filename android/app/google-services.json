@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "802476629116",
+    "project_id": "malnutrition-59515",
+    "storage_bucket": "malnutrition-59515.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:802476629116:android:ddd7273b95768ac24fbdf9",
+        "android_client_info": {
+          "package_name": "com.example.malnutrition"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "802476629116-02vb5m7f3018jl5po8ocfln0hiqbna60.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.malnutrition",
+            "certificate_hash": "7b8824c20410aea157df19092446e77612456cb8"
+          }
+        },
+        {
+          "client_id": "802476629116-vaek7dakselncg99m353nnsj5ga3fi8a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCF9rm8sWy6cPJCs1N1v8kmGhbHINmPooM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "802476629116-vaek7dakselncg99m353nnsj5ga3fi8a.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
