@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:malnutrition/auth/register.dart';
 
@@ -9,6 +11,10 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final TextEditingController phonenum = TextEditingController();
+  final auth = FirebaseAuth.instance;
+  final formKey = GlobalKey<FormState>();
+
   bool showLoading = false;
   @override
   Widget build(BuildContext context) {
@@ -56,6 +62,7 @@ class _LoginPageState extends State<LoginPage> {
                 child: Form(
                   //key: formKey,
                   child: TextFormField(
+                    controller: phonenum,
                     validator: (value) {
                       if (value!.isEmpty || value.length != 10) {
                         return "Enter correct number";
@@ -132,149 +139,26 @@ class _LoginPageState extends State<LoginPage> {
                     minWidth: MediaQuery.of(context).size.width,
                     onPressed: () async {
                       FocusScope.of(context).unfocus();
+                      final isValid = formKey.currentState!.validate();
+                      if (isValid) {
+                    setState(() {
+                      showLoading = true;
+                    });
+                    CollectionReference collectionRef =
+                        FirebaseFirestore.instance.collection('users');
+                         QuerySnapshot querySnapshot = await collectionRef
+                        .where('phoneNumber', isEqualTo: phonenum.text)
+                        .get();
+                         final allData =
+                        querySnapshot.docs.map((doc) => doc.data()).toList();
+                      }
+                      
                       Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const RegisterPage()));
-                      // final isValid = formKey.currentState!.validate();
-                      // if (isValid) {
-                      //   setState(() {
-                      //     showLoading = true;
-                      //   });
-                      //   CollectionReference collectionRef =
-                      //       FirebaseFirestore.instance.collection('users');
-        
-                      //   // Get docs from collection reference
-                      //   QuerySnapshot querySnapshot = await collectionRef
-                      //       .where('phoneNumber', isEqualTo: phonenum.text)
-                      //       .get();
-                      //   //print(querySnapshot);
-                      //   // if(querySnapshot == null){
-                      //   //   print('new user');
-                      //   // }else{
-                      //   //   print('existing user');
-                      //   // }
-        
-                      //   // Get data from docs and convert map to List
-                      //   final allData =
-                      //       querySnapshot.docs.map((doc) => doc.data()).toList();
-                      //   if (allData.isEmpty) {
-                      //     print('new user');
-                      //     Navigator.pushReplacement(
-                      //       context,
-                      //       MaterialPageRoute(
-                      //         builder: (context) => SignUp(
-                      //           phoneNumber: phonenum.text,
-                      //         ),
-                      //       ),
-                      //     );
-                      //   } else {
-                      //     print('old user');
-                      //     await auth.verifyPhoneNumber(
-                      //         phoneNumber: '+91${phonenum.text}',
-                      //         verificationCompleted: (_) {
-                      //           setState(() {
-                      //             showLoading = false;
-                      //           });
-                      //         },
-                      //         verificationFailed: (e) {
-                      //           final snackBar = SnackBar(
-                      //             behavior: SnackBarBehavior.floating,
-                      //             backgroundColor: Colors.transparent,
-                      //             elevation: 0,
-                      //             content: Container(
-                      //               padding: const EdgeInsets.all(8),
-                      //               decoration: BoxDecoration(
-                      //                 color: const Color.fromRGBO(138, 80, 196, 60),
-                      //                 borderRadius: BorderRadius.circular(10),
-                      //               ),
-                      //               child: Row(
-                      //                 mainAxisAlignment: MainAxisAlignment.center,
-                      //                 children: [
-                      //                   Expanded(
-                      //                     child: Text(
-                      //                       e.toString(),
-                      //                       textAlign: TextAlign.center,
-                      //                       style: TextStyle(fontSize: 15),
-                      //                     ),
-                      //                   ),
-                      //                 ],
-                      //               ),
-                      //             ),
-                      //           );
-                      //           ScaffoldMessenger.of(context)
-                      //               .showSnackBar(snackBar);
-                      //           setState(() {
-                      //             showLoading = false;
-                      //           });
-                      //           print(e.message);
-                      //         },
-                      //         codeSent: (String verificationId, int? token) async {
-                      //           Navigator.push(
-                      //             context,
-                      //             MaterialPageRoute(
-                      //               builder: (context) => OtpScreen(
-                      //                 verificationId: verificationId,
-                      //               ),
-                      //             ),
-                      //           );
-                      //           // await FirebaseFirestore.instance
-                      //           //     .collection('users')
-                      //           //     .doc(auth.currentUser!.uid)
-                      //           //     .set({
-                      //           //   'phoneNumber': phonenum.text,
-                      //           // });
-                      //           // final  uid = FirebaseAuth.instance.currentUser!.uid;
-                      //           // print(uid);
-        
-                      //           setState(() {
-                      //             showLoading = false;
-                      //           });
-                      //         },
-                      //         codeAutoRetrievalTimeout: (e) {
-                      //           // final snackBar = SnackBar(
-                      //           //   behavior: SnackBarBehavior.floating,
-                      //           //   backgroundColor: Colors.transparent,
-                      //           //   elevation: 0,
-                      //           //   content: Container(
-                      //           //     padding: const EdgeInsets.all(8),
-                      //           //     decoration: BoxDecoration(
-                      //           //       color: const Color.fromRGBO(138, 80, 196, 60),
-                      //           //       borderRadius: BorderRadius.circular(10),
-                      //           //     ),
-                      //           //     child: Row(
-                      //           //       mainAxisAlignment: MainAxisAlignment.center,
-                      //           //       children: [
-                      //           //         Expanded(
-                      //           //           child: Text(
-                      //           //             e,
-                      //           //             textAlign: TextAlign.center,
-                      //           //             style: TextStyle(fontSize: 15),
-                      //           //           ),
-                      //           //         ),
-                      //           //       ],
-                      //           //     ),
-                      //           //   ),
-                      //           // );
-                      //           // ScaffoldMessenger.of(context).showSnackBar(
-                      //           //     snackBar);
-                      //           setState(() {
-                      //             showLoading = false;
-                      //           });
-                      //           print(e);
-                      //         });
-        
-                      //     print(allData);
-        
-                      //     //FirebaseFirestore.instance.collection('users').doc();
-                      //     print(phonenum.text);
-                      //     // print(FirebaseAuth.instance.currentUser!.uid);
-                      //     // if(FirebaseAuth.instance.currentUser!.uid.isNotEmpty){
-                      //     //   print("exixting user");
-                      //     //
-                      //     // }
-                      //   }
-                      // }
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const RegisterPage(),
+                        ),
+                      );
                     },
                     child: showLoading
                         ? const CircularProgressIndicator(
