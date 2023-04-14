@@ -370,6 +370,35 @@ class _RegisterPageState extends State<RegisterPage> {
                                   showLoading = false;
                                 });
                               },
+                              
+                              codeSent: (String signUpVerificationId,
+                                  int? token) async {
+                                print('verificationID $signUpVerificationId');
+                             
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => SignupOtp(
+                                      signUpVerificationID:
+                                          signUpVerificationId,
+                                      phoneNumber: phonenumController,
+                                      userName: nameController.text,
+                                      email: emailController.text,
+                                      dob: dobController.text,
+                                      aadharNumber: aadharController.text,
+                                      address: addressController.text,
+                                      gender: genderController.text,
+                                    ),
+                                  ),
+                                );
+                                final uid =
+                                    FirebaseAuth.instance.currentUser!.uid;
+                                print('uid $uid');
+
+                                setState(() {
+                                  showLoading = false;
+                                });
+                              },
                               verificationFailed: (e) {
                                 final snackBar = SnackBar(
                                   behavior: SnackBarBehavior.floating,
@@ -403,34 +432,6 @@ class _RegisterPageState extends State<RegisterPage> {
                                   showLoading = false;
                                 });
                                 print("error msg $e.message");
-                              },
-                              codeSent: (String signUpVerificationId,
-                                  int? token) async {
-                                print('verificationID $signUpVerificationId');
-                             
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => SignupOtp(
-                                      signUpVerificationID:
-                                          signUpVerificationId,
-                                      phoneNumber: phonenumController,
-                                      userName: nameController.text,
-                                      email: emailController.text,
-                                      dob: dobController.text,
-                                      aadharNumber: aadharController.text,
-                                      address: addressController.text,
-                                      gender: genderController.text,
-                                    ),
-                                  ),
-                                );
-                                final uid =
-                                    FirebaseAuth.instance.currentUser!.uid;
-                                print('uid $uid');
-
-                                setState(() {
-                                  showLoading = false;
-                                });
                               },
                               timeout: const Duration(seconds: 120),
                               codeAutoRetrievalTimeout: (e) {
@@ -466,7 +467,9 @@ class _RegisterPageState extends State<RegisterPage> {
                                   showLoading = false;
                                 });
                                 print('error $e');
-                              });
+                              }
+                              );
+                              
                         } catch (e) {
                           print('err $e');
                         }

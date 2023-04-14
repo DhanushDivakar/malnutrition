@@ -4,9 +4,10 @@ import 'package:flutter/material.dart';
 import 'auth/login.dart';
 
 Future<void> main() async {
-  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
  
+ WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+
   runApp(
     const MyApp(),
   );
