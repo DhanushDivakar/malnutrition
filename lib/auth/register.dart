@@ -358,7 +358,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         });
                         try {
                           await auth.verifyPhoneNumber(
-                              phoneNumber: '+91$phonenumController',
+                              phoneNumber: '+91 $phonenumController',
                               verificationCompleted: (_) {
                                 setState(() {
                                   showLoading = false;
