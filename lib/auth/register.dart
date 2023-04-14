@@ -351,14 +351,20 @@ class _RegisterPageState extends State<RegisterPage> {
                     minWidth: MediaQuery.of(context).size.width,
                     onPressed: () async {
                       FocusScope.of(context).unfocus();
+                     //print(widget.phoneNumber);
+                          
                       final isValid = _formKey.currentState!.validate();
                       if (isValid) {
                         setState(() {
                           showLoading = true;
                         });
                         try {
+                           final phoneNumber = widget.phoneNumber;
+                          print('widget $phoneNumber');
+                        
                           await auth.verifyPhoneNumber(
-                              phoneNumber: '+91 $phonenumController',
+                            
+                              phoneNumber: '+91$phoneNumber',
                               verificationCompleted: (_) {
                                 setState(() {
                                   showLoading = false;
@@ -384,7 +390,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                           child: Text(
                                             e.toString(),
                                             textAlign: TextAlign.center,
-                                            style: TextStyle(fontSize: 15),
+                                            style:const  TextStyle(fontSize: 15),
                                           ),
                                         ),
                                       ],
@@ -396,18 +402,18 @@ class _RegisterPageState extends State<RegisterPage> {
                                 setState(() {
                                   showLoading = false;
                                 });
-                                print(e.message);
+                                print("error msg $e.message");
                               },
-                              codeSent: (String SignUpVerificationId,
+                              codeSent: (String signUpVerificationId,
                                   int? token) async {
-                                print(SignUpVerificationId);
-                                print("Hiii");
+                                print('verificationID $signUpVerificationId');
+                             
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) => SignupOtp(
                                       signUpVerificationID:
-                                          SignUpVerificationId,
+                                          signUpVerificationId,
                                       phoneNumber: phonenumController,
                                       userName: nameController.text,
                                       email: emailController.text,
@@ -420,12 +426,13 @@ class _RegisterPageState extends State<RegisterPage> {
                                 );
                                 final uid =
                                     FirebaseAuth.instance.currentUser!.uid;
-                                print(uid);
+                                print('uid $uid');
 
                                 setState(() {
                                   showLoading = false;
                                 });
                               },
+                              timeout: const Duration(seconds: 120),
                               codeAutoRetrievalTimeout: (e) {
                                 final snackBar = SnackBar(
                                   behavior: SnackBarBehavior.floating,
@@ -458,10 +465,10 @@ class _RegisterPageState extends State<RegisterPage> {
                                 setState(() {
                                   showLoading = false;
                                 });
-                                print(e);
+                                print('error $e');
                               });
                         } catch (e) {
-                          print(e);
+                          print('err $e');
                         }
                       }
                     },
