@@ -59,20 +59,20 @@ class _RegisterPageState extends State<RegisterPage> {
               Padding(
                 padding: const EdgeInsets.all(20.0),
                 child: Form(
-                  //key: formKey,
+                  key: _formKey,
                   child: Column(
                     children: [
                       SizedBox(
                         height: height * 0.02,
                       ),
                       TextFormField(
-                        validator: (value) {
-                          if (value!.isEmpty || value.length != 10) {
-                            return "Enter correct number";
-                          } else {
-                            return null;
-                          }
-                        },
+                        // validator: (value) {
+                        //   if (value!.isEmpty || value.length != 10) {
+                        //     return "Enter correct number";
+                        //   } else {
+                        //     return null;
+                        //   }
+                        // },
 
                         autofocus: false,
                         //controller: ,
@@ -107,13 +107,13 @@ class _RegisterPageState extends State<RegisterPage> {
                         height: height * 0.02,
                       ),
                       TextFormField(
-                        validator: (value) {
-                          if (value!.isEmpty || value.length != 10) {
-                            return "Enter correct number";
-                          } else {
-                            return null;
-                          }
-                        },
+                        // validator: (value) {
+                        //   if (value!.isEmpty || value.length != 10) {
+                        //     return "Enter correct number";
+                        //   } else {
+                        //     return null;
+                        //   }
+                        // },
                         autofocus: false,
                         style: TextStyle(
                             fontSize: height * 0.02,
@@ -146,13 +146,13 @@ class _RegisterPageState extends State<RegisterPage> {
                         height: height * 0.02,
                       ),
                       TextFormField(
-                        validator: (value) {
-                          if (value!.isEmpty || value.length != 10) {
-                            return "Enter correct number";
-                          } else {
-                            return null;
-                          }
-                        },
+                        // validator: (value) {
+                        //   if (value!.isEmpty || value.length != 10) {
+                        //     return "Enter correct number";
+                        //   } else {
+                        //     return null;
+                        //   }
+                        // },
                         autofocus: false,
                         style: TextStyle(
                             fontSize: height * 0.02,
@@ -185,13 +185,13 @@ class _RegisterPageState extends State<RegisterPage> {
                         height: height * 0.02,
                       ),
                       TextFormField(
-                        validator: (value) {
-                          if (value!.isEmpty || value.length != 10) {
-                            return "Enter correct number";
-                          } else {
-                            return null;
-                          }
-                        },
+                        // validator: (value) {
+                        //   if (value!.isEmpty || value.length != 10) {
+                        //     return "Enter correct number";
+                        //   } else {
+                        //     return null;
+                        //   }
+                        // },
                         autofocus: false,
                         style: TextStyle(
                             fontSize: height * 0.02,
@@ -223,13 +223,13 @@ class _RegisterPageState extends State<RegisterPage> {
                         height: height * 0.02,
                       ),
                       TextFormField(
-                        validator: (value) {
-                          if (value!.isEmpty || value.length != 10) {
-                            return "Enter correct number";
-                          } else {
-                            return null;
-                          }
-                        },
+                        // validator: (value) {
+                        //   if (value!.isEmpty || value.length != 10) {
+                        //     return "Enter correct number";
+                        //   } else {
+                        //     return null;
+                        //   }
+                        // },
                         autofocus: false,
                         style: TextStyle(
                             fontSize: height * 0.02,
@@ -262,13 +262,13 @@ class _RegisterPageState extends State<RegisterPage> {
                         height: height * 0.02,
                       ),
                       TextFormField(
-                        validator: (value) {
-                          if (value!.isEmpty || value.length != 10) {
-                            return "Enter correct number";
-                          } else {
-                            return null;
-                          }
-                        },
+                        // validator: (value) {
+                        //   if (value!.isEmpty || value.length != 10) {
+                        //     return "Enter correct number";
+                        //   } else {
+                        //     return null;
+                        //   }
+                        // },
                         autofocus: false,
                         style: TextStyle(
                             fontSize: height * 0.02,
@@ -301,13 +301,13 @@ class _RegisterPageState extends State<RegisterPage> {
                         height: height * 0.02,
                       ),
                       TextFormField(
-                        validator: (value) {
-                          if (value!.isEmpty || value.length != 10) {
-                            return "Enter correct number";
-                          } else {
-                            return null;
-                          }
-                        },
+                        // validator: (value) {
+                        //   if (value!.isEmpty || value.length != 10) {
+                        //     return "Enter correct number";
+                        //   } else {
+                        //     return null;
+                        //   }
+                        // },
                         autofocus: false,
                         style: TextStyle(
                             fontSize: height * 0.02,

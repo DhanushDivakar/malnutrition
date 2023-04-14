@@ -61,7 +61,7 @@ class _LoginPageState extends State<LoginPage> {
               Padding(
                 padding: const EdgeInsets.all(20.0),
                 child: Form(
-                  //key: formKey,
+                  key: formKey,
                   child: TextFormField(
                     controller: phonenum,
                     validator: (value) {
@@ -139,6 +139,7 @@ class _LoginPageState extends State<LoginPage> {
                     //padding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
                     minWidth: MediaQuery.of(context).size.width,
                     onPressed: () async {
+                      print(phonenum.text);
                       FocusScope.of(context).unfocus();
                       final isValid = formKey.currentState!.validate();
                       if (isValid) {
