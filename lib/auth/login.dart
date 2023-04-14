@@ -12,7 +12,7 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController phonenum = TextEditingController();
-  final auth = FirebaseAuth.instance;
+ // final auth = FirebaseAuth.instance;
   final formKey = GlobalKey<FormState>();
 
   bool showLoading = false;
