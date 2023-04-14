@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:malnutrition/auth/otp.dart';
 import 'package:malnutrition/auth/register.dart';
 
 class LoginPage extends StatefulWidget {
@@ -12,7 +13,7 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController phonenum = TextEditingController();
- // final auth = FirebaseAuth.instance;
+  final auth = FirebaseAuth.instance;
   final formKey = GlobalKey<FormState>();
 
   bool showLoading = false;
@@ -141,24 +142,100 @@ class _LoginPageState extends State<LoginPage> {
                       FocusScope.of(context).unfocus();
                       final isValid = formKey.currentState!.validate();
                       if (isValid) {
-                    setState(() {
-                      showLoading = true;
-                    });
-                    CollectionReference collectionRef =
-                        FirebaseFirestore.instance.collection('users');
-                         QuerySnapshot querySnapshot = await collectionRef
-                        .where('phoneNumber', isEqualTo: phonenum.text)
-                        .get();
-                         final allData =
-                        querySnapshot.docs.map((doc) => doc.data()).toList();
+                        setState(() {
+                          showLoading = true;
+                        });
+                        CollectionReference collectionRef =
+                            FirebaseFirestore.instance.collection('users');
+
+                        // Get docs from collection reference
+                        QuerySnapshot querySnapshot = await collectionRef
+                            .where('phoneNumber', isEqualTo: phonenum.text)
+                            .get();
+                        final allData = querySnapshot.docs
+                            .map((doc) => doc.data())
+                            .toList();
+                        if (allData.isEmpty) {
+                          print('new user');
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => RegisterPage(
+                                phoneNumber: phonenum.text,
+                              ),
+                            ),
+                          );
+                        } else {
+                          print('old user');
+                          await auth.verifyPhoneNumber(
+                              phoneNumber: '+91${phonenum.text}',
+                              verificationCompleted: (_) {
+                                setState(() {
+                                  showLoading = false;
+                                });
+                              },
+                              verificationFailed: (e) {
+                                final snackBar = SnackBar(
+                                  behavior: SnackBarBehavior.floating,
+                                  backgroundColor: Colors.transparent,
+                                  elevation: 0,
+                                  content: Container(
+                                    padding: const EdgeInsets.all(8),
+                                    decoration: BoxDecoration(
+                                      color: const Color.fromRGBO(
+                                          138, 80, 196, 60),
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Expanded(
+                                          child: Text(
+                                            e.toString(),
+                                            textAlign: TextAlign.center,
+                                            style:
+                                                const TextStyle(fontSize: 15),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(snackBar);
+                                setState(() {
+                                  showLoading = false;
+                                });
+                                print(e.message);
+                              },
+                              codeSent:
+                                  (String verificationId, int? token) async {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => OtpPage(
+                                      verificationId: verificationId,
+                                    ),
+                                  ),
+                                );
+
+                                setState(() {
+                                  showLoading = false;
+                                });
+                              },
+                              codeAutoRetrievalTimeout: (e) {
+                                setState(() {
+                                  showLoading = false;
+                                });
+                                print(e);
+                              });
+
+                          print(allData);
+
+                          print(phonenum.text);
+                        }
                       }
-                      
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const RegisterPage(),
-                        ),
-                      );
                     },
                     child: showLoading
                         ? const CircularProgressIndicator(

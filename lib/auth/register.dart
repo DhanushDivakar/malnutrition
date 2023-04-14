@@ -1,8 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:malnutrition/auth/otp.dart';
 
 class RegisterPage extends StatefulWidget {
-  const RegisterPage({super.key});
+  final String phoneNumber;
+  const RegisterPage({super.key, required this.phoneNumber});
 
   @override
   State<RegisterPage> createState() => _RegisterPageState();
@@ -10,6 +12,15 @@ class RegisterPage extends StatefulWidget {
 
 class _RegisterPageState extends State<RegisterPage> {
   bool showLoading = false;
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController dobController = TextEditingController();
+  final TextEditingController phonenumController = TextEditingController();
+  final TextEditingController addressController = TextEditingController();
+  final TextEditingController aadharController = TextEditingController();
+  final TextEditingController genderController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+  final FirebaseAuth auth = FirebaseAuth.instance;
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
@@ -34,8 +45,8 @@ class _RegisterPageState extends State<RegisterPage> {
         body: SingleChildScrollView(
           child: Column(
             children: [
-               Padding(
-                padding:const  EdgeInsets.all(20.0),
+              Padding(
+                padding: const EdgeInsets.all(20.0),
                 child: Text(
                   "Sign In/ Sign Up",
                   style: TextStyle(
@@ -62,16 +73,17 @@ class _RegisterPageState extends State<RegisterPage> {
                             return null;
                           }
                         },
-        
+
                         autofocus: false,
-                        style:  TextStyle(
+                        //controller: ,
+                        style: TextStyle(
                             fontSize: height * 0.02,
                             color: Colors.black,
                             fontWeight: FontWeight.w500),
                         //keyboardType: TextInputType.number,
                         cursorColor: Theme.of(context).colorScheme.primary,
                         textInputAction: TextInputAction.done,
-                        // controller: phonenum,
+                        controller: nameController,
                         decoration: InputDecoration(
                           contentPadding:
                               const EdgeInsets.fromLTRB(20, 15, 20, 15),
@@ -102,16 +114,15 @@ class _RegisterPageState extends State<RegisterPage> {
                             return null;
                           }
                         },
-        
                         autofocus: false,
-                        style:  TextStyle(
+                        style: TextStyle(
                             fontSize: height * 0.02,
                             color: Colors.black,
                             fontWeight: FontWeight.w500),
                         keyboardType: TextInputType.number,
                         cursorColor: Theme.of(context).colorScheme.primary,
                         textInputAction: TextInputAction.done,
-                        // controller: phonenum,
+                        controller: phonenumController,
                         decoration: InputDecoration(
                           contentPadding:
                               const EdgeInsets.fromLTRB(20, 15, 20, 15),
@@ -142,16 +153,15 @@ class _RegisterPageState extends State<RegisterPage> {
                             return null;
                           }
                         },
-        
                         autofocus: false,
-                        style:  TextStyle(
-                            fontSize:height * 0.02 ,
+                        style: TextStyle(
+                            fontSize: height * 0.02,
                             color: Colors.black,
                             fontWeight: FontWeight.w500),
                         keyboardType: TextInputType.number,
                         cursorColor: Theme.of(context).colorScheme.primary,
                         textInputAction: TextInputAction.done,
-                        // controller: phonenum,
+                        controller: dobController,
                         decoration: InputDecoration(
                           contentPadding:
                               const EdgeInsets.fromLTRB(20, 15, 20, 15),
@@ -182,15 +192,14 @@ class _RegisterPageState extends State<RegisterPage> {
                             return null;
                           }
                         },
-        
                         autofocus: false,
-                        style:  TextStyle(
+                        style: TextStyle(
                             fontSize: height * 0.02,
                             color: Colors.black,
                             fontWeight: FontWeight.w500),
                         cursorColor: Theme.of(context).colorScheme.primary,
                         textInputAction: TextInputAction.done,
-                        // controller: phonenum,
+                        controller: genderController,
                         decoration: InputDecoration(
                           contentPadding:
                               const EdgeInsets.fromLTRB(20, 15, 20, 15),
@@ -221,16 +230,15 @@ class _RegisterPageState extends State<RegisterPage> {
                             return null;
                           }
                         },
-        
                         autofocus: false,
-                        style:  TextStyle(
+                        style: TextStyle(
                             fontSize: height * 0.02,
                             color: Colors.black,
                             fontWeight: FontWeight.w500),
                         keyboardType: TextInputType.emailAddress,
                         cursorColor: Theme.of(context).colorScheme.primary,
                         textInputAction: TextInputAction.done,
-                        // controller: phonenum,
+                        controller: emailController,
                         decoration: InputDecoration(
                           contentPadding:
                               const EdgeInsets.fromLTRB(20, 15, 20, 15),
@@ -261,16 +269,15 @@ class _RegisterPageState extends State<RegisterPage> {
                             return null;
                           }
                         },
-        
                         autofocus: false,
-                        style:  TextStyle(
+                        style: TextStyle(
                             fontSize: height * 0.02,
                             color: Colors.black,
                             fontWeight: FontWeight.w500),
                         keyboardType: TextInputType.number,
                         cursorColor: Theme.of(context).colorScheme.primary,
                         textInputAction: TextInputAction.done,
-                        // controller: phonenum,
+                        controller: aadharController,
                         decoration: InputDecoration(
                           contentPadding:
                               const EdgeInsets.fromLTRB(20, 15, 20, 15),
@@ -301,16 +308,15 @@ class _RegisterPageState extends State<RegisterPage> {
                             return null;
                           }
                         },
-        
                         autofocus: false,
-                        style:  TextStyle(
+                        style: TextStyle(
                             fontSize: height * 0.02,
                             color: Colors.black,
                             fontWeight: FontWeight.w500),
                         maxLines: 3,
                         cursorColor: Theme.of(context).colorScheme.primary,
                         textInputAction: TextInputAction.done,
-                        // controller: phonenum,
+                        controller: addressController,
                         decoration: InputDecoration(
                           contentPadding:
                               const EdgeInsets.fromLTRB(20, 15, 20, 15),
@@ -345,149 +351,119 @@ class _RegisterPageState extends State<RegisterPage> {
                     minWidth: MediaQuery.of(context).size.width,
                     onPressed: () async {
                       FocusScope.of(context).unfocus();
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const OtpPage()));
-                      // final isValid = formKey.currentState!.validate();
-                      // if (isValid) {
-                      //   setState(() {
-                      //     showLoading = true;
-                      //   });
-                      //   CollectionReference collectionRef =
-                      //       FirebaseFirestore.instance.collection('users');
-        
-                      //   // Get docs from collection reference
-                      //   QuerySnapshot querySnapshot = await collectionRef
-                      //       .where('phoneNumber', isEqualTo: phonenum.text)
-                      //       .get();
-                      //   //print(querySnapshot);
-                      //   // if(querySnapshot == null){
-                      //   //   print('new user');
-                      //   // }else{
-                      //   //   print('existing user');
-                      //   // }
-        
-                      //   // Get data from docs and convert map to List
-                      //   final allData =
-                      //       querySnapshot.docs.map((doc) => doc.data()).toList();
-                      //   if (allData.isEmpty) {
-                      //     print('new user');
-                      //     Navigator.pushReplacement(
-                      //       context,
-                      //       MaterialPageRoute(
-                      //         builder: (context) => SignUp(
-                      //           phoneNumber: phonenum.text,
-                      //         ),
-                      //       ),
-                      //     );
-                      //   } else {
-                      //     print('old user');
-                      //     await auth.verifyPhoneNumber(
-                      //         phoneNumber: '+91${phonenum.text}',
-                      //         verificationCompleted: (_) {
-                      //           setState(() {
-                      //             showLoading = false;
-                      //           });
-                      //         },
-                      //         verificationFailed: (e) {
-                      //           final snackBar = SnackBar(
-                      //             behavior: SnackBarBehavior.floating,
-                      //             backgroundColor: Colors.transparent,
-                      //             elevation: 0,
-                      //             content: Container(
-                      //               padding: const EdgeInsets.all(8),
-                      //               decoration: BoxDecoration(
-                      //                 color: const Color.fromRGBO(138, 80, 196, 60),
-                      //                 borderRadius: BorderRadius.circular(10),
-                      //               ),
-                      //               child: Row(
-                      //                 mainAxisAlignment: MainAxisAlignment.center,
-                      //                 children: [
-                      //                   Expanded(
-                      //                     child: Text(
-                      //                       e.toString(),
-                      //                       textAlign: TextAlign.center,
-                      //                       style: TextStyle(fontSize: 15),
-                      //                     ),
-                      //                   ),
-                      //                 ],
-                      //               ),
-                      //             ),
-                      //           );
-                      //           ScaffoldMessenger.of(context)
-                      //               .showSnackBar(snackBar);
-                      //           setState(() {
-                      //             showLoading = false;
-                      //           });
-                      //           print(e.message);
-                      //         },
-                      //         codeSent: (String verificationId, int? token) async {
-                      //           Navigator.push(
-                      //             context,
-                      //             MaterialPageRoute(
-                      //               builder: (context) => OtpScreen(
-                      //                 verificationId: verificationId,
-                      //               ),
-                      //             ),
-                      //           );
-                      //           // await FirebaseFirestore.instance
-                      //           //     .collection('users')
-                      //           //     .doc(auth.currentUser!.uid)
-                      //           //     .set({
-                      //           //   'phoneNumber': phonenum.text,
-                      //           // });
-                      //           // final  uid = FirebaseAuth.instance.currentUser!.uid;
-                      //           // print(uid);
-        
-                      //           setState(() {
-                      //             showLoading = false;
-                      //           });
-                      //         },
-                      //         codeAutoRetrievalTimeout: (e) {
-                      //           // final snackBar = SnackBar(
-                      //           //   behavior: SnackBarBehavior.floating,
-                      //           //   backgroundColor: Colors.transparent,
-                      //           //   elevation: 0,
-                      //           //   content: Container(
-                      //           //     padding: const EdgeInsets.all(8),
-                      //           //     decoration: BoxDecoration(
-                      //           //       color: const Color.fromRGBO(138, 80, 196, 60),
-                      //           //       borderRadius: BorderRadius.circular(10),
-                      //           //     ),
-                      //           //     child: Row(
-                      //           //       mainAxisAlignment: MainAxisAlignment.center,
-                      //           //       children: [
-                      //           //         Expanded(
-                      //           //           child: Text(
-                      //           //             e,
-                      //           //             textAlign: TextAlign.center,
-                      //           //             style: TextStyle(fontSize: 15),
-                      //           //           ),
-                      //           //         ),
-                      //           //       ],
-                      //           //     ),
-                      //           //   ),
-                      //           // );
-                      //           // ScaffoldMessenger.of(context).showSnackBar(
-                      //           //     snackBar);
-                      //           setState(() {
-                      //             showLoading = false;
-                      //           });
-                      //           print(e);
-                      //         });
-        
-                      //     print(allData);
-        
-                      //     //FirebaseFirestore.instance.collection('users').doc();
-                      //     print(phonenum.text);
-                      //     // print(FirebaseAuth.instance.currentUser!.uid);
-                      //     // if(FirebaseAuth.instance.currentUser!.uid.isNotEmpty){
-                      //     //   print("exixting user");
-                      //     //
-                      //     // }
-                      //   }
-                      // }
+                      final isValid = _formKey.currentState!.validate();
+                      if (isValid) {
+                        setState(() {
+                          showLoading = true;
+                        });
+                        try {
+                          await auth.verifyPhoneNumber(
+                              phoneNumber: '+91$phonenumController',
+                              verificationCompleted: (_) {
+                                setState(() {
+                                  showLoading = false;
+                                });
+                              },
+                              verificationFailed: (e) {
+                                final snackBar = SnackBar(
+                                  behavior: SnackBarBehavior.floating,
+                                  backgroundColor: Colors.transparent,
+                                  elevation: 0,
+                                  content: Container(
+                                    padding: const EdgeInsets.all(8),
+                                    decoration: BoxDecoration(
+                                      color: const Color.fromRGBO(
+                                          138, 80, 196, 60),
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Expanded(
+                                          child: Text(
+                                            e.toString(),
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(fontSize: 15),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(snackBar);
+                                setState(() {
+                                  showLoading = false;
+                                });
+                                print(e.message);
+                              },
+                              codeSent: (String SignUpVerificationId,
+                                  int? token) async {
+                                print(SignUpVerificationId);
+                                print("Hiii");
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => SignupOtp(
+                                      signUpVerificationID:
+                                          SignUpVerificationId,
+                                      phoneNumber: phonenumController,
+                                      userName: nameController.text,
+                                      email: emailController.text,
+                                      dob: dobController.text,
+                                      aadharNumber: aadharController.text,
+                                      address: addressController.text,
+                                      gender: genderController.text,
+                                    ),
+                                  ),
+                                );
+                                final uid =
+                                    FirebaseAuth.instance.currentUser!.uid;
+                                print(uid);
+
+                                setState(() {
+                                  showLoading = false;
+                                });
+                              },
+                              codeAutoRetrievalTimeout: (e) {
+                                final snackBar = SnackBar(
+                                  behavior: SnackBarBehavior.floating,
+                                  backgroundColor: Colors.transparent,
+                                  elevation: 0,
+                                  content: Container(
+                                    padding: const EdgeInsets.all(8),
+                                    decoration: BoxDecoration(
+                                      color: const Color.fromRGBO(
+                                          138, 80, 196, 60),
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Expanded(
+                                          child: Text(
+                                            e,
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(fontSize: 15),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                                // ScaffoldMessenger.of(context)
+                                //     .showSnackBar(snackBar);
+                                setState(() {
+                                  showLoading = false;
+                                });
+                                print(e);
+                              });
+                        } catch (e) {
+                          print(e);
+                        }
+                      }
                     },
                     child: showLoading
                         ? const CircularProgressIndicator(
