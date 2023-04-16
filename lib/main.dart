@@ -4,8 +4,7 @@ import 'package:flutter/material.dart';
 import 'auth/login.dart';
 
 Future<void> main() async {
- 
- WidgetsFlutterBinding.ensureInitialized();
+  WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
 
   runApp(
@@ -23,10 +22,9 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-       
         primarySwatch: Colors.orange,
       ),
-      home:const  LoginPage(),
+      home: const LoginPage(),
     );
   }
 }
