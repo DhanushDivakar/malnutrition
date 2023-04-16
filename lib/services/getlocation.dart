@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
@@ -12,81 +13,14 @@ class AddChild extends StatefulWidget {
 class _AddChildState extends State<AddChild> {
   final _formKey = GlobalKey<FormState>();
   String? _childName, _aadharNumber, _guardianName;
-  // Location location = Location();
-  // bool? _serviceEnabled;
-  // PermissionStatus? _permissionGranted;
-  // LocationData? _locationData;
-  // double? fieldLatitude;
-  // double? fieldLogitude;
 
   @override
   void initState() {
     super.initState();
-    getLocation();
+    _getCurrentPosition();
+    Geolocator.openLocationSettings();
   }
 
-  // Future<void> getLocation() async {
-  // _serviceEnabled = await location.serviceEnabled();
-  // if (!_serviceEnabled!) {
-  //   _serviceEnabled = await location.requestService();
-  //   if (!_serviceEnabled!) {
-  //     return;
-  //   }
-  // }
-
-  // _permissionGranted = await location.hasPermission();
-  // if (_permissionGranted == PermissionStatus.denied) {
-  //   _permissionGranted = await location.requestPermission();
-  //   if (_permissionGranted != PermissionStatus.granted) {
-  //     return;
-  //   }
-  // }
-  // _locationData = await location.getLocation();
-  // setState(() {
-  //   fieldLatitude = _locationData?.latitude;
-  //   fieldLogitude = _locationData?.longitude;
-  //   print(fieldLatitude);
-  //   print(fieldLogitude);
-  // });
-  // Test if location services are enabled.
-
-  // Geolocator.requestPermission();
-  // bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
-  // if (!serviceEnabled) {
-  //   // Location services are not enabled don't continue
-  //   // accessing the position and request users of the
-  //   // App to enable the location services.
-  //   return Future.error('Location services are disabled.');
-  // }
-
-  // LocationPermission permission = await Geolocator.checkPermission();
-  // if (permission == LocationPermission.denied) {
-  //   permission = await Geolocator.requestPermission();
-  //   if (permission == LocationPermission.deniedForever) {
-  //     // Permissions are denied forever, handle appropriately.
-  //     return Future.error(
-  //         Exception('Location permissions are permanently denied.'));
-  //   }
-
-  //   if (permission == LocationPermission.denied) {
-  //     // Permissions are denied, next time you could try
-  //     // requesting permissions again (this is also where
-  //     // Android's shouldShowRequestPermissionRationale
-  //     // returned true. According to Android guidelines
-  //     // your App should show an explanatory UI now.
-  //     return Future.error(Exception('Location permissions are denied.'));
-  //   }
-  // }
-
-  // // When we reach here, permissions are granted and we can
-  // // continue accessing the position of the device.
-
-  // Position position = await Geolocator.getCurrentPosition(
-  //     desiredAccuracy: LocationAccuracy.high);
-  // setState(() {
-  //   _position = position;
-  // });
-  //}
   String? _currentAddress;
   Position? _currentPosition;
   Future<void> _getCurrentPosition() async {
@@ -106,7 +40,7 @@ class _AddChildState extends State<AddChild> {
   Future<bool> getLocation() async {
     bool serviceEnabled;
     LocationPermission permission;
-    permission = await Geolocator.requestPermission();
+    await Geolocator.requestPermission();
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -145,50 +79,28 @@ class _AddChildState extends State<AddChild> {
       debugPrint(e);
     });
   }
-  // void _getCurrentLocation() async {
-  //   bool serviceEnabled;
-  //   LocationPermission permission;
-  //   Geolocator.requestPermission();
-
-  //   serviceEnabled = await Geolocator.isLocationServiceEnabled();
-  //   if (!serviceEnabled) {
-  //     return Future.error('Location services are disabled.');
-  //   }
-
-  //   permission = await Geolocator.checkPermission();
-  //   if (permission == LocationPermission.denied) {
-  //     permission = await Geolocator.requestPermission();
-  //     if (permission == LocationPermission.denied) {
-  //       return Future.error('Location permissions are denied');
-  //     }
-  //   }
-
-  //   if (permission == LocationPermission.deniedForever) {
-  //     return Future.error(
-  //         'Location permissions are permanently denied, we cannot request permissions.');
-  //   }
-
-  //   Position position = await Geolocator.getCurrentPosition();
-  //   setState(() {
-  //     _position = position;
-  //   });
-  // }
 
   void _submitForm() async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
       try {
-        // await FirebaseFirestore.instance.collection('children_details').add({
-        //   'childName': _childName,
-        //   'aadharNumber': _aadharNumber,
-        //   'guardianName': _guardianName,
-        // });
-        print(_childName);
-        print(_aadharNumber);
-        print(_guardianName);
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Child added successfully')),
-        );
+        if (_currentAddress != null) {
+          _getCurrentPosition;
+
+          await FirebaseFirestore.instance.collection('children_details').add({
+            'childName': _childName,
+            'aadharNumber': _aadharNumber,
+            'guardianName': _guardianName,
+            'address': _currentAddress,
+          });
+          print(_childName);
+          print(_aadharNumber);
+          print(_guardianName);
+          print(_currentAddress);
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Child added successfully')),
+          );
+        }
       } catch (error) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Failed to add child')),
@@ -252,19 +164,24 @@ class _AddChildState extends State<AddChild> {
                 },
               ),
               SizedBox(height: 16),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text('LAT: ${_currentPosition?.latitude ?? ""}'),
-                  Text('LNG: ${_currentPosition?.longitude ?? ""}'),
-                  Text('ADDRESS: ${_currentAddress ?? ""}'),
-                  const SizedBox(height: 32),
-                  ElevatedButton(
-                    onPressed: _getCurrentPosition,
-                    child: const Text("Get Current Location"),
-                  )
-                ],
-              ),
+              if (_currentAddress != null)
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text('LAT: ${_currentPosition?.latitude ?? ""}'),
+                    Text('LNG: ${_currentPosition?.longitude ?? ""}'),
+                    Text('ADDRESS: ${_currentAddress ?? ""}'),
+                    const SizedBox(height: 32),
+                    ElevatedButton(
+                      onPressed: _submitForm,
+                      child: const Text("Get Current Location"),
+                    )
+                  ],
+                ),
+              ElevatedButton(
+                onPressed: _submitForm,
+                child: const Text("Get Current Location"),
+              )
             ],
           ),
         ),
