@@ -356,7 +356,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const HomeScreen(),
+                          builder: (context) => MyHomePage(),
                         ),
                       );
                       //   FocusScope.of(context).unfocus();

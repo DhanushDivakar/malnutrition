@@ -135,7 +135,7 @@ class _OtpPageState extends State<OtpPage> {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => const HomeScreen(),
+            builder: (context) => MyHomePage(),
           ),
         );
       });
@@ -225,7 +225,7 @@ class _OtpPageState extends State<OtpPage> {
 
 class SignupOtp extends StatefulWidget {
   final signUpVerificationID;
-  final  phoneNumber;
+  final phoneNumber;
   final String userName;
   final String email;
   final String dob;
@@ -388,7 +388,7 @@ class _SignupOtpState extends State<SignupOtp> {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => HomeScreen(),
+            builder: (context) => MalnutritionChecker(),
           ),
         );
       });
