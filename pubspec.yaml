@@ -39,7 +39,9 @@ dependencies:
   pin_code_fields: ^7.4.0
   cloud_firestore: 4.4.5
   firebase_auth: 4.3.0
-  firebase_core: 2.8.0
+  firebase_core: 2.9.0
+  geolocator: ^9.0.2
+  location: ^4.4.0
 
 
 

@@ -1,5 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'dart:math' as math;
+
+import '../services/getlocation.dart';
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key? key}) : super(key: key);
@@ -12,39 +16,49 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('My App'),
-      ),
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            DrawerHeader(
-              child: Text('Menu'),
-              decoration: BoxDecoration(),
-            ),
-            ListTile(
-              title: const Text('Malnutrition Checker'),
-              onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  return const MalnutritionChecker();
-                }));
-              },
-            ),
-            const Divider(),
-            ListTile(
-              title: const Text('Track'),
-              onTap: () {
-                // Do something when Option 2 is tapped
-              },
-            ),
-          ],
+        appBar: AppBar(
+          title: const Text('My App'),
         ),
-      ),
-      body: Center(
-        child: Text('Welcome to my app!'),
-      ),
-    );
+        drawer: Drawer(
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: [
+              DrawerHeader(
+                child: Text('Menu'),
+                decoration: BoxDecoration(),
+              ),
+              ListTile(
+                title: const Text('Malnutrition Checker'),
+                onTap: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) {
+                    return const MalnutritionChecker();
+                  }));
+                },
+              ),
+              const Divider(),
+              ListTile(
+                title: const Text('Track'),
+                onTap: () {
+                  // Do something when Option 2 is tapped
+                },
+              ),
+            ],
+          ),
+        ),
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              TextButton(
+                  onPressed: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
+                      return const AddChild();
+                    }));
+                  },
+                  child: Text("Add child"))
+            ],
+          ),
+        ));
   }
 }
 
