@@ -47,25 +47,27 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
       body: SingleChildScrollView(
-        child: Column(
-          children: [
-            TextButton(
-              onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  return const AddChild();
-                }));
-              },
-              child: Text("Add child"),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  return const UpdateLocation();
-                }));
-              },
-              child: const Text("Update Location"),
-            ),
-          ],
+        child: Center(
+          child: Column(
+            children: [
+              TextButton(
+                onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) {
+                    return const AddChild();
+                  }));
+                },
+                child: Text("Add child"),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) {
+                    return const UpdateLocation();
+                  }));
+                },
+                child: const Text("Update Location"),
+              ),
+            ],
+          ),
         ),
       ),
     );

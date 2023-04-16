@@ -22,6 +22,13 @@ class _AddChildState extends State<AddChild> {
     // Geolocator.openLocationSettings();
   }
 
+  String? _selectedGender;
+
+  final List<String> _genders = <String>[
+    'Male',
+    'Female',
+  ];
+
   String? _currentAddress;
   Position? _currentPosition;
   Future<void> _getCurrentPosition() async {
@@ -218,6 +225,34 @@ class _AddChildState extends State<AddChild> {
                       onSaved: (value) {
                         _aadharNumber = value!;
                       },
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(
+                          'Gender',
+                          style: TextStyle(
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        DropdownButton<String>(
+                          value: _selectedGender,
+                          items: _genders
+                              .map((gender) => DropdownMenuItem<String>(
+                                    child: Text(gender),
+                                    value: gender,
+                                  ))
+                              .toList(),
+                          onChanged: (value) {
+                            setState(() {
+                              _selectedGender = value;
+                            });
+                            print(_selectedGender);
+                          },
+                          isExpanded: true,
+                        ),
+                      ],
                     ),
                     TextFormField(
                       decoration: InputDecoration(labelText: 'Guardian Name'),
