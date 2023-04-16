@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:math';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -225,30 +226,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 width: MediaQuery.of(context).size.width / 2,
                 child: ElevatedButton(
                   onPressed: () {
-                    double age = double.tryParse(_ageController.text) ?? 0.0;
-                    double weight =
-                        double.tryParse(_weightController.text) ?? 0.0;
-                    double height =
-                        double.tryParse(_heightController.text) ?? 0.0;
-                    double muac = double.tryParse(_muacController.text) ?? 0.0;
-                    double headCircumference =
-                        double.tryParse(_headCircumferenceController.text) ??
-                            0.0;
-                    double skinfoldThickness =
-                        double.tryParse(_skinfoldThicknessController.text) ??
-                            0.0;
-
-                    // Calculate BMI
-                    double heightInMeters = height / 100;
-                    double bmi = weight / (heightInMeters * heightInMeters);
-                    print(bmi);
-                   
-                        
-                    setState(() {
-                        malnutritionStatus = getMalnutritionStatus(
-                        age, bmi, muac, headCircumference, skinfoldThickness);
-                      
-                    });
+                    // String status = checkMalnutritionStatus(
+                    //     age: 10,
+                    //     weight: 6,
+                    //     height: 70,
+                    //     muac: 12.5,
+                    //     headCircumference: 45,
+                    //     skinfoldThickness: 110);
+                    // print('Malnutrition Status: $status');
                   },
                   child: const Padding(
                     padding: EdgeInsets.symmetric(vertical: 10),
@@ -278,47 +263,63 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
-String getMalnutritionStatus(double age, double bmi, double muac,
-    double headCircumference, double skinfoldThickness) {
-  String status = '';
+// String getChildMalnutritionStatus(double ageInMonths, double weight, double height, double muac, double headCircumference, double skinfoldThickness) {
+//   // calculate z-scores for each measurement
+//   double weightZScore = calculateWeightZScore(ageInMonths, weight, gender);
+//   double heightZScore = calculateHeightZScore(ageInMonths, height, gender);
+//   double muacZScore = calculateMUACZScore(ageInMonths, muac, gender);
+//   double headCircumferenceZScore = calculateHeadCircumferenceZScore(ageInMonths, headCircumference, gender);
+//   double skinfoldThicknessZScore = calculateSkinfoldThicknessZScore(ageInMonths, skinfoldThickness, gender);
 
-  if (age < 6) {
-    if (bmi < 16) {
-      status = 'Severe Acute Malnutrition';
-    } else if (bmi >= 16 && bmi < 17) {
-      status = 'Moderate Acute Malnutrition';
-    } else if (bmi >= 17 && bmi < 18.5) {
-      status = 'Mild Acute Malnutrition';
-    } else {
-      status = 'Normal';
-    }
-  } else {
-    if (bmi < 18.5) {
-      if (muac < 12.5) {
-        status = 'Severe Chronic Malnutrition';
-      } else if (muac >= 12.5 && muac < 13.5) {
-        status = 'Moderate Chronic Malnutrition';
-      } else if (muac >= 13.5 && muac < 14.5) {
-        status = 'Mild Chronic Malnutrition';
-      } else {
-        status = 'Normal';
-      }
-    } else {
-      if (headCircumference < 31) {
-        status = 'Microcephaly';
-      } else if (headCircumference >= 31 && headCircumference < 34) {
-        status = 'Normal Head Circumference';
-      } else {
-        status = 'Macrocephaly';
-      }
+//   // calculate composite z-score
+//   double compositeZScore = weightZScore + heightZScore + muacZScore + headCircumferenceZScore + skinfoldThicknessZScore;
 
-      if (skinfoldThickness >= 10) {
-        status += ' with Excess Fat';
-      } else {
-        status += ' with Normal Fat';
-      }
-    }
-  }
+//   // determine nutritional status based on composite z-score
+//   if (compositeZScore >= -1 && compositeZScore <= 1) {
+//     return "Normal";
+//   } else if (compositeZScore >= -2 && compositeZScore < -1) {
+//     return "Moderately Malnourished";
+//   } else if (compositeZScore < -2) {
+//     return "Severely Malnourished";
+//   }
 
-  return status;
-}
+//   return "N/A"; // return N/A if child is over 5 years old
+// }
+
+// double? calculateWeightZScore(double ageInMonths, double weight, String gender) {
+//   // define L, M, and S values for weight-for-age by gender and age
+//   double L, M, S;
+  
+//   if (gender == "male") {
+//     if (ageInMonths >= 0 && ageInMonths < 24) {
+//       L = -0.544;
+//       M = 7.6256;
+//       S = 0.1467;
+//     } else if (ageInMonths >= 24 && ageInMonths < 60) {
+//       L = -0.1544;
+//       M = 13.4064;
+//       S = 0.0903;
+//     } else {
+//       return null; // return null if child is over 5 years old
+//     }
+//   } else if (gender == "female") {
+//     if (ageInMonths >= 0 && ageInMonths < 24) {
+//       L = -0.611;
+//       M = 7.2032;
+//       S = 0.1468;
+//     } else if (ageInMonths >= 24 && ageInMonths < 60) {
+//       L = -0.2521;
+//       M = 12.1119;
+//       S = 0.0952;
+//     } else {
+//       return null; // return null if child is over 5 years old
+//     }
+//   } else {
+//     return null; // return null if gender is invalid
+//   }
+
+//   // calculate weight-for-age z-score using LMS method
+//   double zScore = ((weight / M).pow(L) - 1) / (S * L);
+
+//   return zScore;/
+// }

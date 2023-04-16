@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:malnutrition/HomeScreen/home_screen.dart';
 import 'package:malnutrition/auth/otp.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -145,80 +146,82 @@ class _RegisterPageState extends State<RegisterPage> {
                       SizedBox(
                         height: height * 0.02,
                       ),
-                      TextFormField(
-                        // validator: (value) {
-                        //   if (value!.isEmpty || value.length != 10) {
-                        //     return "Enter correct number";
-                        //   } else {
-                        //     return null;
-                        //   }
-                        // },
-                        autofocus: false,
-                        style: TextStyle(
-                            fontSize: height * 0.02,
-                            color: Colors.black,
-                            fontWeight: FontWeight.w500),
-                        keyboardType: TextInputType.number,
-                        cursorColor: Theme.of(context).colorScheme.primary,
-                        textInputAction: TextInputAction.done,
-                        controller: dobController,
-                        decoration: InputDecoration(
-                          contentPadding:
-                              const EdgeInsets.fromLTRB(20, 15, 20, 15),
-                          hintText: "Date of Birth",
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide: const BorderSide(
-                              width: 0.2,
-                              color: Color.fromRGBO(230, 154, 141, 1),
-                            ),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                                color: Theme.of(context).colorScheme.primary,
-                                width: 2),
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
-                        ),
-                      ),
+                      DateOfBirthInput(),
+                      // TextFormField(
+                      //   // validator: (value) {
+                      //   //   if (value!.isEmpty || value.length != 10) {
+                      //   //     return "Enter correct number";
+                      //   //   } else {
+                      //   //     return null;
+                      //   //   }
+                      //   // },
+                      //   autofocus: false,
+                      //   style: TextStyle(
+                      //       fontSize: height * 0.02,
+                      //       color: Colors.black,
+                      //       fontWeight: FontWeight.w500),
+                      //   keyboardType: TextInputType.number,
+                      //   cursorColor: Theme.of(context).colorScheme.primary,
+                      //   textInputAction: TextInputAction.done,
+                      //   controller: dobController,
+                      //   decoration: InputDecoration(
+                      //     contentPadding:
+                      //         const EdgeInsets.fromLTRB(20, 15, 20, 15),
+                      //     hintText: "Date of Birth",
+                      //     border: OutlineInputBorder(
+                      //       borderRadius: BorderRadius.circular(10),
+                      //       borderSide: const BorderSide(
+                      //         width: 0.2,
+                      //         color: Color.fromRGBO(230, 154, 141, 1),
+                      //       ),
+                      //     ),
+                      //     focusedBorder: OutlineInputBorder(
+                      //       borderSide: BorderSide(
+                      //           color: Theme.of(context).colorScheme.primary,
+                      //           width: 2),
+                      //       borderRadius: BorderRadius.circular(10.0),
+                      //     ),
+                      //   ),
+                      // ),
                       SizedBox(
                         height: height * 0.02,
                       ),
-                      TextFormField(
-                        // validator: (value) {
-                        //   if (value!.isEmpty || value.length != 10) {
-                        //     return "Enter correct number";
-                        //   } else {
-                        //     return null;
-                        //   }
-                        // },
-                        autofocus: false,
-                        style: TextStyle(
-                            fontSize: height * 0.02,
-                            color: Colors.black,
-                            fontWeight: FontWeight.w500),
-                        cursorColor: Theme.of(context).colorScheme.primary,
-                        textInputAction: TextInputAction.done,
-                        controller: genderController,
-                        decoration: InputDecoration(
-                          contentPadding:
-                              const EdgeInsets.fromLTRB(20, 15, 20, 15),
-                          hintText: "Gender",
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide: const BorderSide(
-                              width: 0.2,
-                              color: Color.fromRGBO(230, 154, 141, 1),
-                            ),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                                color: Theme.of(context).colorScheme.primary,
-                                width: 2),
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
-                        ),
-                      ),
+                      // TextFormField(
+                      //   // validator: (value) {
+                      //   //   if (value!.isEmpty || value.length != 10) {
+                      //   //     return "Enter correct number";
+                      //   //   } else {
+                      //   //     return null;
+                      //   //   }
+                      //   // },
+                      //   autofocus: false,
+                      //   style: TextStyle(
+                      //       fontSize: height * 0.02,
+                      //       color: Colors.black,
+                      //       fontWeight: FontWeight.w500),
+                      //   cursorColor: Theme.of(context).colorScheme.primary,
+                      //   textInputAction: TextInputAction.done,
+                      //   controller: genderController,
+                      //   decoration: InputDecoration(
+                      //     contentPadding:
+                      //         const EdgeInsets.fromLTRB(20, 15, 20, 15),
+                      //     hintText: "Gender",
+                      //     border: OutlineInputBorder(
+                      //       borderRadius: BorderRadius.circular(10),
+                      //       borderSide: const BorderSide(
+                      //         width: 0.2,
+                      //         color: Color.fromRGBO(230, 154, 141, 1),
+                      //       ),
+                      //     ),
+                      //     focusedBorder: OutlineInputBorder(
+                      //       borderSide: BorderSide(
+                      //           color: Theme.of(context).colorScheme.primary,
+                      //           width: 2),
+                      //       borderRadius: BorderRadius.circular(10.0),
+                      //     ),
+                      //   ),
+                      // ),
+                      GenderInput(),
                       SizedBox(
                         height: height * 0.02,
                       ),
@@ -350,130 +353,136 @@ class _RegisterPageState extends State<RegisterPage> {
                     //padding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
                     minWidth: MediaQuery.of(context).size.width,
                     onPressed: () async {
-                      FocusScope.of(context).unfocus();
-                     //print(widget.phoneNumber);
-                          
-                      final isValid = _formKey.currentState!.validate();
-                      if (isValid) {
-                        setState(() {
-                          showLoading = true;
-                        });
-                        try {
-                           final phoneNumber = widget.phoneNumber;
-                          print('widget $phoneNumber');
-                        
-                          await auth.verifyPhoneNumber(
-                            
-                              phoneNumber: '+91$phoneNumber',
-                              verificationCompleted: (_) {
-                                setState(() {
-                                  showLoading = false;
-                                });
-                              },
-                              
-                              codeSent: (String signUpVerificationId,
-                                  int? token) async {
-                                print('verificationID $signUpVerificationId');
-                             
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => SignupOtp(
-                                      signUpVerificationID:
-                                          signUpVerificationId,
-                                      phoneNumber: phonenumController,
-                                      userName: nameController.text,
-                                      email: emailController.text,
-                                      dob: dobController.text,
-                                      aadharNumber: aadharController.text,
-                                      address: addressController.text,
-                                      gender: genderController.text,
-                                    ),
-                                  ),
-                                );
-                                final uid =
-                                    FirebaseAuth.instance.currentUser!.uid;
-                                print('uid $uid');
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const HomeScreen(),
+                        ),
+                      );
+                      //   FocusScope.of(context).unfocus();
+                      //  //print(widget.phoneNumber);
 
-                                setState(() {
-                                  showLoading = false;
-                                });
-                              },
-                              verificationFailed: (e) {
-                                final snackBar = SnackBar(
-                                  behavior: SnackBarBehavior.floating,
-                                  backgroundColor: Colors.transparent,
-                                  elevation: 0,
-                                  content: Container(
-                                    padding: const EdgeInsets.all(8),
-                                    decoration: BoxDecoration(
-                                      color: const Color.fromRGBO(
-                                          138, 80, 196, 60),
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Expanded(
-                                          child: Text(
-                                            e.toString(),
-                                            textAlign: TextAlign.center,
-                                            style:const  TextStyle(fontSize: 15),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                );
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(snackBar);
-                                setState(() {
-                                  showLoading = false;
-                                });
-                                print("error msg $e.message");
-                              },
-                              timeout: const Duration(seconds: 120),
-                              codeAutoRetrievalTimeout: (e) {
-                                final snackBar = SnackBar(
-                                  behavior: SnackBarBehavior.floating,
-                                  backgroundColor: Colors.transparent,
-                                  elevation: 0,
-                                  content: Container(
-                                    padding: const EdgeInsets.all(8),
-                                    decoration: BoxDecoration(
-                                      color: const Color.fromRGBO(
-                                          138, 80, 196, 60),
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Expanded(
-                                          child: Text(
-                                            e,
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(fontSize: 15),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                );
-                                // ScaffoldMessenger.of(context)
-                                //     .showSnackBar(snackBar);
-                                setState(() {
-                                  showLoading = false;
-                                });
-                                print('error $e');
-                              }
-                              );
-                              
-                        } catch (e) {
-                          print('err $e');
-                        }
-                      }
+                      //   final isValid = _formKey.currentState!.validate();
+                      //   if (isValid) {
+                      //     setState(() {
+                      //       showLoading = true;
+                      //     });
+                      //     try {
+                      //        final phoneNumber = widget.phoneNumber;
+                      //       print('widget $phoneNumber');
+
+                      //       await auth.verifyPhoneNumber(
+
+                      //           phoneNumber: '+91$phoneNumber',
+                      //           verificationCompleted: (_) {
+                      //             setState(() {
+                      //               showLoading = false;
+                      //             });
+                      //           },
+
+                      //           codeSent: (String signUpVerificationId,
+                      //               int? token) async {
+                      //             print('verificationID $signUpVerificationId');
+
+                      //             Navigator.push(
+                      //               context,
+                      //               MaterialPageRoute(
+                      //                 builder: (context) => SignupOtp(
+                      //                   signUpVerificationID:
+                      //                       signUpVerificationId,
+                      //                   phoneNumber: phonenumController,
+                      //                   userName: nameController.text,
+                      //                   email: emailController.text,
+                      //                   dob: dobController.text,
+                      //                   aadharNumber: aadharController.text,
+                      //                   address: addressController.text,
+                      //                   gender: genderController.text,
+                      //                 ),
+                      //               ),
+                      //             );
+                      //             final uid =
+                      //                 FirebaseAuth.instance.currentUser!.uid;
+                      //             print('uid $uid');
+
+                      //             setState(() {
+                      //               showLoading = false;
+                      //             });
+                      //           },
+                      //           verificationFailed: (e) {
+                      //             final snackBar = SnackBar(
+                      //               behavior: SnackBarBehavior.floating,
+                      //               backgroundColor: Colors.transparent,
+                      //               elevation: 0,
+                      //               content: Container(
+                      //                 padding: const EdgeInsets.all(8),
+                      //                 decoration: BoxDecoration(
+                      //                   color: const Color.fromRGBO(
+                      //                       138, 80, 196, 60),
+                      //                   borderRadius: BorderRadius.circular(10),
+                      //                 ),
+                      //                 child: Row(
+                      //                   mainAxisAlignment:
+                      //                       MainAxisAlignment.center,
+                      //                   children: [
+                      //                     Expanded(
+                      //                       child: Text(
+                      //                         e.toString(),
+                      //                         textAlign: TextAlign.center,
+                      //                         style:const  TextStyle(fontSize: 15),
+                      //                       ),
+                      //                     ),
+                      //                   ],
+                      //                 ),
+                      //               ),
+                      //             );
+                      //             ScaffoldMessenger.of(context)
+                      //                 .showSnackBar(snackBar);
+                      //             setState(() {
+                      //               showLoading = false;
+                      //             });
+                      //             print("error msg $e.message");
+                      //           },
+                      //           timeout: const Duration(seconds: 120),
+                      //           codeAutoRetrievalTimeout: (e) {
+                      //             final snackBar = SnackBar(
+                      //               behavior: SnackBarBehavior.floating,
+                      //               backgroundColor: Colors.transparent,
+                      //               elevation: 0,
+                      //               content: Container(
+                      //                 padding: const EdgeInsets.all(8),
+                      //                 decoration: BoxDecoration(
+                      //                   color: const Color.fromRGBO(
+                      //                       138, 80, 196, 60),
+                      //                   borderRadius: BorderRadius.circular(10),
+                      //                 ),
+                      //                 child: Row(
+                      //                   mainAxisAlignment:
+                      //                       MainAxisAlignment.center,
+                      //                   children: [
+                      //                     Expanded(
+                      //                       child: Text(
+                      //                         e,
+                      //                         textAlign: TextAlign.center,
+                      //                         style: TextStyle(fontSize: 15),
+                      //                       ),
+                      //                     ),
+                      //                   ],
+                      //                 ),
+                      //               ),
+                      //             );
+                      //             // ScaffoldMessenger.of(context)
+                      //             //     .showSnackBar(snackBar);
+                      //             setState(() {
+                      //               showLoading = false;
+                      //             });
+                      //             print('error $e');
+                      //           }
+                      //           );
+
+                      //     } catch (e) {
+                      //       print('err $e');
+                      //     }
+                      //   }
                     },
                     child: showLoading
                         ? const CircularProgressIndicator(
@@ -495,6 +504,107 @@ class _RegisterPageState extends State<RegisterPage> {
           ),
         ),
       ),
+    );
+  }
+}
+
+class DateOfBirthInput extends StatefulWidget {
+  const DateOfBirthInput({Key? key}) : super(key: key);
+
+  @override
+  _DateOfBirthInputState createState() => _DateOfBirthInputState();
+}
+
+class _DateOfBirthInputState extends State<DateOfBirthInput> {
+  DateTime? _selectedDate;
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(1900),
+      lastDate: DateTime.now(),
+    );
+    if (picked != null) {
+      setState(() {
+        _selectedDate = picked;
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () => _selectDate(context),
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 8.0),
+        decoration: BoxDecoration(
+          border: Border.all(
+              color: Theme.of(context).colorScheme.primary, width: 2),
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Text(
+              _selectedDate == null
+                  ? 'Select your date of birth'
+                  : 'Date of birth: ${_selectedDate!.day}/${_selectedDate!.month}/${_selectedDate!.year}',
+              style: const TextStyle(
+                fontSize: 16.0,
+              ),
+            ),
+            const Icon(Icons.calendar_today),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class GenderInput extends StatefulWidget {
+  const GenderInput({Key? key}) : super(key: key);
+
+  @override
+  _GenderInputState createState() => _GenderInputState();
+}
+
+class _GenderInputState extends State<GenderInput> {
+  String? _selectedGender;
+
+  final List<String> _genders = <String>[
+    'Male',
+    'Female',
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Text(
+          'Gender',
+          style: TextStyle(
+            fontSize: 16.0,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        DropdownButton<String>(
+          value: _selectedGender,
+          items: _genders
+              .map((gender) => DropdownMenuItem<String>(
+                    child: Text(gender),
+                    value: gender,
+                  ))
+              .toList(),
+          onChanged: (value) {
+            setState(() {
+              _selectedGender = value;
+            });
+          },
+          isExpanded: true,
+        ),
+      ],
     );
   }
 }

@@ -138,105 +138,113 @@ class _LoginPageState extends State<LoginPage> {
                   child: MaterialButton(
                     //padding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
                     minWidth: MediaQuery.of(context).size.width,
-                    onPressed: () async {
-                      print(phonenum.text);
-                      FocusScope.of(context).unfocus();
-                      final isValid = formKey.currentState!.validate();
-                      if (isValid) {
-                        setState(() {
-                          showLoading = true;
-                        });
-                        CollectionReference collectionRef =
-                            FirebaseFirestore.instance.collection('users');
+                    onPressed: () {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => RegisterPage(
+                            phoneNumber: phonenum.text,
+                          ),
+                        ),
+                      );
+                      // print(phonenum.text);
+                      // FocusScope.of(context).unfocus();
+                      // final isValid = formKey.currentState!.validate();
+                      // if (isValid) {
+                      //   setState(() {
+                      //     showLoading = true;
+                      //   });
+                      //   CollectionReference collectionRef =
+                      //       FirebaseFirestore.instance.collection('users');
 
-                        // Get docs from collection reference
-                        QuerySnapshot querySnapshot = await collectionRef
-                            .where('phoneNumber', isEqualTo: phonenum.text)
-                            .get();
-                        final allData = querySnapshot.docs
-                            .map((doc) => doc.data())
-                            .toList();
-                        if (allData.isEmpty) {
-                          print('new user');
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => RegisterPage(
-                                phoneNumber: phonenum.text,
-                              ),
-                            ),
-                          );
-                        } else {
-                          print('old user');
-                          await auth.verifyPhoneNumber(
-                              phoneNumber: '+91${phonenum.text}',
-                              verificationCompleted: (_) {
-                                setState(() {
-                                  showLoading = false;
-                                });
-                              },
-                              verificationFailed: (e) {
-                                final snackBar = SnackBar(
-                                  behavior: SnackBarBehavior.floating,
-                                  backgroundColor: Colors.transparent,
-                                  elevation: 0,
-                                  content: Container(
-                                    padding: const EdgeInsets.all(8),
-                                    decoration: BoxDecoration(
-                                      color: const Color.fromRGBO(
-                                          138, 80, 196, 60),
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Expanded(
-                                          child: Text(
-                                            e.toString(),
-                                            textAlign: TextAlign.center,
-                                            style:
-                                                const TextStyle(fontSize: 15),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                );
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(snackBar);
-                                setState(() {
-                                  showLoading = false;
-                                });
-                                print(e.message);
-                              },
-                              codeSent:
-                                  (String verificationId, int? token) async {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => OtpPage(
-                                      verificationId: verificationId,
-                                    ),
-                                  ),
-                                );
+                      //   // Get docs from collection reference
+                      //   QuerySnapshot querySnapshot = await collectionRef
+                      //       .where('phoneNumber', isEqualTo: phonenum.text)
+                      //       .get();
+                      //   final allData = querySnapshot.docs
+                      //       .map((doc) => doc.data())
+                      //       .toList();
+                      //   if (allData.isEmpty) {
+                      //     print('new user');
+                      //     Navigator.pushReplacement(
+                      //       context,
+                      //       MaterialPageRoute(
+                      //         builder: (context) => RegisterPage(
+                      //           phoneNumber: phonenum.text,
+                      //         ),
+                      //       ),
+                      //     );
+                      //   } else {
+                      //     print('old user');
+                      //     await auth.verifyPhoneNumber(
+                      //         phoneNumber: '+91${phonenum.text}',
+                      //         verificationCompleted: (_) {
+                      //           setState(() {
+                      //             showLoading = false;
+                      //           });
+                      //         },
+                      //         verificationFailed: (e) {
+                      //           final snackBar = SnackBar(
+                      //             behavior: SnackBarBehavior.floating,
+                      //             backgroundColor: Colors.transparent,
+                      //             elevation: 0,
+                      //             content: Container(
+                      //               padding: const EdgeInsets.all(8),
+                      //               decoration: BoxDecoration(
+                      //                 color: const Color.fromRGBO(
+                      //                     138, 80, 196, 60),
+                      //                 borderRadius: BorderRadius.circular(10),
+                      //               ),
+                      //               child: Row(
+                      //                 mainAxisAlignment:
+                      //                     MainAxisAlignment.center,
+                      //                 children: [
+                      //                   Expanded(
+                      //                     child: Text(
+                      //                       e.toString(),
+                      //                       textAlign: TextAlign.center,
+                      //                       style:
+                      //                           const TextStyle(fontSize: 15),
+                      //                     ),
+                      //                   ),
+                      //                 ],
+                      //               ),
+                      //             ),
+                      //           );
+                      //           ScaffoldMessenger.of(context)
+                      //               .showSnackBar(snackBar);
+                      //           setState(() {
+                      //             showLoading = false;
+                      //           });
+                      //           print(e.message);
+                      //         },
+                      //         codeSent:
+                      //             (String verificationId, int? token) async {
+                      //           Navigator.push(
+                      //             context,
+                      //             MaterialPageRoute(
+                      //               builder: (context) => OtpPage(
+                      //                 verificationId: verificationId,
+                      //               ),
+                      //             ),
+                      //           );
 
-                                setState(() {
-                                  showLoading = false;
-                                });
-                              },
-                              codeAutoRetrievalTimeout: (e) {
-                                setState(() {
-                                  showLoading = false;
-                                });
-                                print(e);
-                              });
+                      //           setState(() {
+                      //             showLoading = false;
+                      //           });
+                      //         },
+                      //         codeAutoRetrievalTimeout: (e) {
+                      //           setState(() {
+                      //             showLoading = false;
+                      //           });
+                      //           print(e);
+                      //         });
 
-                          print(allData);
+                      //     print(allData);
 
-                          print(phonenum.text);
-                        }
-                      }
+                      //     print(phonenum.text);
+                      //   }
+                      // }
                     },
                     child: showLoading
                         ? const CircularProgressIndicator(
