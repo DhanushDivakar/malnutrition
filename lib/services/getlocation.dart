@@ -147,6 +147,8 @@ class _AddChildState extends State<AddChild> {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text('Child added successfully')),
           );
+          Navigator.of(context).pop();
+
           setState(() {
             isLoading = false;
           });
@@ -164,84 +166,90 @@ class _AddChildState extends State<AddChild> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Add Child'),
-      ),
-      body: Padding(
-        padding: EdgeInsets.all(16),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              TextFormField(
-                decoration:
-                    InputDecoration(labelText: 'Child Name as in Aadhar Card'),
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Please enter a name';
-                  }
-                  return null;
-                },
-                onSaved: (value) {
-                  _childName = value!;
-                },
+      appBar: isLoading
+          ? AppBar(
+              automaticallyImplyLeading: false,
+              title: const Text('Add Child'),
+            )
+          : AppBar(
+              title: Text('Add Child'),
+            ),
+      body: isLoading
+          ? const Center(
+              child: SizedBox(
+                height: 25,
+                width: 25,
+                child: CircularProgressIndicator(),
               ),
-              TextFormField(
-                decoration: InputDecoration(labelText: 'Aadhar Number'),
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Please enter a number';
-                  }
-                  if (!RegExp(r'^[2-9]{1}[0-9]{3}[0-9]{4}[0-9]{4}$')
-                      .hasMatch(value)) {
-                    return 'Please enter a valid 12-digit Aadhar number';
-                  }
-                  return null;
-                },
-                onSaved: (value) {
-                  _aadharNumber = value!;
-                },
-              ),
-              TextFormField(
-                decoration: InputDecoration(labelText: 'Guardian Name'),
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Please enter a name';
-                  }
-                  return null;
-                },
-                onSaved: (value) {
-                  _guardianName = value!;
-                },
-              ),
-              SizedBox(height: 16),
-              if (_currentAddress != null)
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+            )
+          : Padding(
+              padding: EdgeInsets.all(16),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Text('LAT: ${_currentPosition?.latitude ?? ""}'),
-                    Text('LNG: ${_currentPosition?.longitude ?? ""}'),
-                    Text('ADDRESS: ${_currentAddress ?? ""}'),
-                    const SizedBox(height: 32),
+                    TextFormField(
+                      decoration: const InputDecoration(
+                          labelText: 'Child Name as in Aadhar Card'),
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'Please enter a name';
+                        }
+                        return null;
+                      },
+                      onSaved: (value) {
+                        _childName = value!;
+                      },
+                    ),
+                    TextFormField(
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(labelText: 'Aadhar Number'),
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'Please enter a number';
+                        }
+                        if (!RegExp(r'^[2-9]{1}[0-9]{3}[0-9]{4}[0-9]{4}$')
+                            .hasMatch(value)) {
+                          return 'Please enter a valid 12-digit Aadhar number';
+                        }
+                        return null;
+                      },
+                      onSaved: (value) {
+                        _aadharNumber = value!;
+                      },
+                    ),
+                    TextFormField(
+                      decoration: InputDecoration(labelText: 'Guardian Name'),
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'Please enter a name';
+                        }
+                        return null;
+                      },
+                      onSaved: (value) {
+                        _guardianName = value!;
+                      },
+                    ),
+                    SizedBox(height: 16),
+                    if (_currentAddress != null)
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text('LAT: ${_currentPosition?.latitude ?? ""}'),
+                          Text('LNG: ${_currentPosition?.longitude ?? ""}'),
+                          Text('ADDRESS: ${_currentAddress ?? ""}'),
+                          const SizedBox(height: 32),
+                        ],
+                      ),
+                    ElevatedButton(
+                      onPressed: _submitForm,
+                      child: const Text("Add"),
+                    )
                   ],
                 ),
-              ElevatedButton(
-                onPressed: _submitForm,
-                child: isLoading
-                    ? const SizedBox(
-                        height: 25,
-                        width: 25,
-                        child: CircularProgressIndicator(
-                          color: Colors.white,
-                        ),
-                      )
-                    : const Text("Add"),
-              )
-            ],
-          ),
-        ),
-      ),
+              ),
+            ),
     );
   }
 }
