@@ -17,8 +17,9 @@ class _AddChildState extends State<AddChild> {
   @override
   void initState() {
     super.initState();
-    _getCurrentPosition();
-    Geolocator.openLocationSettings();
+
+    Geolocator.requestPermission();
+    // Geolocator.openLocationSettings();
   }
 
   String? _currentAddress;
@@ -37,15 +38,17 @@ class _AddChildState extends State<AddChild> {
     });
   }
 
+  bool isLoading = false;
+  bool? serviceEnabled;
+  LocationPermission? permission;
   Future<bool> getLocation() async {
-    bool serviceEnabled;
-    LocationPermission permission;
     await Geolocator.requestPermission();
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
+    if (!serviceEnabled!) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text(
               'Location services are disabled. Please enable the services')));
+
       return false;
     }
     permission = await Geolocator.checkPermission();
@@ -54,6 +57,7 @@ class _AddChildState extends State<AddChild> {
       if (permission == LocationPermission.denied) {
         ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('Location permissions are denied')));
+
         return false;
       }
     }
@@ -61,6 +65,7 @@ class _AddChildState extends State<AddChild> {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text(
               'Location permissions are permanently denied, we cannot request permissions.')));
+
       return false;
     }
     return true;
@@ -81,17 +86,59 @@ class _AddChildState extends State<AddChild> {
   }
 
   void _submitForm() async {
+    FocusScope.of(context).unfocus();
+
+    await Geolocator.requestPermission();
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      try {
-        if (_currentAddress != null) {
-          _getCurrentPosition;
+      setState(() {
+        isLoading = true;
+      });
+      serviceEnabled = await Geolocator.isLocationServiceEnabled();
 
-          await FirebaseFirestore.instance.collection('children_details').add({
+      if (!serviceEnabled!) {
+        Geolocator.requestPermission();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Please turn on location')),
+        );
+      }
+      permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied &&
+          permission == LocationPermission.deniedForever) {
+        permission = await Geolocator.requestPermission();
+        if (permission == LocationPermission.denied) {
+          setState(() {
+            isLoading = false;
+          });
+          ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Location permissions are denied')));
+        }
+      }
+      await Geolocator.getCurrentPosition(
+              desiredAccuracy: LocationAccuracy.high)
+          .then((Position position) {
+        setState(() => _currentPosition = position);
+        placemarkFromCoordinates(
+                _currentPosition!.latitude, _currentPosition!.longitude)
+            .then((List<Placemark> placemarks) {
+          Placemark place = placemarks[0];
+          setState(() {
+            _currentAddress =
+                '${place.street}, ${place.subLocality}, ${place.subAdministrativeArea}, ${place.postalCode}';
+          });
+          FirebaseFirestore.instance.collection('children_details').add({
             'childName': _childName,
             'aadharNumber': _aadharNumber,
             'guardianName': _guardianName,
             'address': _currentAddress,
+            'time': DateTime.now(),
+          }).catchError((e) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('Failed to add child')),
+            );
+            setState(() {
+              isLoading = false;
+            });
           });
           print(_childName);
           print(_aadharNumber);
@@ -100,12 +147,17 @@ class _AddChildState extends State<AddChild> {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text('Child added successfully')),
           );
-        }
-      } catch (error) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to add child')),
-        );
-      }
+          setState(() {
+            isLoading = false;
+          });
+        }).catchError((e) {
+          debugPrint(e);
+        });
+        print(position.latitude);
+        print(position.longitude);
+      }).catchError((e) {
+        debugPrint(e);
+      });
     }
   }
 
@@ -172,15 +224,19 @@ class _AddChildState extends State<AddChild> {
                     Text('LNG: ${_currentPosition?.longitude ?? ""}'),
                     Text('ADDRESS: ${_currentAddress ?? ""}'),
                     const SizedBox(height: 32),
-                    ElevatedButton(
-                      onPressed: _submitForm,
-                      child: const Text("Get Current Location"),
-                    )
                   ],
                 ),
               ElevatedButton(
                 onPressed: _submitForm,
-                child: const Text("Get Current Location"),
+                child: isLoading
+                    ? const SizedBox(
+                        height: 25,
+                        width: 25,
+                        child: CircularProgressIndicator(
+                          color: Colors.white,
+                        ),
+                      )
+                    : const Text("Add"),
               )
             ],
           ),
