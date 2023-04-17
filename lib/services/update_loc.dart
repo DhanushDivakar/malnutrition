@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 
 class UpdateLocation extends StatefulWidget {
   const UpdateLocation({super.key});
@@ -14,30 +13,48 @@ class _UpdateLocationState extends State<UpdateLocation> {
   String? aadharNumber;
 
   Future<void> _searchAadhar() async {
+    FocusScope.of(context).unfocus();
     final String aadharNumberCo = _aadharNumberController.text.trim();
 
     final CollectionReference collectionReference =
         FirebaseFirestore.instance.collection('children_details');
-    Query query =
-        collectionReference.where('aadharNumber', isEqualTo: aadharNumberCo);
+    Query query = collectionReference
+        .where('aadharNumber', isEqualTo: aadharNumberCo)
+        .limit(1);
     QuerySnapshot querySnapshot = await query.get();
     final docData = querySnapshot.docs.map((doc) => doc.data()).toList();
 
     if (docData.isNotEmpty) {
       print("found");
       setState(() {
-        aadharNumber = querySnapshot.docs.toString();
+        aadharNumber = aadharNumberCo;
+        ScaffoldMessenger.of(context)
+            .showSnackBar(const SnackBar(content: Text('Found')));
       });
     } else {
       print("not found");
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Aadhar number not found')));
       setState(() {
         aadharNumber = null;
       });
     }
-    print(aadharNumberCo);
 
-    // print(aadharNumber![0].toString());
+    // await FirebaseFirestore.instance
+    //     .collection('children_details')
+    //     .where('aadharNumber', isEqualTo: aadharNumberCo)
+    //     .get()
+    //     .then((event) {
+    //   if (event.docs.isNotEmpty) {
+    //     Map<String, dynamic> documentData =
+    //         event.docs.single.data()[1]['aadharNumber'];
+    //     print(documentData); //if it is a single document
+    //   }
+    // }).catchError((e) => print("error fetching data: $e"));
   }
+
+  CollectionReference user =
+      FirebaseFirestore.instance.collection('children_details');
 
   @override
   Widget build(BuildContext context) {
@@ -67,11 +84,10 @@ class _UpdateLocationState extends State<UpdateLocation> {
             if (aadharNumber == null)
               Text('No data found for the given Aadhar number.')
             else
-              FutureBuilder<Object>(
-                future: FirebaseFirestore.instance
-                    .collection('children_details')
-                    .doc()
-                    .get(),
+              StreamBuilder<Object>(
+                stream: user
+                    .where('aadharNumber', isEqualTo: '8988898898')
+                    .snapshots(),
                 builder: (context, snapshot) {
                   //   CollectionReference collectionReference =  FirebaseFirestore.instance
                   //     .collection('children_details')
@@ -83,7 +99,9 @@ class _UpdateLocationState extends State<UpdateLocation> {
                   if (snapshot.hasError) {
                     return Text('Error = ${snapshot.error}');
                   }
-                  return Text("");
+                  var docs = snapshot.data;
+
+                  return Text("docs");
                 },
               )
             //       Column(
