@@ -60,7 +60,7 @@ class _UpdateLocationState extends State<UpdateLocation> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Search Aadhar'),
+        title: Text('Search Aadhaar'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -72,7 +72,7 @@ class _UpdateLocationState extends State<UpdateLocation> {
               controller: _aadharNumberController,
               keyboardType: TextInputType.number,
               decoration: InputDecoration(
-                labelText: 'Aadhar Number',
+                labelText: 'Aadhaar Number',
               ),
             ),
             SizedBox(height: 16.0),

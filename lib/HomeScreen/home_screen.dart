@@ -78,6 +78,19 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ),
       ),
+      // bottomNavigationBar: BottomAppBar(
+      //   child: Row(
+      //     mainAxisAlignment: MainAxisAlignment.center,
+      //     children: <Widget>[
+      //       ElevatedButton(
+      //         onPressed: () {
+      //           // Handle button press
+      //         },
+      //         child: Text('Click me!'),
+      //       ),
+      //     ],
+      //   ),
+      // ),
     );
   }
 }

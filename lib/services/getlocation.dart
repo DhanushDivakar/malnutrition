@@ -135,6 +135,7 @@ class _AddChildState extends State<AddChild> {
           });
           FirebaseFirestore.instance.collection('children_details').add({
             'childName': _childName,
+            'gender': _selectedGender,
             'aadharNumber': _aadharNumber,
             'guardianName': _guardianName,
             'address': _currentAddress,
@@ -198,7 +199,9 @@ class _AddChildState extends State<AddChild> {
                   children: [
                     TextFormField(
                       decoration: const InputDecoration(
-                          labelText: 'Child Name as in Aadhar Card'),
+                        labelText: 'Child Name as in Aadhar Card',
+                        border: OutlineInputBorder(),
+                      ),
                       validator: (value) {
                         if (value!.isEmpty) {
                           return 'Please enter a name';
@@ -209,9 +212,16 @@ class _AddChildState extends State<AddChild> {
                         _childName = value!;
                       },
                     ),
+                    const SizedBox(
+                      height: 10,
+                    ),
                     TextFormField(
                       keyboardType: TextInputType.number,
-                      decoration: InputDecoration(labelText: 'Aadhar Number'),
+                      maxLength: 12,
+                      decoration: const InputDecoration(
+                        labelText: 'Aadhar Number',
+                        border: OutlineInputBorder(),
+                      ),
                       validator: (value) {
                         if (value!.isEmpty) {
                           return 'Please enter a number';
@@ -226,36 +236,44 @@ class _AddChildState extends State<AddChild> {
                         _aadharNumber = value!;
                       },
                     ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(
-                          'Gender',
-                          style: TextStyle(
-                            fontSize: 16.0,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        DropdownButton<String>(
-                          value: _selectedGender,
-                          items: _genders
-                              .map((gender) => DropdownMenuItem<String>(
-                                    child: Text(gender),
-                                    value: gender,
-                                  ))
-                              .toList(),
-                          onChanged: (value) {
-                            setState(() {
-                              _selectedGender = value;
-                            });
-                            print(_selectedGender);
-                          },
-                          isExpanded: true,
-                        ),
-                      ],
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    DropdownButtonFormField<String>(
+                      validator: (value) {
+                        if (_selectedGender == null) {
+                          return 'Please select a gender';
+                        }
+                        return null;
+                      },
+                      decoration: const InputDecoration(
+                        labelText: 'Gender',
+                        border: OutlineInputBorder(),
+                      ),
+                      borderRadius: BorderRadius.circular(10),
+                      value: _selectedGender,
+                      enableFeedback: true,
+                      items: _genders
+                          .map((gender) => DropdownMenuItem<String>(
+                                value: gender,
+                                child: Text(gender),
+                              ))
+                          .toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          _selectedGender = value;
+                        });
+                        print(_selectedGender);
+                      },
+                      isExpanded: true,
+                    ),
+                    const SizedBox(
+                      height: 10,
                     ),
                     TextFormField(
-                      decoration: InputDecoration(labelText: 'Guardian Name'),
+                      decoration: const InputDecoration(
+                          labelText: 'Guardian Name',
+                          border: OutlineInputBorder()),
                       validator: (value) {
                         if (value!.isEmpty) {
                           return 'Please enter a name';
@@ -266,7 +284,7 @@ class _AddChildState extends State<AddChild> {
                         _guardianName = value!;
                       },
                     ),
-                    SizedBox(height: 16),
+                    const SizedBox(height: 16),
                     if (_currentAddress != null)
                       Column(
                         mainAxisAlignment: MainAxisAlignment.center,
