@@ -74,186 +74,52 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
-// class AddChild extends StatefulWidget {
-//   const AddChild({super.key});
+class GenderInput extends StatefulWidget {
+  const GenderInput({Key? key}) : super(key: key);
 
-//   @override
-//   State<AddChild> createState() => _AddChildState();
-// }
+  @override
+  _GenderInputState createState() => _GenderInputState();
+}
 
-// class _AddChildState extends State<AddChild> {
-//   final _formKey = GlobalKey<FormState>();
-//   String? _childName, _aadharNumber, _guardianName;
-//   Position? _position;
+class _GenderInputState extends State<GenderInput> {
+  String? _selectedGender;
 
-//   @override
-//   void initState() {
-//     super.initState();
-//     getLocation();
-//   }
+  final List<String> _genders = <String>[
+    'Male',
+    'Female',
+  ];
 
-//   Future<void> getLocation() async {
-//     // Test if location services are enabled.
-//     Geolocator.requestPermission();
-//     bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
-//     if (!serviceEnabled) {
-//       // Location services are not enabled don't continue
-//       // accessing the position and request users of the
-//       // App to enable the location services.
-//       return Future.error('Location services are disabled.');
-//     }
-
-//     LocationPermission permission = await Geolocator.checkPermission();
-//     if (permission == LocationPermission.denied) {
-//       permission = await Geolocator.requestPermission();
-//       if (permission == LocationPermission.deniedForever) {
-//         // Permissions are denied forever, handle appropriately.
-//         return Future.error(
-//             Exception('Location permissions are permanently denied.'));
-//       }
-
-//       if (permission == LocationPermission.denied) {
-//         // Permissions are denied, next time you could try
-//         // requesting permissions again (this is also where
-//         // Android's shouldShowRequestPermissionRationale
-//         // returned true. According to Android guidelines
-//         // your App should show an explanatory UI now.
-//         return Future.error(Exception('Location permissions are denied.'));
-//       }
-//     }
-
-//     // When we reach here, permissions are granted and we can
-//     // continue accessing the position of the device.
-
-//     Position position = await Geolocator.getCurrentPosition(
-//         desiredAccuracy: LocationAccuracy.high);
-//     setState(() {
-//       _position = position;
-//     });
-//   }
-
-//   // void _getCurrentLocation() async {
-//   //   bool serviceEnabled;
-//   //   LocationPermission permission;
-//   //   Geolocator.requestPermission();
-
-//   //   serviceEnabled = await Geolocator.isLocationServiceEnabled();
-//   //   if (!serviceEnabled) {
-//   //     return Future.error('Location services are disabled.');
-//   //   }
-
-//   //   permission = await Geolocator.checkPermission();
-//   //   if (permission == LocationPermission.denied) {
-//   //     permission = await Geolocator.requestPermission();
-//   //     if (permission == LocationPermission.denied) {
-//   //       return Future.error('Location permissions are denied');
-//   //     }
-//   //   }
-
-//   //   if (permission == LocationPermission.deniedForever) {
-//   //     return Future.error(
-//   //         'Location permissions are permanently denied, we cannot request permissions.');
-//   //   }
-
-//   //   Position position = await Geolocator.getCurrentPosition();
-//   //   setState(() {
-//   //     _position = position;
-//   //   });
-//   // }
-
-//   void _submitForm() async {
-//     if (_formKey.currentState!.validate()) {
-//       _formKey.currentState!.save();
-//       try {
-//         // await FirebaseFirestore.instance.collection('children_details').add({
-//         //   'childName': _childName,
-//         //   'aadharNumber': _aadharNumber,
-//         //   'guardianName': _guardianName,
-//         // });
-//         print(_childName);
-//         print(_aadharNumber);
-//         print(_guardianName);
-//         ScaffoldMessenger.of(context).showSnackBar(
-//           SnackBar(content: Text('Child added successfully')),
-//         );
-//       } catch (error) {
-//         ScaffoldMessenger.of(context).showSnackBar(
-//           SnackBar(content: Text('Failed to add child')),
-//         );
-//       }
-//     }
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Text('Add Child'),
-//       ),
-//       body: Padding(
-//         padding: EdgeInsets.all(16),
-//         child: Form(
-//           key: _formKey,
-//           child: Column(
-//             crossAxisAlignment: CrossAxisAlignment.stretch,
-//             children: [
-//               TextFormField(
-//                 decoration:
-//                     InputDecoration(labelText: 'Child Name as in Aadhar Card'),
-//                 validator: (value) {
-//                   if (value!.isEmpty) {
-//                     return 'Please enter a name';
-//                   }
-//                   return null;
-//                 },
-//                 onSaved: (value) {
-//                   _childName = value!;
-//                 },
-//               ),
-//               TextFormField(
-//                 decoration: InputDecoration(labelText: 'Aadhar Number'),
-//                 validator: (value) {
-//                   if (value!.isEmpty) {
-//                     return 'Please enter a number';
-//                   }
-//                   if (!RegExp(r'^[2-9]{1}[0-9]{3}[0-9]{4}[0-9]{4}$')
-//                       .hasMatch(value)) {
-//                     return 'Please enter a valid 12-digit Aadhar number';
-//                   }
-//                   return null;
-//                 },
-//                 onSaved: (value) {
-//                   _aadharNumber = value!;
-//                 },
-//               ),
-//               TextFormField(
-//                 decoration: InputDecoration(labelText: 'Guardian Name'),
-//                 validator: (value) {
-//                   if (value!.isEmpty) {
-//                     return 'Please enter a name';
-//                   }
-//                   return null;
-//                 },
-//                 onSaved: (value) {
-//                   _guardianName = value!;
-//                 },
-//               ),
-//               SizedBox(height: 16),
-//               if (_position != null)
-//                 Text(
-//                     'Latitude: ${_position?.latitude}, Longitude: ${_position?.longitude}'),
-//               SizedBox(height: 16),
-//               ElevatedButton(
-//                 onPressed: _submitForm,
-//                 child: Text('Add Child'),
-//               ),
-//             ],
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Text(
+          'Gender',
+          style: TextStyle(
+            fontSize: 16.0,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        DropdownButton<String>(
+          value: _selectedGender,
+          items: _genders
+              .map((gender) => DropdownMenuItem<String>(
+                    child: Text(gender),
+                    value: gender,
+                  ))
+              .toList(),
+          onChanged: (value) {
+            setState(() {
+              _selectedGender = value;
+            });
+          },
+          isExpanded: true,
+        ),
+      ],
+    );
+  }
+}
 
 class MalnutritionChecker extends StatefulWidget {
   const MalnutritionChecker({super.key});
@@ -326,6 +192,9 @@ class _MalnutritionCheckerState extends State<MalnutritionChecker> {
                   ),
                 ],
               ),
+              const SizedBox(height: 20),
+              const GenderInput(),
+
               const SizedBox(height: 20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
