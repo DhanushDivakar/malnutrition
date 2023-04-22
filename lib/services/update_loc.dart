@@ -108,63 +108,83 @@ class _UpdateLocationState extends State<UpdateLocation> {
                     aadharNumber = null;
                   });
                 }
-                // ignore: use_build_context_synchronously
-                showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10)),
-                        title: Text('Result'),
-                        content: Text('Result '),
-                        actions: [
-                          ElevatedButton(
+                if (docData.isNotEmpty) {
+                  // ignore: use_build_context_synchronously
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)),
+                          title: Text('Search'),
+                          content: Text(
+                              'Aadhaar number ${_aadharNumberController.text} found'),
+                          actions: [
+                            ElevatedButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                child: Text('yes'))
+                          ],
+                        );
+                      });
+                } else {
+                  // ignore: use_build_context_synchronously
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)),
+                          title: Text('Search'),
+                          content: Text(
+                              'Aadhaar number ${_aadharNumberController.text} not found'),
+                          actions: [
+                            ElevatedButton(
                               onPressed: () {
                                 Navigator.pop(context);
                               },
-                              child: Text('Go Back'))
-                        ],
-                      );
-                    });
-
-                // await FirebaseFirestore.instance
-                //     .collection('children_details')
-                //     .where('aadharNumber', isEqualTo: aadharNumberCo)
-                //     .get()
-                //     .then((event) {
-                //   if (event.docs.isNotEmpty) {
-                //     Map<String, dynamic> documentData =
-                //         event.docs.single.data()[1]['aadharNumber'];
-                //     print(documentData); //if it is a single document
-                //   }
-                // }).catchError((e) => print("error fetching data: $e"));
+                              child: Text('Go Back'),
+                            )
+                          ],
+                        );
+                      });
+                }
               },
               child: Text('Search'),
+              // child: Text('Search'),
             ),
-            SizedBox(height: 16.0),
-            if (aadharNumber == null)
-              Text('No data found for the given Aadhar number.')
-            else
-              StreamBuilder<Object>(
-                stream: user
-                    .where('aadharNumber', isEqualTo: '8988898898')
-                    .snapshots(),
-                builder: (context, snapshot) {
-                  //   CollectionReference collectionReference =  FirebaseFirestore.instance
-                  //     .collection('children_details')
-                  //     .doc()
-                  //     .get();
-                  //    Query query =
-                  //     collectionReference.where('aadharNumber', isEqualTo: aadharNumberCo);
-                  // QuerySnapshot querySnapshot = await query.get(),
-                  if (snapshot.hasError) {
-                    return Text('Error = ${snapshot.error}');
-                  }
-                  var docs = snapshot.data;
+            const SizedBox(height: 16.0),
 
-                  return Text("docs");
-                },
-              )
+            // StreamBuilder(
+            //   stream: user
+            //       .where('aadharNumber',
+            //           isEqualTo: _aadharNumberController.text)
+            //       .snapshots(),
+            //   builder: (context, snapshot) {
+            //     //   CollectionReference collectionReference =  FirebaseFirestore.instance
+            //     //     .collection('children_details')
+            //     //     .doc()
+            //     //     .get();
+            //     //    Query query =
+            //     //     collectionReference.where('aadharNumber', isEqualTo: aadharNumberCo);
+            //     // QuerySnapshot querySnapshot = await query.get(),
+            //     if (snapshot.hasError) {
+            //       return Text('Error = ${snapshot.error}');
+            //     }
+            //     if (snapshot.hasData) {
+            //       //final data = snapshot.data as DocumentSnapshot;
+            //       Map<String, dynamic> items =
+            //           snapshot.data!.docs as Map<String, dynamic>;
+
+            //       //Map<String, dynamic> documentData = snapshot.data! as Map<String, dynamic>;
+            //       final a = items['aadharNumber'];
+            //       print(a);
+            //     }
+
+            //     return Text("docs");
+            //   },
+            // )
             //       Column(
             //         crossAxisAlignment: CrossAxisAlignment.start,
             //         children: [

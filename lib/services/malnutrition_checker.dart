@@ -54,11 +54,7 @@ class _MalnutritionCheckerState extends State<MalnutritionChecker> {
     }
 
     if (zScore < -3) {
-      return "Severe malnutrition";
-    } else if (zScore < -2) {
-      return "Moderate malnutrition";
-    } else if (zScore < -1) {
-      return "Mild malnutrition";
+      return "malnutrition";
     } else {
       return "Normal";
     }
@@ -661,6 +657,7 @@ class _MalnutritionCheckerState extends State<MalnutritionChecker> {
     return (zWFA + zHFA) / 2;
   }
 
+  final formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
@@ -673,269 +670,296 @@ class _MalnutritionCheckerState extends State<MalnutritionChecker> {
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
-          child: Column(
-            //mainAxisAlignment: MainAxisAlignment.center,
-            //crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width / 3,
-                    child: Text(
-                      'Age: ',
-                      style: TextStyle(
-                        fontSize: height * 0.025,
+          child: Form(
+            key: formKey,
+            child: Column(
+              //mainAxisAlignment: MainAxisAlignment.center,
+              //crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width / 3,
+                      child: Text(
+                        'Age: ',
+                        style: TextStyle(
+                          fontSize: height * 0.025,
+                        ),
                       ),
                     ),
-                  ),
-                  const SizedBox(width: 10),
-                  Flexible(
-                    child: TextField(
-                      controller: _ageController,
-                      keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
+                    const SizedBox(width: 10),
+                    Flexible(
+                      child: TextField(
+                        controller: _ageController,
+                        keyboardType: TextInputType.number,
+                        decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                        ),
                       ),
                     ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width / 2.85,
-                    child: Text(
-                      'Gender: ',
-                      style: TextStyle(
-                        fontSize: height * 0.025,
+                  ],
+                ),
+                const SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width / 2.85,
+                      child: Text(
+                        'Gender: ',
+                        style: TextStyle(
+                          fontSize: height * 0.025,
+                        ),
                       ),
                     ),
-                  ),
-                  Flexible(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5.0),
-                        color: Colors.transparent,
-                        border: Border.all(color: Colors.grey),
+                    Flexible(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5.0),
+                          color: Colors.transparent,
+                          border: Border.all(color: Colors.grey),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                              left: 10, top: 5, bottom: 5),
+                          child: DropdownButton<String>(
+                            underline: const SizedBox(),
+                            value: _selectedGender,
+                            items: _genders
+                                .map((gender) => DropdownMenuItem<String>(
+                                      value: gender,
+                                      child: Text(gender),
+                                    ))
+                                .toList(),
+                            onChanged: (value) {
+                              setState(() {
+                                _selectedGender = value;
+                              });
+                            },
+                            borderRadius: BorderRadius.circular(10),
+                            isExpanded: true,
+                          ),
+                        ),
                       ),
-                      child: Padding(
-                        padding:
-                            const EdgeInsets.only(left: 10, top: 5, bottom: 5),
-                        child: DropdownButton<String>(
-                          underline: const SizedBox(),
-                          value: _selectedGender,
-                          items: _genders
-                              .map((gender) => DropdownMenuItem<String>(
-                                    value: gender,
-                                    child: Text(gender),
-                                  ))
-                              .toList(),
-                          onChanged: (value) {
-                            setState(() {
-                              _selectedGender = value;
-                            });
-                          },
-                          borderRadius: BorderRadius.circular(10),
-                          isExpanded: true,
+                    ),
+                  ],
+                ),
+
+                const SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width / 3,
+                      child: Text(
+                        'Weight (Kg): ',
+                        style: TextStyle(
+                          fontSize: height * 0.025,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Flexible(
+                      child: TextField(
+                        controller: _weightController,
+                        keyboardType: TextInputType.number,
+                        decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width / 3,
+                      child: Text(
+                        'Height (cm): ',
+                        style: TextStyle(
+                          fontSize: height * 0.025,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Flexible(
+                      child: TextField(
+                        controller: _heightController,
+                        keyboardType: TextInputType.number,
+                        decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width / 3,
+                      child: Text(
+                        'MUAC (cm): ',
+                        style: TextStyle(
+                          fontSize: height * 0.025,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Flexible(
+                      child: TextField(
+                        controller: _muacController,
+                        keyboardType: TextInputType.number,
+                        decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 20),
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.center,
+                //   children: [
+                //     SizedBox(
+                //       width: MediaQuery.of(context).size.width / 3,
+                //       child: Text(
+                //         'BMI: ',
+                //         style: TextStyle(
+                //           fontSize: height * 0.025,
+                //         ),
+                //       ),
+                //     ),
+                //     const SizedBox(width: 10),
+                //     Flexible(
+                //       child: TextField(
+                //         controller: _bmiController,
+                //         keyboardType: TextInputType.number,
+                //         decoration: const InputDecoration(
+                //           border: OutlineInputBorder(),
+                //         ),
+                //       ),
+                //     ),
+                //   ],
+                // ),
+                const SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width / 3,
+                      child: Text(
+                        'head circumference (cm): ',
+                        style: TextStyle(
+                          fontSize: height * 0.025,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Flexible(
+                      child: TextField(
+                        controller: _headCircumferenceController,
+                        keyboardType: TextInputType.number,
+                        decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width / 3,
+                      child: Text(
+                        'SkinFold thickness (mm): ',
+                        style: TextStyle(
+                          fontSize: height * 0.025,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Flexible(
+                      child: TextField(
+                        controller: _skinfoldThicknessController,
+                        keyboardType: TextInputType.number,
+                        decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 40),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width / 2,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      double age = double.tryParse(_ageController.text) ?? 0.0;
+                      double height =
+                          double.tryParse(_heightController.text) ?? 0.0;
+                      double weight =
+                          double.tryParse(_weightController.text) ?? 0.0;
+
+                      String gender = _selectedGender ?? 'male';
+                      print('weight : $weight');
+                      print('height : $height');
+                      print('age : $age');
+                      print('gender : $gender');
+
+                      malnutritionStatus =
+                          calculateMalnutrition(age, height, weight, gender);
+
+                      print(malnutritionStatus);
+                      print(calculateMalnutrition(age, height, weight, gender));
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10)),
+                              title: Text('Result'),
+                              content: Text(calculateMalnutrition(
+                                  age, height, weight, gender)),
+                              actions: [
+                                ElevatedButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: Text('Ok'))
+                              ],
+                            );
+                          });
+                    },
+                    child: const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 10),
+                      child: Text(
+                        'Check',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
                   ),
-                ],
-              ),
-
-              const SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width / 3,
-                    child: Text(
-                      'Weight (Kg): ',
-                      style: TextStyle(
-                        fontSize: height * 0.025,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  Flexible(
-                    child: TextField(
-                      controller: _weightController,
-                      keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width / 3,
-                    child: Text(
-                      'Height (cm): ',
-                      style: TextStyle(
-                        fontSize: height * 0.025,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  Flexible(
-                    child: TextField(
-                      controller: _heightController,
-                      keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width / 3,
-                    child: Text(
-                      'MUAC (cm): ',
-                      style: TextStyle(
-                        fontSize: height * 0.025,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  Flexible(
-                    child: TextField(
-                      controller: _muacController,
-                      keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 20),
-              // Row(
-              //   mainAxisAlignment: MainAxisAlignment.center,
-              //   children: [
-              //     SizedBox(
-              //       width: MediaQuery.of(context).size.width / 3,
-              //       child: Text(
-              //         'BMI: ',
-              //         style: TextStyle(
-              //           fontSize: height * 0.025,
-              //         ),
-              //       ),
-              //     ),
-              //     const SizedBox(width: 10),
-              //     Flexible(
-              //       child: TextField(
-              //         controller: _bmiController,
-              //         keyboardType: TextInputType.number,
-              //         decoration: const InputDecoration(
-              //           border: OutlineInputBorder(),
-              //         ),
-              //       ),
-              //     ),
-              //   ],
-              // ),
-              const SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width / 3,
-                    child: Text(
-                      'head circumference (cm): ',
-                      style: TextStyle(
-                        fontSize: height * 0.025,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  Flexible(
-                    child: TextField(
-                      controller: _headCircumferenceController,
-                      keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width / 3,
-                    child: Text(
-                      'SkinFold thickness (mm): ',
-                      style: TextStyle(
-                        fontSize: height * 0.025,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  Flexible(
-                    child: TextField(
-                      controller: _skinfoldThicknessController,
-                      keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 40),
-              SizedBox(
-                width: MediaQuery.of(context).size.width / 2,
-                child: ElevatedButton(
-                  onPressed: () {
-                    double age = double.tryParse(_ageController.text) ?? 0.0;
-                    double height =
-                        double.tryParse(_heightController.text) ?? 0.0;
-                    double weight =
-                        double.tryParse(_weightController.text) ?? 0.0;
-
-                    String gender = _selectedGender ?? 'male';
-
-                    malnutritionStatus =
-                        calculateMalnutrition(age, 15, 80, gender);
-                    print(malnutritionStatus);
-                  },
-                  child: const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 10),
-                    child: Text(
-                      'Check',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
                 ),
-              ),
-              const SizedBox(height: 20),
-              Text(
-                'Result:  $malnutritionStatus',
-                style: const TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                ),
-              ),
-            ],
+                // const SizedBox(height: 20),
+                // Text(
+                //   'Result:  $malnutritionStatus',
+                //   style: const TextStyle(
+                //     fontSize: 20,
+                //     fontWeight: FontWeight.bold,
+                //     color: Colors.black,
+                //   ),
+                // ),
+              ],
+            ),
           ),
         ),
       ),
