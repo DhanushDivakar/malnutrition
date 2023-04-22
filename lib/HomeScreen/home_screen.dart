@@ -41,24 +41,26 @@ class _MyHomePageState extends State<MyHomePage> {
                 }));
               },
             ),
-            const Divider(),
-            ListTile(
-              title: const Text('Track'),
-              onTap: () {
-                // Navigator.push(context, MaterialPageRoute(builder: (context) {
-                //   return const MalnutritionChecker();
-                // }));
-                // Do something when Option 2 is tapped
-              },
-            ),
+            // const Divider(),
+            // ListTile(
+            //   title: const Text('Track'),
+            //   onTap: () {
+            //     // Navigator.push(context, MaterialPageRoute(builder: (context) {
+            //     //   return const MalnutritionChecker();
+            //     // }));
+            //     // Do something when Option 2 is tapped
+            //   },
+            // ),
           ],
         ),
       ),
       body: SingleChildScrollView(
         child: Center(
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              TextButton(
+              ElevatedButton(
                 onPressed: () {
                   Navigator.push(context, MaterialPageRoute(builder: (context) {
                     return const AddChild();
@@ -66,7 +68,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 },
                 child: Text("Add child"),
               ),
-              TextButton(
+              ElevatedButton(
                 onPressed: () {
                   Navigator.push(context, MaterialPageRoute(builder: (context) {
                     return const UpdateLocation();
@@ -74,6 +76,29 @@ class _MyHomePageState extends State<MyHomePage> {
                 },
                 child: const Text("Update Location"),
               ),
+              //   ElevatedButton(
+              //   onPressed: () {},
+              //   child: Padding(
+              //     padding: const EdgeInsets.symmetric(
+              //       horizontal: 24.0,
+              //       vertical: 16.0,
+              //     ),
+              //     child: Text(
+              //       'Button 1',
+              //       style: TextStyle(
+              //         fontSize: 20.0,
+              //         fontWeight: FontWeight.bold,
+              //         color: Colors.white,
+              //       ),
+              //     ),
+              //   ),
+              //   style: ElevatedButton.styleFrom(
+              //     primary: Colors.green,
+              //     shape: RoundedRectangleBorder(
+              //       borderRadius: BorderRadius.circular(24.0),
+              //     ),
+              //   ),
+              // ),
             ],
           ),
         ),
