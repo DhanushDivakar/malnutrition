@@ -65,7 +65,7 @@ class _MalnutritionCheckerState extends State<MalnutritionChecker> {
                     SizedBox(
                       width: MediaQuery.of(context).size.width / 3,
                       child: Text(
-                        'Age: ',
+                        'Age (months): ',
                         style: TextStyle(
                           fontSize: height * 0.025,
                         ),
