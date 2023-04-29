@@ -40,6 +40,7 @@ class _AddChildState extends State<AddChild> {
 
   String? _currentAddress;
   Position? _currentPosition;
+  String? postalCode;
 
   bool isLoading = false;
   bool? serviceEnabled;
@@ -72,20 +73,6 @@ class _AddChildState extends State<AddChild> {
       return false;
     }
     return true;
-  }
-
-  Future<void> _getAddressFromLatLng(Position position) async {
-    await placemarkFromCoordinates(
-            _currentPosition!.latitude, _currentPosition!.longitude)
-        .then((List<Placemark> placemarks) {
-      Placemark place = placemarks[0];
-      setState(() {
-        _currentAddress =
-            '${place.street}, ${place.subLocality}, ${place.subAdministrativeArea}, ${place.postalCode}';
-      });
-    }).catchError((e) {
-      debugPrint(e);
-    });
   }
 
   void _submitForm() async {
@@ -126,10 +113,14 @@ class _AddChildState extends State<AddChild> {
             .then((List<Placemark> placemarks) {
           Placemark place = placemarks[0];
           setState(() {
+            postalCode = place.postalCode;
             _currentAddress =
                 '${place.street}, ${place.subLocality}, ${place.subAdministrativeArea}, ${place.postalCode}';
           });
-          FirebaseFirestore.instance.collection('children_details').add({
+          FirebaseFirestore.instance
+              .collection('children_details')
+              .doc(postalCode)
+              .set({
             'childName': _childName,
             'gender': _selectedGender,
             'aadharNumber': _aadharNumber,
@@ -141,8 +132,27 @@ class _AddChildState extends State<AddChild> {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text('Failed to add child')),
             );
-            setState(() {
-              isLoading = false;
+          }).then((value) {
+            // write data to location_history collection
+            FirebaseFirestore.instance
+                .collection('location_history')
+                .doc(_aadharNumber)
+                .set({
+              'childName': _childName,
+              'gender': _selectedGender,
+              'aadharNumber': _aadharNumber,
+              'guardianName': _guardianName,
+              'address': _currentAddress,
+              'condition': _selectedCondition,
+              'time': DateTime.now(),
+            }).catchError((e) {
+              print('failed to add into loc history');
+            }).then((value) {
+              if (mounted) {
+                setState(() {
+                  isLoading = false;
+                });
+              }
             });
           });
           print(_childName);
@@ -154,9 +164,11 @@ class _AddChildState extends State<AddChild> {
           );
           Navigator.of(context).pop();
 
-          setState(() {
-            isLoading = false;
-          });
+          if (mounted) {
+            setState(() {
+              isLoading = false;
+            });
+          }
         }).catchError((e) {
           debugPrint(e);
         });
