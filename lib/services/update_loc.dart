@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:malnutrition/services/foundData_screen.dart';
 
 class UpdateLocation extends StatefulWidget {
   const UpdateLocation({super.key});
@@ -59,11 +58,17 @@ class _UpdateLocationState extends State<UpdateLocation> {
                 }
                 if (docData.isNotEmpty) {
                   // ignore: use_build_context_synchronously
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const FoundDataScreen(),
-                    ),
+                  showModalBottomSheet(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return Container(
+                        height: MediaQuery.of(context).size.height * 0.5,
+                        color: Colors.white,
+                        child: Center(
+                          child: Text('This is a Modal Bottom Sheet'),
+                        ),
+                      );
+                    },
                   );
                 } else {
                   // ignore: use_build_context_synchronously
