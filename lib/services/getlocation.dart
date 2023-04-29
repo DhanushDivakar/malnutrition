@@ -199,7 +199,7 @@ class _AddChildState extends State<AddChild> {
                   children: [
                     TextFormField(
                       decoration: const InputDecoration(
-                        labelText: 'Child Name as in Aadhar Card',
+                        labelText: 'Child Name',
                         border: OutlineInputBorder(),
                       ),
                       validator: (value) {

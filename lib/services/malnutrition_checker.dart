@@ -73,9 +73,16 @@ class _MalnutritionCheckerState extends State<MalnutritionChecker> {
                     ),
                     const SizedBox(width: 10),
                     Flexible(
-                      child: TextField(
+                      child: TextFormField(
                         controller: _ageController,
                         keyboardType: TextInputType.number,
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'Please enter age ';
+                          }
+
+                          return null;
+                        },
                         decoration: const InputDecoration(
                           border: OutlineInputBorder(),
                         ),
@@ -144,7 +151,14 @@ class _MalnutritionCheckerState extends State<MalnutritionChecker> {
                     ),
                     const SizedBox(width: 10),
                     Flexible(
-                      child: TextField(
+                      child: TextFormField(
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'Please enter a weight';
+                          }
+
+                          return null;
+                        },
                         controller: _weightController,
                         keyboardType: TextInputType.number,
                         decoration: const InputDecoration(
@@ -169,7 +183,14 @@ class _MalnutritionCheckerState extends State<MalnutritionChecker> {
                     ),
                     const SizedBox(width: 10),
                     Flexible(
-                      child: TextField(
+                      child: TextFormField(
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'Please enter a height';
+                          }
+
+                          return null;
+                        },
                         controller: _heightController,
                         keyboardType: TextInputType.number,
                         decoration: const InputDecoration(
@@ -194,7 +215,14 @@ class _MalnutritionCheckerState extends State<MalnutritionChecker> {
                     ),
                     const SizedBox(width: 10),
                     Flexible(
-                      child: TextField(
+                      child: TextFormField(
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'Please enter a Arm Circumference';
+                          }
+
+                          return null;
+                        },
                         controller: _acController,
                         keyboardType: TextInputType.number,
                         decoration: const InputDecoration(
@@ -244,7 +272,14 @@ class _MalnutritionCheckerState extends State<MalnutritionChecker> {
                     ),
                     const SizedBox(width: 10),
                     Flexible(
-                      child: TextField(
+                      child: TextFormField(
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'Please enter a head circumference';
+                          }
+
+                          return null;
+                        },
                         controller: _headCircumferenceController,
                         keyboardType: TextInputType.number,
                         decoration: const InputDecoration(
@@ -269,7 +304,14 @@ class _MalnutritionCheckerState extends State<MalnutritionChecker> {
                     ),
                     const SizedBox(width: 10),
                     Flexible(
-                      child: TextField(
+                      child: TextFormField(
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'Please enter a Triceps SkinFold thickness';
+                          }
+
+                          return null;
+                        },
                         controller: _skinfoldThicknessController,
                         keyboardType: TextInputType.number,
                         decoration: const InputDecoration(
@@ -284,75 +326,79 @@ class _MalnutritionCheckerState extends State<MalnutritionChecker> {
                   width: MediaQuery.of(context).size.width / 2,
                   child: ElevatedButton(
                     onPressed: () {
-                      int age = int.tryParse(_ageController.text) ?? 0;
-                      double height =
-                          double.tryParse(_heightController.text) ?? 0.0;
-                      double weight =
-                          double.tryParse(_weightController.text) ?? 0.0;
-                      double armCircum =
-                          double.tryParse(_acController.text) ?? 0.0;
-                      double headCircum =
-                          double.tryParse(_headCircumferenceController.text) ??
-                              0.0;
-                      double skinfoldThickness =
-                          double.tryParse(_skinfoldThicknessController.text) ??
-                              0.0;
+                      FocusScope.of(context).unfocus();
+                      if (formKey.currentState!.validate()) {
+                        formKey.currentState!.save();
+                        int age = int.tryParse(_ageController.text) ?? 0;
+                        double height =
+                            double.tryParse(_heightController.text) ?? 0.0;
+                        double weight =
+                            double.tryParse(_weightController.text) ?? 0.0;
+                        double armCircum =
+                            double.tryParse(_acController.text) ?? 0.0;
+                        double headCircum = double.tryParse(
+                                _headCircumferenceController.text) ??
+                            0.0;
+                        double skinfoldThickness = double.tryParse(
+                                _skinfoldThicknessController.text) ??
+                            0.0;
 
-                      String gender = _selectedGender ?? 'male';
-                      print('weight : $weight');
-                      print('height : $height');
-                      print('age : $age');
-                      print('gender : $gender');
+                        String gender = _selectedGender ?? 'male';
+                        print('weight : $weight');
+                        print('height : $height');
+                        print('age : $age');
+                        print('gender : $gender');
 //  print(getMalnutritionStatus(ageMonths : 45,gender: 'female',weightKg:18,heightCm: 110,armCircum: 15,headCm: 50,skinfoldThickness: 10));
 
-                      malnutritionStatus = getMalnutritionStatus(
-                        ageMonths: age,
-                        gender: gender,
-                        weightKg: weight,
-                        heightCm: height,
-                        armCircum: armCircum,
-                        headCm: headCircum,
-                        skinfoldThickness: skinfoldThickness,
-                      );
-                      print(getMalnutritionStatus(
-                        ageMonths: age,
-                        gender: gender,
-                        weightKg: weight,
-                        heightCm: height,
-                        armCircum: armCircum,
-                        headCm: headCircum,
-                        skinfoldThickness: skinfoldThickness,
-                      ));
+                        malnutritionStatus = getMalnutritionStatus(
+                          ageMonths: age,
+                          gender: gender,
+                          weightKg: weight,
+                          heightCm: height,
+                          armCircum: armCircum,
+                          headCm: headCircum,
+                          skinfoldThickness: skinfoldThickness,
+                        );
+                        print(getMalnutritionStatus(
+                          ageMonths: age,
+                          gender: gender,
+                          weightKg: weight,
+                          heightCm: height,
+                          armCircum: armCircum,
+                          headCm: headCircum,
+                          skinfoldThickness: skinfoldThickness,
+                        ));
 
-                      print(malnutritionStatus);
+                        print(malnutritionStatus);
 
-                      showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10)),
-                              title: Text('Result'),
-                              content: Text(
-                                getMalnutritionStatus(
-                                  ageMonths: age,
-                                  gender: gender,
-                                  weightKg: weight,
-                                  heightCm: height,
-                                  armCircum: armCircum,
-                                  headCm: headCircum,
-                                  skinfoldThickness: skinfoldThickness,
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10)),
+                                title: Text('Result'),
+                                content: Text(
+                                  getMalnutritionStatus(
+                                    ageMonths: age,
+                                    gender: gender,
+                                    weightKg: weight,
+                                    heightCm: height,
+                                    armCircum: armCircum,
+                                    headCm: headCircum,
+                                    skinfoldThickness: skinfoldThickness,
+                                  ),
                                 ),
-                              ),
-                              actions: [
-                                ElevatedButton(
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                    },
-                                    child: Text('Ok'))
-                              ],
-                            );
-                          });
+                                actions: [
+                                  ElevatedButton(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      child: Text('Ok'))
+                                ],
+                              );
+                            });
+                      }
                     },
                     child: const Padding(
                       padding: EdgeInsets.symmetric(vertical: 10),
