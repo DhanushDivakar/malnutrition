@@ -24,26 +24,22 @@ class _AddChildState extends State<AddChild> {
 
   String? _selectedGender;
 
+  String? _selectedCondition;
+
   final List<String> _genders = <String>[
     'Male',
     'Female',
   ];
 
+  final List<String> _condition = <String>[
+    'Normal',
+    'Mild malnutrition',
+    'Moderate malnutrition',
+    'Severe malnutrition',
+  ];
+
   String? _currentAddress;
   Position? _currentPosition;
-  Future<void> _getCurrentPosition() async {
-    final hasPermission = await getLocation();
-    if (!hasPermission) return;
-    await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
-        .then((Position position) {
-      setState(() => _currentPosition = position);
-      _getAddressFromLatLng(_currentPosition!);
-      print(position.latitude);
-      print(position.longitude);
-    }).catchError((e) {
-      debugPrint(e);
-    });
-  }
 
   bool isLoading = false;
   bool? serviceEnabled;
@@ -139,6 +135,7 @@ class _AddChildState extends State<AddChild> {
             'aadharNumber': _aadharNumber,
             'guardianName': _guardianName,
             'address': _currentAddress,
+            'condition': _selectedCondition,
             'time': DateTime.now(),
           }).catchError((e) {
             ScaffoldMessenger.of(context).showSnackBar(
@@ -190,116 +187,149 @@ class _AddChildState extends State<AddChild> {
                 child: CircularProgressIndicator(),
               ),
             )
-          : Padding(
-              padding: EdgeInsets.all(16),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    TextFormField(
-                      decoration: const InputDecoration(
-                        labelText: 'Child Name',
-                        border: OutlineInputBorder(),
+          : SingleChildScrollView(
+              child: Padding(
+                padding: EdgeInsets.all(16),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      TextFormField(
+                        decoration: const InputDecoration(
+                          labelText: 'Child Name',
+                          border: OutlineInputBorder(),
+                        ),
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'Please enter a name';
+                          }
+                          return null;
+                        },
+                        onSaved: (value) {
+                          _childName = value!;
+                        },
                       ),
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return 'Please enter a name';
-                        }
-                        return null;
-                      },
-                      onSaved: (value) {
-                        _childName = value!;
-                      },
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    TextFormField(
-                      keyboardType: TextInputType.number,
-                      maxLength: 12,
-                      decoration: const InputDecoration(
-                        labelText: 'Aadhar Number',
-                        border: OutlineInputBorder(),
+                      const SizedBox(
+                        height: 10,
                       ),
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return 'Please enter a number';
-                        }
-                        if (!RegExp(r'^[2-9]{1}[0-9]{3}[0-9]{4}[0-9]{4}$')
-                            .hasMatch(value)) {
-                          return 'Please enter a valid 12-digit Aadhar number';
-                        }
-                        return null;
-                      },
-                      onSaved: (value) {
-                        _aadharNumber = value!;
-                      },
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    DropdownButtonFormField<String>(
-                      validator: (value) {
-                        if (_selectedGender == null) {
-                          return 'Please select a gender';
-                        }
-                        return null;
-                      },
-                      decoration: const InputDecoration(
-                        labelText: 'Gender',
-                        border: OutlineInputBorder(),
+                      TextFormField(
+                        keyboardType: TextInputType.number,
+                        maxLength: 12,
+                        decoration: const InputDecoration(
+                          labelText: 'Aadhar Number',
+                          border: OutlineInputBorder(),
+                        ),
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'Please enter a number';
+                          }
+                          if (!RegExp(r'^[2-9]{1}[0-9]{3}[0-9]{4}[0-9]{4}$')
+                              .hasMatch(value)) {
+                            return 'Please enter a valid 12-digit Aadhar number';
+                          }
+                          return null;
+                        },
+                        onSaved: (value) {
+                          _aadharNumber = value!;
+                        },
                       ),
-                      borderRadius: BorderRadius.circular(10),
-                      value: _selectedGender,
-                      enableFeedback: true,
-                      items: _genders
-                          .map((gender) => DropdownMenuItem<String>(
-                                value: gender,
-                                child: Text(gender),
-                              ))
-                          .toList(),
-                      onChanged: (value) {
-                        setState(() {
-                          _selectedGender = value;
-                        });
-                        print(_selectedGender);
-                      },
-                      isExpanded: true,
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    TextFormField(
-                      decoration: const InputDecoration(
-                          labelText: 'Guardian Name',
-                          border: OutlineInputBorder()),
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return 'Please enter a name';
-                        }
-                        return null;
-                      },
-                      onSaved: (value) {
-                        _guardianName = value!;
-                      },
-                    ),
-                    const SizedBox(height: 16),
-                    if (_currentAddress != null)
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text('LAT: ${_currentPosition?.latitude ?? ""}'),
-                          Text('LNG: ${_currentPosition?.longitude ?? ""}'),
-                          Text('ADDRESS: ${_currentAddress ?? ""}'),
-                          const SizedBox(height: 32),
-                        ],
+                      const SizedBox(
+                        height: 10,
                       ),
-                    ElevatedButton(
-                      onPressed: _submitForm,
-                      child: const Text("Add"),
-                    )
-                  ],
+                      DropdownButtonFormField<String>(
+                        validator: (value) {
+                          if (_selectedGender == null) {
+                            return 'Please select a gender';
+                          }
+                          return null;
+                        },
+                        decoration: const InputDecoration(
+                          labelText: 'Gender',
+                          border: OutlineInputBorder(),
+                        ),
+                        borderRadius: BorderRadius.circular(10),
+                        value: _selectedGender,
+                        enableFeedback: true,
+                        items: _genders
+                            .map((gender) => DropdownMenuItem<String>(
+                                  value: gender,
+                                  child: Text(gender),
+                                ))
+                            .toList(),
+                        onChanged: (value) {
+                          setState(() {
+                            _selectedGender = value;
+                          });
+                          print(_selectedGender);
+                        },
+                        isExpanded: true,
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      TextFormField(
+                        decoration: const InputDecoration(
+                            labelText: 'Guardian Name',
+                            border: OutlineInputBorder()),
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'Please enter a name';
+                          }
+                          return null;
+                        },
+                        onSaved: (value) {
+                          _guardianName = value!;
+                        },
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      DropdownButtonFormField<String>(
+                        validator: (value) {
+                          if (_selectedGender == null) {
+                            return 'Please select the option';
+                          }
+                          return null;
+                        },
+                        decoration: const InputDecoration(
+                          labelText: 'Condition',
+                          border: OutlineInputBorder(),
+                        ),
+                        borderRadius: BorderRadius.circular(10),
+                        value: _selectedCondition,
+                        enableFeedback: true,
+                        items: _condition
+                            .map((gender) => DropdownMenuItem<String>(
+                                  value: gender,
+                                  child: Text(gender),
+                                ))
+                            .toList(),
+                        onChanged: (value) {
+                          setState(() {
+                            _selectedCondition = value;
+                          });
+                          print(_selectedCondition);
+                        },
+                        isExpanded: true,
+                      ),
+                      const SizedBox(height: 16),
+                      if (_currentAddress != null)
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text('LAT: ${_currentPosition?.latitude ?? ""}'),
+                            Text('LNG: ${_currentPosition?.longitude ?? ""}'),
+                            Text('ADDRESS: ${_currentAddress ?? ""}'),
+                            const SizedBox(height: 32),
+                          ],
+                        ),
+                      ElevatedButton(
+                        onPressed: _submitForm,
+                        child: const Text("Add"),
+                      )
+                    ],
+                  ),
                 ),
               ),
             ),

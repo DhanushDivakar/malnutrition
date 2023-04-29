@@ -4696,10 +4696,3 @@ class _GenderInputState extends State<GenderInput> {
     );
   }
 }
-
-enum MalnutritionStatus {
-  Normal,
-  Mild,
-  Moderate,
-  Severe,
-}
