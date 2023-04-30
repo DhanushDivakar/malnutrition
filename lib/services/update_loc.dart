@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 
 class UpdateLocation extends StatefulWidget {
   const UpdateLocation({super.key});
@@ -12,7 +14,7 @@ class _UpdateLocationState extends State<UpdateLocation> {
   final TextEditingController _aadharNumberController = TextEditingController();
   String? aadharNumber;
   String? _currentAddress;
-
+  final _formKey = GlobalKey<FormState>();
   final CollectionReference childrenCollection =
       FirebaseFirestore.instance.collection('children_details');
 
@@ -34,12 +36,92 @@ class _UpdateLocationState extends State<UpdateLocation> {
     'Severe malnutrition',
   ];
 
+  bool isLoading = false;
+  bool isLoadingg = false;
+  bool? serviceEnabled;
+  LocationPermission? permission;
+
+  Position? _currentPosition;
+
+  void _submitForm() async {
+    setState(() {
+      isLoadingg = true;
+    });
+    Navigator.pop(context);
+    FocusScope.of(context).unfocus();
+
+    await Geolocator.requestPermission();
+
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+
+    if (!serviceEnabled!) {
+      Geolocator.requestPermission();
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please turn on location')),
+      );
+    }
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied &&
+        permission == LocationPermission.deniedForever) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        setState(() {
+          isLoadingg = false;
+        });
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Location permissions are denied')));
+      }
+    }
+    await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
+        .then((Position position) {
+      setState(() => _currentPosition = position);
+      placemarkFromCoordinates(
+              _currentPosition!.latitude, _currentPosition!.longitude)
+          .then((List<Placemark> placemarks) {
+        Placemark place = placemarks[0];
+        setState(() {
+          _currentAddress =
+              '${place.street}, ${place.subLocality}, ${place.subAdministrativeArea}, ${place.postalCode}';
+        });
+        FirebaseFirestore.instance.collection('location_history').add({
+          'aadharNumber': aadharNumber,
+          'address': _currentAddress,
+          'condition': _selectedCondition,
+          'time': DateTime.now(),
+        }).catchError((e) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Failed to add child')),
+          );
+        });
+        print(aadharNumber);
+        print(_currentAddress);
+        print(_selectedCondition);
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Updated sucessfully')),
+        );
+
+        setState(() {
+          isLoadingg = false;
+        });
+        Navigator.pop(context);
+      }).catchError((e) {
+        debugPrint(e);
+      });
+      print(position.latitude);
+      print(position.longitude);
+    }).catchError((e) {
+      debugPrint(e);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    final TextEditingController descriptionController = TextEditingController();
+    //final TextEditingController descriptionController = TextEditingController();
+    final height = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
-        title: Text('Search Aadhaar'),
+        title: const Text('Search Aadhaar'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -54,11 +136,12 @@ class _UpdateLocationState extends State<UpdateLocation> {
                 FocusScope.of(context).unfocus();
                 final String aadharNumberCo =
                     _aadharNumberController.text.trim();
-
+                isLoading = true;
                 final CollectionReference collectionReference =
                     FirebaseFirestore.instance.collection('location_history');
                 Query query = collectionReference
                     .where('aadharNumber', isEqualTo: aadharNumberCo)
+                    .orderBy('time', descending: true)
                     .limit(1);
                 QuerySnapshot querySnapshot = await query.get();
                 final docData =
@@ -66,10 +149,12 @@ class _UpdateLocationState extends State<UpdateLocation> {
 
                 if (docData.isNotEmpty) {
                   print("found");
+                  isLoading = false;
                   setState(() {
                     aadharNumber = aadharNumberCo;
                   });
                 } else {
+                  isLoading = false;
                   print("not found");
 
                   setState(() {
@@ -80,140 +165,206 @@ class _UpdateLocationState extends State<UpdateLocation> {
                   final QuerySnapshot<Map<String, dynamic>> childSnapshot =
                       await getChildData(aadharNumber!);
                   final childData = childSnapshot.docs[0].data();
-                  // ignore: use_build_context_synchronously
-                  showModalBottomSheet(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return SingleChildScrollView(
-                        child: Card(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          elevation: 4,
-                          child: Container(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 16, vertical: 16),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            childData['childName'],
-                                            style: TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 24,
-                                              fontWeight: FontWeight.bold,
+                  isLoading
+                      ? const CircularProgressIndicator()
+                      // ignore: use_build_context_synchronously
+                      : showModalBottomSheet(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return SingleChildScrollView(
+                              child: SizedBox(
+                                height: height * 0.6,
+                                child: Form(
+                                  key: _formKey,
+                                  child: isLoadingg
+                                      ? const CircularProgressIndicator()
+                                      : Card(
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(20),
+                                          ),
+                                          elevation: 4,
+                                          child: Container(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 16, vertical: 16),
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Row(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Expanded(
+                                                      child: Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          Text(
+                                                            childData[
+                                                                'childName'],
+                                                            style:
+                                                                const TextStyle(
+                                                              color:
+                                                                  Colors.black,
+                                                              fontSize: 24,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                            ),
+                                                          ),
+                                                          const SizedBox(
+                                                              height: 4),
+                                                          Text(
+                                                            childData['gender'],
+                                                            style:
+                                                                const TextStyle(
+                                                              color:
+                                                                  Colors.black,
+                                                              fontSize: 16,
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                                const SizedBox(height: 16),
+                                                Text(
+                                                  'Aadhaar Number: ${childData['aadharNumber']}',
+                                                  style: const TextStyle(
+                                                    color: Colors.black,
+                                                    fontSize: 18,
+                                                  ),
+                                                ),
+                                                const SizedBox(height: 8),
+                                                Text(
+                                                  'Guardian Name: ${childData['guardianName']}',
+                                                  style: const TextStyle(
+                                                    color: Colors.black,
+                                                    fontSize: 18,
+                                                  ),
+                                                ),
+                                                const SizedBox(height: 8),
+                                                Text(
+                                                  'Previous Location: ${childData['address']}',
+                                                  style: const TextStyle(
+                                                    color: Colors.black,
+                                                    fontSize: 18,
+                                                  ),
+                                                ),
+                                                const SizedBox(height: 8),
+                                                const Text(
+                                                    'Select the current condition of child'),
+                                                const SizedBox(height: 8),
+                                                DropdownButtonFormField<String>(
+                                                  decoration:
+                                                      const InputDecoration(
+                                                    labelText: 'Condition',
+                                                    border:
+                                                        OutlineInputBorder(),
+                                                  ),
+                                                  validator: (value) {
+                                                    if (_selectedCondition ==
+                                                        null) {
+                                                      return 'Please select an option';
+                                                    }
+                                                    return null;
+                                                  },
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                  value: _selectedCondition,
+                                                  enableFeedback: true,
+                                                  items: _condition
+                                                      .map((gender) =>
+                                                          DropdownMenuItem<
+                                                              String>(
+                                                            value: gender,
+                                                            child: Text(gender),
+                                                          ))
+                                                      .toList(),
+                                                  onChanged: (value) {
+                                                    setState(() {
+                                                      _selectedCondition =
+                                                          value;
+                                                    });
+                                                    print(_selectedCondition);
+                                                  },
+                                                  isExpanded: true,
+                                                ),
+                                                const SizedBox(
+                                                  height: 10,
+                                                ),
+                                                Padding(
+                                                  padding: const EdgeInsets.all(
+                                                      15.0),
+                                                  child: Align(
+                                                    alignment:
+                                                        Alignment.centerRight,
+                                                    child: ElevatedButton(
+                                                      onPressed: () {
+                                                        FocusScope.of(context)
+                                                            .unfocus();
+                                                        if (_formKey
+                                                            .currentState!
+                                                            .validate()) {
+                                                          _formKey.currentState!
+                                                              .save();
+                                                          showDialog(
+                                                            context: context,
+                                                            builder:
+                                                                (BuildContext
+                                                                    context) {
+                                                              return AlertDialog(
+                                                                title: const Text(
+                                                                    'Confirmation'),
+                                                                content: const Text(
+                                                                    'Are you sure you want to update?'),
+                                                                actions: [
+                                                                  TextButton(
+                                                                    child: const Text(
+                                                                        'Cancel'),
+                                                                    onPressed:
+                                                                        () {
+                                                                      Navigator.of(
+                                                                              context)
+                                                                          .pop();
+                                                                    },
+                                                                  ),
+                                                                  ElevatedButton(
+                                                                    onPressed:
+                                                                        _submitForm,
+                                                                    child: const Text(
+                                                                        'Confirm'),
+                                                                  ),
+                                                                ],
+                                                              );
+                                                            },
+                                                          );
+                                                        }
+                                                      },
+                                                      child:
+                                                          const Text('Update'),
+                                                    ),
+                                                  ),
+                                                ),
+                                                // TextFormField(
+                                                //   controller: descriptionController,
+                                                //   decoration: InputDecoration(
+                                                //     border: OutlineInputBorder(),
+                                                //     hintText: 'Enter description',
+                                                //   ),
+                                                // ),
+                                              ],
                                             ),
                                           ),
-                                          SizedBox(height: 4),
-                                          Text(
-                                            childData['gender'],
-                                            style: TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 16,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
+                                        ),
                                 ),
-                                SizedBox(height: 16),
-                                Text(
-                                  'Aadhaar Number: ${childData['aadharNumber']}',
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 18,
-                                  ),
-                                ),
-                                SizedBox(height: 8),
-                                Text(
-                                  'Guardian Name: ${childData['guardianName']}',
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 18,
-                                  ),
-                                ),
-                                SizedBox(height: 8),
-                                Text(
-                                  'Previous Location: ${childData['address']}',
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 18,
-                                  ),
-                                ),
-                                SizedBox(height: 8),
-                                DropdownButtonFormField<String>(
-                                  decoration: const InputDecoration(
-                                    labelText: 'Condition',
-                                    border: OutlineInputBorder(),
-                                  ),
-                                  borderRadius: BorderRadius.circular(10),
-                                  value: _selectedCondition,
-                                  enableFeedback: true,
-                                  items: _condition
-                                      .map((gender) => DropdownMenuItem<String>(
-                                            value: gender,
-                                            child: Text(gender),
-                                          ))
-                                      .toList(),
-                                  onChanged: (value) {
-                                    setState(() {
-                                      _selectedCondition = value;
-                                    });
-                                    print(_selectedCondition);
-                                  },
-                                  isExpanded: true,
-                                ),
-                                SizedBox(height: 8),
-                                Align(
-                                  alignment: Alignment.centerRight,
-                                  child: ElevatedButton(
-                                      onPressed: () {
-                                        //                             FirebaseFirestore.instance
-                                        //     .collection('location_history')
-                                        //     .doc(_aadharNumber)
-                                        //     .set({
-                                        //   'childName': _childName,
-                                        //   'gender': _selectedGender,
-                                        //   'aadharNumber': _aadharNumber,
-                                        //   'guardianName': _guardianName,
-                                        //   'address': _currentAddress,
-                                        //   'condition': _selectedCondition,
-                                        //   'time': DateTime.now(),
-                                        // }).catchError((e) {
-                                        //   print('failed to add into loc history');
-                                        // }).then((value) {
-                                        //   if (mounted) {
-                                        //     setState(() {
-                                        //       isLoading = false;
-                                        //     });
-                                        //   }
-                                        // });
-                                      },
-                                      child: const Text('Update')),
-                                ),
-                                // TextFormField(
-                                //   controller: descriptionController,
-                                //   decoration: InputDecoration(
-                                //     border: OutlineInputBorder(),
-                                //     hintText: 'Enter description',
-                                //   ),
-                                // ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      );
-                    },
-                  );
+                              ),
+                            );
+                          },
+                        );
                 } else {
                   // ignore: use_build_context_synchronously
                   showDialog(
@@ -239,7 +390,7 @@ class _UpdateLocationState extends State<UpdateLocation> {
 
                 // Do something with the submitted value
               },
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Aadhaar Number',
                 hintText: 'Aadhaar Number',
                 border: OutlineInputBorder(),
