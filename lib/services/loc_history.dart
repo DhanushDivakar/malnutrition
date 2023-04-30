@@ -16,7 +16,6 @@ class _LocHistoryState extends State<LocHistory> {
   Map<String, dynamic>? _childData;
   bool _isLoading = false;
 
-  List<DocumentSnapshot> _docs = [];
   bool isLoading = true;
 
   @override
@@ -33,7 +32,6 @@ class _LocHistoryState extends State<LocHistory> {
         .orderBy('time', descending: true);
     final querySnapshot = await query.get();
     setState(() {
-      _docs = querySnapshot.docs;
       isLoading = false;
     });
   }

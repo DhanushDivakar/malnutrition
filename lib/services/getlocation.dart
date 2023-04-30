@@ -45,35 +45,6 @@ class _AddChildState extends State<AddChild> {
   bool isLoading = false;
   bool? serviceEnabled;
   LocationPermission? permission;
-  // Future<bool> getLocation() async {
-  //   await Geolocator.requestPermission();
-  //   serviceEnabled = await Geolocator.isLocationServiceEnabled();
-  //   if (!serviceEnabled!) {
-  //     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-  //         content: Text(
-  //             'Location services are disabled. Please enable the services')));
-
-  //     return false;
-  //   }
-  //   permission = await Geolocator.checkPermission();
-  //   if (permission == LocationPermission.denied) {
-  //     permission = await Geolocator.requestPermission();
-  //     if (permission == LocationPermission.denied) {
-  //       ScaffoldMessenger.of(context).showSnackBar(
-  //           const SnackBar(content: Text('Location permissions are denied')));
-
-  //       return false;
-  //     }
-  //   }
-  //   if (permission == LocationPermission.deniedForever) {
-  //     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-  //         content: Text(
-  //             'Location permissions are permanently denied, we cannot request permissions.')));
-
-  //     return false;
-  //   }
-  //   return true;
-  // }
 
   void _submitForm() async {
     FocusScope.of(context).unfocus();
@@ -125,7 +96,6 @@ class _AddChildState extends State<AddChild> {
             'address': _currentAddress,
             'condition': _selectedCondition,
             'time': DateTime.now(),
-            'postalCode': postalCode
           }).catchError((e) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text('Failed to add child')),
@@ -136,13 +106,12 @@ class _AddChildState extends State<AddChild> {
                 .collection('location_history')
                 .doc()
                 .set({
-              'childName': _childName,
-              'gender': _selectedGender,
               'aadharNumber': _aadharNumber,
-              'guardianName': _guardianName,
               'address': _currentAddress,
               'condition': _selectedCondition,
               'time': DateTime.now(),
+              'gender': _selectedGender,
+              'postalCode': postalCode,
             }).catchError((e) {
               print('failed to add into loc history');
             }).then((value) {
