@@ -173,6 +173,9 @@ class _LocHistoryState extends State<LocHistory> {
                         ),
                       ),
                     ),
+          const SizedBox(
+            height: 10,
+          ),
           FutureBuilder<QuerySnapshot>(
             future: FirebaseFirestore.instance
                 .collection('location_history')
@@ -185,11 +188,11 @@ class _LocHistoryState extends State<LocHistory> {
               }
 
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return CircularProgressIndicator();
+                return const CircularProgressIndicator();
               }
 
               if (snapshot.data!.docs.isEmpty) {
-                return Text('No data found.');
+                return const Text('No data found.');
               }
 
               return _aadharNumber == null
@@ -209,8 +212,7 @@ class _LocHistoryState extends State<LocHistory> {
                             child: ListTile(
                               title: Text(data['address']),
                               trailing: Text('Time: $formattedDate'),
-                              subtitle: Text(
-                                  'Condition: ${data['condition']}, Time: ${data['time']}'),
+                              subtitle: Text('Condition: ${data['condition']}'),
                             ),
                           );
                         },
