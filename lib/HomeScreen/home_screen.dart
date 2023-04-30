@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:malnutrition/services/getlocation.dart';
+import 'package:malnutrition/services/loc_history.dart';
 import 'package:malnutrition/services/malnutrition_checker.dart';
 import 'package:malnutrition/services/update_loc.dart';
 
@@ -74,6 +75,15 @@ class _MyHomePageState extends State<MyHomePage> {
                 },
                 child: const Text("Update Location"),
               ),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) {
+                    return const LocHistory();
+                  }));
+                },
+                child: const Text("See history"),
+              ),
+
               //   ElevatedButton(
               //   onPressed: () {},
               //   child: Padding(
