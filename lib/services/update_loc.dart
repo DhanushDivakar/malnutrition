@@ -312,51 +312,11 @@ class _UpdateLocationState extends State<UpdateLocation> {
                                                         Alignment.centerRight,
                                                     child: ElevatedButton(
                                                       onPressed: _submitForm,
-                                                      // showDialog(
-                                                      //   context: context,
-                                                      //   builder: (BuildContext
-                                                      //       context) {
-                                                      //     return isLoadingg
-                                                      //         ? CircularProgressIndicator()
-                                                      //         : AlertDialog(
-                                                      //             title: const Text(
-                                                      //                 'Confirmation'),
-                                                      //             content: const Text(
-                                                      //                 'Are you sure you want to update?'),
-                                                      //             actions: [
-                                                      //               TextButton(
-                                                      //                 child: const Text(
-                                                      //                     'Cancel'),
-                                                      //                 onPressed:
-                                                      //                     () {
-                                                      //                   Navigator.of(
-                                                      //                           context)
-                                                      //                       .pop();
-                                                      //                 },
-                                                      //               ),
-                                                      //               ElevatedButton(
-                                                      //                 onPressed:
-                                                      //                     _submitForm,
-                                                      //                 child: const Text(
-                                                      //                     'Confirm'),
-                                                      //               ),
-                                                      //             ],
-                                                      //           );
-                                                      //   },
-                                                      // );
-
                                                       child:
                                                           const Text('Update'),
                                                     ),
                                                   ),
                                                 ),
-                                                // TextFormField(
-                                                //   controller: descriptionController,
-                                                //   decoration: InputDecoration(
-                                                //     border: OutlineInputBorder(),
-                                                //     hintText: 'Enter description',
-                                                //   ),
-                                                // ),
                                               ],
                                             ),
                                           ),
@@ -398,116 +358,7 @@ class _UpdateLocationState extends State<UpdateLocation> {
                     ),
                   ),
                   const SizedBox(height: 16.0),
-                  // ElevatedButton(
-                  //   onPressed: () async {
-                  //     FocusScope.of(context).unfocus();
-                  //     final String aadharNumberCo =
-                  //         _aadharNumberController.text.trim();
-
-                  //     final CollectionReference collectionReference =
-                  //         FirebaseFirestore.instance.collection('children_details');
-                  //     Query query = collectionReference
-                  //         .where('aadharNumber', isEqualTo: aadharNumberCo)
-                  //         .limit(1);
-                  //     QuerySnapshot querySnapshot = await query.get();
-                  //     final docData =
-                  //         querySnapshot.docs.map((doc) => doc.data()).toList();
-
-                  //     if (docData.isNotEmpty) {
-                  //       print("found");
-                  //       setState(() {
-                  //         aadharNumber = aadharNumberCo;
-                  //       });
-                  //     } else {
-                  //       print("not found");
-
-                  //       setState(() {
-                  //         aadharNumber = null;
-                  //       });
-                  //     }
-                  //     if (docData.isNotEmpty) {
-                  //       // ignore: use_build_context_synchronously
-                  //       showDialog(
-                  //           context: context,
-                  //           builder: (BuildContext context) {
-                  //             return AlertDialog(
-                  //               shape: RoundedRectangleBorder(
-                  //                   borderRadius: BorderRadius.circular(10)),
-                  //               title: const Text('Search'),
-                  //               content: Text(
-                  //                   'Aadhaar number ${_aadharNumberController.text} found'),
-                  //               actions: [
-                  //                 ElevatedButton(
-                  //                     onPressed: () {
-                  //                       Navigator.pop(context);
-                  //                     },
-                  //                     child: Text('yes'))
-                  //               ],
-                  //             );
-                  //           });
-                  //     } else {
-                  //       // ignore: use_build_context_synchronously
-                  //       showDialog(
-                  //           context: context,
-                  //           builder: (BuildContext context) {
-                  //             return AlertDialog(
-                  //               shape: RoundedRectangleBorder(
-                  //                   borderRadius: BorderRadius.circular(10)),
-                  //               title: const Text('Search'),
-                  //               content: Text(
-                  //                   'Aadhaar number ${_aadharNumberController.text} not found, please register'),
-                  //               actions: [
-                  //                 ElevatedButton(
-                  //                   onPressed: () {
-                  //                     Navigator.pop(context);
-                  //                   },
-                  //                   child: const Text('Go Back'),
-                  //                 )
-                  //               ],
-                  //             );
-                  //           });
-                  //     }
-                  //   },
-                  //   child: const Text('Search'),
-                  //   // child: Text('Search'),
-                  // ),
                   const SizedBox(height: 16.0),
-
-                  // StreamBuilder(
-                  //   stream: user
-                  //       .where('aadharNumber',
-                  //           isEqualTo: _aadharNumberController.text)
-                  //       .snapshots(),
-                  //   builder: (context, snapshot) {
-                  //     //   CollectionReference collectionReference =  FirebaseFirestore.instance
-                  //     //     .collection('children_details')
-                  //     //     .doc()
-                  //     //     .get();
-                  //     //    Query query =
-                  //     //     collectionReference.where('aadharNumber', isEqualTo: aadharNumberCo);
-                  //     // QuerySnapshot querySnapshot = await query.get(),
-                  //     if (snapshot.hasError) {
-                  //       return Text('Error = ${snapshot.error}');
-                  //     }
-                  //     if (snapshot.hasData) {
-                  //       //final data = snapshot.data as DocumentSnapshot;
-                  //       Map<String, dynamic> items =
-                  //           snapshot.data!.docs as Map<String, dynamic>;
-
-                  //       //Map<String, dynamic> documentData = snapshot.data! as Map<String, dynamic>;
-                  //       final a = items['aadharNumber'];
-                  //       print(a);
-                  //     }
-
-                  //     return Text("docs");
-                  //   },
-                  // )
-                  //       Column(
-                  //         crossAxisAlignment: CrossAxisAlignment.start,
-                  //         children: [
-                  //           Text('Name: ${aadharNumber![0].toString()}'),
-                  //         ],
-                  //       ),
                 ],
               ),
             ),
