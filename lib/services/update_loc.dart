@@ -39,6 +39,7 @@ class _UpdateLocationState extends State<UpdateLocation> {
   bool isLoading = false;
   bool isLoadingg = false;
   bool? serviceEnabled;
+  String? postalCode;
   LocationPermission? permission;
 
   Position? _currentPosition;
@@ -84,6 +85,7 @@ class _UpdateLocationState extends State<UpdateLocation> {
             .then((List<Placemark> placemarks) {
           Placemark place = placemarks[0];
           setState(() {
+            postalCode = place.postalCode;
             _currentAddress =
                 '${place.street}, ${place.subLocality}, ${place.subAdministrativeArea}, ${place.postalCode}';
           });
@@ -92,6 +94,7 @@ class _UpdateLocationState extends State<UpdateLocation> {
             'address': _currentAddress,
             'condition': _selectedCondition,
             'time': DateTime.now(),
+            'postalCode': postalCode
           }).catchError((e) {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text('Failed to add child')),

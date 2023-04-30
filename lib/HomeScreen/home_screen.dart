@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:malnutrition/services/data_location.dart';
 
 import 'package:malnutrition/services/getlocation.dart';
 import 'package:malnutrition/services/loc_history.dart';
@@ -40,16 +41,6 @@ class _MyHomePageState extends State<MyHomePage> {
                 }));
               },
             ),
-            // const Divider(),
-            // ListTile(
-            //   title: const Text('Track'),
-            //   onTap: () {
-            //     // Navigator.push(context, MaterialPageRoute(builder: (context) {
-            //     //   return const MalnutritionChecker();
-            //     // }));
-            //     // Do something when Option 2 is tapped
-            //   },
-            // ),
           ],
         ),
       ),
@@ -65,7 +56,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     return const AddChild();
                   }));
                 },
-                child: Text("Add child"),
+                child: const Text("Add child"),
               ),
               ElevatedButton(
                 onPressed: () {
@@ -83,47 +74,18 @@ class _MyHomePageState extends State<MyHomePage> {
                 },
                 child: const Text("See history"),
               ),
-
-              //   ElevatedButton(
-              //   onPressed: () {},
-              //   child: Padding(
-              //     padding: const EdgeInsets.symmetric(
-              //       horizontal: 24.0,
-              //       vertical: 16.0,
-              //     ),
-              //     child: Text(
-              //       'Button 1',
-              //       style: TextStyle(
-              //         fontSize: 20.0,
-              //         fontWeight: FontWeight.bold,
-              //         color: Colors.white,
-              //       ),
-              //     ),
-              //   ),
-              //   style: ElevatedButton.styleFrom(
-              //     primary: Colors.green,
-              //     shape: RoundedRectangleBorder(
-              //       borderRadius: BorderRadius.circular(24.0),
-              //     ),
-              //   ),
-              // ),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) {
+                    return const DataBasedOnLocation();
+                  }));
+                },
+                child: const Text("get all child in your area"),
+              ),
             ],
           ),
         ),
       ),
-      // bottomNavigationBar: BottomAppBar(
-      //   child: Row(
-      //     mainAxisAlignment: MainAxisAlignment.center,
-      //     children: <Widget>[
-      //       ElevatedButton(
-      //         onPressed: () {
-      //           // Handle button press
-      //         },
-      //         child: Text('Click me!'),
-      //       ),
-      //     ],
-      //   ),
-      // ),
     );
   }
 }
