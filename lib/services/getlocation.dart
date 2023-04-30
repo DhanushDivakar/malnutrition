@@ -117,10 +117,7 @@ class _AddChildState extends State<AddChild> {
             _currentAddress =
                 '${place.street}, ${place.subLocality}, ${place.subAdministrativeArea}, ${place.postalCode}';
           });
-          FirebaseFirestore.instance
-              .collection('children_details')
-              .doc(postalCode)
-              .set({
+          FirebaseFirestore.instance.collection('children_details').doc().set({
             'childName': _childName,
             'gender': _selectedGender,
             'aadharNumber': _aadharNumber,
@@ -128,6 +125,7 @@ class _AddChildState extends State<AddChild> {
             'address': _currentAddress,
             'condition': _selectedCondition,
             'time': DateTime.now(),
+            'postalCode': postalCode
           }).catchError((e) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text('Failed to add child')),
@@ -136,7 +134,7 @@ class _AddChildState extends State<AddChild> {
             // write data to location_history collection
             FirebaseFirestore.instance
                 .collection('location_history')
-                .doc(_aadharNumber)
+                .doc()
                 .set({
               'childName': _childName,
               'gender': _selectedGender,
