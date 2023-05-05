@@ -70,31 +70,31 @@ class _DataBasedOnLocationState extends State<DataBasedOnLocation> {
 class LocationHistoryCard extends StatelessWidget {
   final Map<String, dynamic> data;
 
-  const LocationHistoryCard({required this.data});
+  const LocationHistoryCard({super.key, required this.data});
 
   @override
   Widget build(BuildContext context) {
     Map<String, dynamic> latestRecords = {};
-    for (Map<String, dynamic> record in data.values) {
-      String aadharNumber = record['aadharNumber'];
+    // for (Map<String, dynamic> record in data.values) {
+    //   String aadharNumber = record['aadharNumber'];
 
-      // Check if the Aadhar number already exists in the map
-      if (latestRecords.containsKey(aadharNumber)) {
-        // Compare the timestamps of the existing record and the current record
-        DateTime existingTime = latestRecords[aadharNumber]['time'].toDate();
-        DateTime currentTime = record['time'].toDate();
-        if (currentTime.isAfter(existingTime)) {
-          // Replace the existing record with the current record if the current record is newer
-          latestRecords[aadharNumber] = record;
-        }
-      } else {
-        // Add the record to the map if the Aadhar number doesn't already exist
-        latestRecords[aadharNumber] = record;
-      }
-    }
+    //   // Check if the Aadhar number already exists in the map
+    //   if (latestRecords.containsKey(aadharNumber)) {
+    //     // Compare the timestamps of the existing record and the current record
+    //     DateTime existingTime = latestRecords[aadharNumber]['time'].toDate();
+    //     DateTime currentTime = record['time'].toDate();
+    //     if (currentTime.isAfter(existingTime)) {
+    //       // Replace the existing record with the current record if the current record is newer
+    //       latestRecords[aadharNumber] = record;
+    //     }
+    //   } else {
+    //     // Add the record to the map if the Aadhar number doesn't already exist
+    //     latestRecords[aadharNumber] = record;
+    //   }
+    // }
 
-    final time = DateFormat('dd MMM yyyy, hh:mm a')
-        .format(latestRecords['time'].toDate());
+    // final time = DateFormat('dd MMM yyyy, hh:mm a')
+    //     .format(latestRecords['time'].toDate());
 
     return Card(
       elevation: 4.0,
@@ -107,7 +107,8 @@ class LocationHistoryCard extends StatelessWidget {
           ListTile(
             leading: const Icon(Icons.location_on),
             title: Text(latestRecords['address']),
-            subtitle: Text(time),
+
+            /// subtitle: Text(time),
           ),
           const Divider(),
           ListTile(
