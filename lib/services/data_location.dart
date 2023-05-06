@@ -52,11 +52,34 @@ class _DataBasedOnLocationState extends State<DataBasedOnLocation> {
       setState(() => _currentPosition = position);
       placemarkFromCoordinates(
               _currentPosition!.latitude, _currentPosition!.longitude)
-          .then((List<Placemark> placemarks) {
+          .then((List<Placemark> placemarks) async {
         Placemark place = placemarks[0];
         setState(() {
           postalCode = place.postalCode;
         });
+        CollectionReference<Map<String, dynamic>> collection =
+            FirebaseFirestore.instance.collection('location_history');
+
+        // Create a set to keep track of unique aadhar numbers
+        Set<String> uniqueAadharNumbers = {};
+
+        // Query the collection for all documents
+        QuerySnapshot<Map<String, dynamic>> snapshot = await collection
+            .where('postalCode', isEqualTo: postalCode)
+            .orderBy('time', descending: true)
+            .get();
+
+        // Iterate over the documents and display only the unique ones
+        for (QueryDocumentSnapshot<Map<String, dynamic>> documentSnapshot
+            in snapshot.docs) {
+          String aadharNumber = documentSnapshot.data()['aadharNumber'];
+          if (!uniqueAadharNumbers.contains(aadharNumber)) {
+            uniqueAadharNumbers.add(aadharNumber);
+            setState(() {
+              uniqueData.add(documentSnapshot.data());
+            });
+          }
+        }
 
         setState(() {
           isLoading = false;
@@ -71,81 +94,47 @@ class _DataBasedOnLocationState extends State<DataBasedOnLocation> {
     });
   }
 
-  Future<void> displayUniqueData() async {
-    // Get a reference to the collection
-    CollectionReference<Map<String, dynamic>> collection =
-        FirebaseFirestore.instance.collection('location_history');
-
-    // Create a set to keep track of unique aadhar numbers
-    Set<String> uniqueAadharNumbers = {};
-
-    // Query the collection for all documents
-    QuerySnapshot<Map<String, dynamic>> snapshot = await collection
-        .where('postalCode', isEqualTo: postalCode)
-        .orderBy('time', descending: true)
-        .get();
-
-    // Iterate over the documents and display only the unique ones
-    for (QueryDocumentSnapshot<Map<String, dynamic>> documentSnapshot
-        in snapshot.docs) {
-      String aadharNumber = documentSnapshot.data()['aadharNumber'];
-      if (!uniqueAadharNumbers.contains(aadharNumber)) {
-        uniqueAadharNumbers.add(aadharNumber);
-        setState(() {
-          uniqueData.add(documentSnapshot.data());
-        });
-      }
-    }
-  }
-  // Future<void> _fetchData() async {
-  //   final collectionReference =
-  //       FirebaseFirestore.instance.collection('location_history');
-  //   final query = collectionReference
-  //       .where('aadharNumber', isEqualTo: _aadharNumber)
-  //       .orderBy('time', descending: true);
-  //   final querySnapshot = await query.get();
-  //   setState(() {
-  //     isLoading = false;
-  //   });
-  // }
-
   @override
   void initState() {
     super.initState();
     _getPostalCode();
-    displayUniqueData();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Unique Data'),
+        title: const Text('Unique Data'),
       ),
-      body: ListView.builder(
-        itemCount: uniqueData.length,
-        itemBuilder: (context, index) {
-          Map<String, dynamic> data = uniqueData[index];
-          DateTime date =
-              DateTime.fromMillisecondsSinceEpoch(data['time'].seconds * 1000);
-          String formattedDate = DateFormat('dd MMM yyyy hh:mm a').format(date);
-          return ListTile(
-            isThreeLine: true,
-            subtitle: Text(
-              'address: ${data['address']}',
-              style: TextStyle(color: Colors.black),
+      body: isLoading
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : ListView.builder(
+              itemCount: uniqueData.length,
+              itemBuilder: (context, index) {
+                Map<String, dynamic> data = uniqueData[index];
+                DateTime date = DateTime.fromMillisecondsSinceEpoch(
+                    data['time'].seconds * 1000);
+                String formattedDate =
+                    DateFormat('dd MMM yyyy hh:mm a').format(date);
+                return ListTile(
+                  isThreeLine: true,
+                  subtitle: Text(
+                    'address: ${data['address']}',
+                    style: const TextStyle(color: Colors.black),
+                  ),
+                  title: Text(
+                    'Aadhar Number: ${data['aadharNumber']}',
+                    style: const TextStyle(color: Colors.black),
+                  ),
+                  trailing: Text(
+                    'time: $formattedDate',
+                    style: const TextStyle(color: Colors.black),
+                  ),
+                );
+              },
             ),
-            title: Text(
-              'Aadhar Number: ${data['aadharNumber']}',
-              style: TextStyle(color: Colors.black),
-            ),
-            trailing: Text(
-              'time: $formattedDate',
-              style: TextStyle(color: Colors.black),
-            ),
-          );
-        },
-      ),
     );
   }
 //   late Stream<QuerySnapshot<Map<String, dynamic>>> _stream;
