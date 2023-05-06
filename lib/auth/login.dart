@@ -1,8 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:malnutrition/auth/otp.dart';
-import 'package:malnutrition/auth/register.dart';
+import 'package:malnutrition/HomeScreen/home_screen.dart';
 import 'package:pinput/pinput.dart';
 
 class LoginPage extends StatefulWidget {
@@ -19,6 +18,7 @@ class _LoginPageState extends State<LoginPage> {
   final FocusNode pinFocusNode = FocusNode();
   final auth = FirebaseAuth.instance;
   final formKey = GlobalKey<FormState>();
+  String? pinCode;
 
   bool showLoading = false;
 
@@ -29,23 +29,76 @@ class _LoginPageState extends State<LoginPage> {
     super.dispose();
   }
 
+  Future<void> authenticateUser(String phoneNumber, String pin) async {
+    try {
+      setState(() {
+        showLoading = true;
+      });
+      // Get a reference to the 'auth' collection
+      CollectionReference<Map<String, dynamic>> authCollection =
+          FirebaseFirestore.instance.collection('auth');
+
+      // Query the collection for a document with the entered phone number
+      QuerySnapshot<Map<String, dynamic>> snapshot = await authCollection
+          .where('phoneNumber', isEqualTo: phoneNumber)
+          .get();
+
+      // Check if a document with the entered phone number exists
+      if (snapshot.docs.isNotEmpty) {
+        // Get the document data
+        Map<String, dynamic> authData = snapshot.docs[0].data();
+
+        // Check if the entered PIN matches the PIN in the document
+        if (authData['pin'] == pin) {
+          print("Correct pin");
+          setState(() {
+            showLoading = false;
+          });
+          // Authentication successful
+          // ignore: use_build_context_synchronously
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const MyHomePage()),
+          );
+        } else {
+          print("wrong pin");
+          setState(() {
+            showLoading = false;
+          });
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Incorrect pin')),
+          );
+        }
+      }
+    } catch (e) {
+      print('Error authenticating user: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+            content: Text('Something went wrong, try after some time')),
+      );
+    }
+
+    // Authentication failed
+  }
+
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
-    const focusedBorderColor = Color.fromRGBO(23, 171, 144, 1);
-    const fillColor = Color.fromRGBO(243, 246, 249, 0);
-    const borderColor = Color.fromRGBO(23, 171, 144, 0.4);
+    const focusedBorderColor = Colors.orange;
+    const fillColor = Color.fromARGB(0, 198, 133, 77);
+    const borderColor = Colors.black;
 
     final defaultPinTheme = PinTheme(
       width: 56,
       height: 56,
+      margin: const EdgeInsets.all(10),
       textStyle: const TextStyle(
         fontSize: 22,
-        color: Color.fromRGBO(30, 60, 87, 1),
+        color: Colors.black,
       ),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(19),
+        borderRadius: BorderRadius.circular(10),
         border: Border.all(color: borderColor),
       ),
     );
@@ -148,7 +201,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
               Form(
-                key: formKey,
+                // key: formKey,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -158,12 +211,13 @@ class _LoginPageState extends State<LoginPage> {
                       child: Pinput(
                         controller: pinController,
                         focusNode: pinFocusNode,
-                        androidSmsAutofillMethod:
-                            AndroidSmsAutofillMethod.smsUserConsentApi,
-                        listenForMultipleSmsOnAndroid: true,
+
                         defaultPinTheme: defaultPinTheme,
                         validator: (value) {
-                          return value == '2222' ? null : 'Pin is incorrect';
+                          if (value!.isEmpty) {
+                            return "Enter 4 digit pin";
+                          }
+                          return null;
                         },
                         // onClipboardFound: (value) {
                         //   debugPrint('onClipboardFound: $value');
@@ -171,11 +225,10 @@ class _LoginPageState extends State<LoginPage> {
                         // },
                         hapticFeedbackType: HapticFeedbackType.lightImpact,
                         onCompleted: (pin) {
+                          pinCode = pin;
                           debugPrint('onCompleted: $pin');
                         },
-                        onChanged: (value) {
-                          debugPrint('onChanged: $value');
-                        },
+
                         cursor: Column(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
@@ -189,14 +242,14 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         focusedPinTheme: defaultPinTheme.copyWith(
                           decoration: defaultPinTheme.decoration!.copyWith(
-                            borderRadius: BorderRadius.circular(8),
+                            borderRadius: BorderRadius.circular(10),
                             border: Border.all(color: focusedBorderColor),
                           ),
                         ),
                         submittedPinTheme: defaultPinTheme.copyWith(
                           decoration: defaultPinTheme.decoration!.copyWith(
                             color: fillColor,
-                            borderRadius: BorderRadius.circular(19),
+                            borderRadius: BorderRadius.circular(10),
                             border: Border.all(color: focusedBorderColor),
                           ),
                         ),
@@ -205,75 +258,29 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
                     ),
-                    TextButton(
-                      onPressed: () {
-                        pinFocusNode.unfocus();
-                        formKey.currentState!.validate();
-                      },
-                      child: const Text('Validate'),
-                    ),
                   ],
                 ),
               ),
 
-              SizedBox(
-                //height: 90,
-                child: Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: TextFormField(
-                    autofocus: false,
-                    style: const TextStyle(
-                        fontSize: 16,
-                        color: Colors.black,
-                        fontWeight: FontWeight.w600),
-                    keyboardType: TextInputType.number,
-                    cursorColor: Theme.of(context).colorScheme.primary,
-                    textInputAction: TextInputAction.done,
-                    controller: otpController,
-                    decoration: InputDecoration(
-                      contentPadding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
-                      hintText: "Enter OTP",
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: const BorderSide(
-                          width: 0.2,
-                          color: Color.fromRGBO(230, 154, 141, 1),
-                        ),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                            color: Color.fromRGBO(235, 165, 54, 10), width: 2),
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-                child: Material(
-                  elevation: 3,
-                  borderRadius: BorderRadius.circular(10),
-                  color: Theme.of(context).colorScheme.primary,
-                  child: MaterialButton(
-                    //padding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
-                    minWidth: MediaQuery.of(context).size.width,
-                    onPressed: () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => RegisterPage(
-                            phoneNumber: phonenum.text,
-                          ),
-                        ),
-                      );
-                    },
-                    child: showLoading
-                        ? const CircularProgressIndicator(
-                            color: Colors.white,
-                          )
-                        : Text(
-                            "Continue",
+                child: showLoading
+                    ? const CircularProgressIndicator()
+                    : Material(
+                        elevation: 3,
+                        borderRadius: BorderRadius.circular(10),
+                        color: Theme.of(context).colorScheme.primary,
+                        child: MaterialButton(
+                          //padding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
+                          minWidth: MediaQuery.of(context).size.width,
+                          onPressed: () {
+                            print(pinCode);
+                            if (pinCode != null) {
+                              authenticateUser(phonenum.text, pinCode!);
+                            }
+                          },
+                          child: Text(
+                            "Login",
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               color: Colors.white,
@@ -281,8 +288,8 @@ class _LoginPageState extends State<LoginPage> {
                               fontSize: height * 0.025,
                             ),
                           ),
-                  ),
-                ),
+                        ),
+                      ),
               ),
             ],
           ),
