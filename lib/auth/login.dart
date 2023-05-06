@@ -13,10 +13,21 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController phonenum = TextEditingController();
+  final TextEditingController otpController = TextEditingController();
+  final TextEditingController _pinController = TextEditingController();
+  final FocusNode _pinFocusNode = FocusNode();
   final auth = FirebaseAuth.instance;
   final formKey = GlobalKey<FormState>();
 
   bool showLoading = false;
+
+  @override
+  void dispose() {
+    _pinController.dispose();
+    _pinFocusNode.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
@@ -27,16 +38,6 @@ class _LoginPageState extends State<LoginPage> {
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           elevation: 0,
-          // leading: IconButton(
-          //   icon: Icon(
-          //     Icons.chevron_left_rounded,
-          //     color: Theme.of(context).colorScheme.primary,
-          //     size: 45,
-          //   ),
-          //   onPressed: () {
-          //     Navigator.of(context).pop();
-          //   },
-          // ),
         ),
         body: SingleChildScrollView(
           child: Column(
@@ -80,7 +81,6 @@ class _LoginPageState extends State<LoginPage> {
                     keyboardType: TextInputType.number,
                     cursorColor: Theme.of(context).colorScheme.primary,
                     textInputAction: TextInputAction.done,
-                    // controller: phonenum,
                     decoration: InputDecoration(
                       contentPadding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
                       hintText: "Phone Number",
@@ -124,6 +124,75 @@ class _LoginPageState extends State<LoginPage> {
                         borderSide: BorderSide(
                             color: Theme.of(context).colorScheme.primary,
                             width: 2),
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              // Container(
+              //   padding: EdgeInsets.all(20.0),
+              //   child: Column(
+              //     mainAxisAlignment: MainAxisAlignment.center,
+              //     crossAxisAlignment: CrossAxisAlignment.center,
+              //     children: [
+              //       PinPut(
+              //         fieldsCount: 4,
+              //         textStyle: TextStyle(fontSize: 20.0),
+              //         eachFieldWidth: 60.0,
+              //         eachFieldHeight: 60.0,
+              //         onSubmit: (String pin) {
+              //           // Handle PIN submission
+              //           print('Entered PIN: $pin');
+              //         },
+              //         focusNode: _pinFocusNode,
+              //         controller: _pinController,
+              //         submittedFieldDecoration: BoxDecoration(
+              //           color: Colors.green,
+              //           borderRadius: BorderRadius.circular(10.0),
+              //         ),
+              //         selectedFieldDecoration: BoxDecoration(
+              //           color: Colors.blue,
+              //           borderRadius: BorderRadius.circular(10.0),
+              //         ),
+              //         followingFieldDecoration: BoxDecoration(
+              //           color: Colors.grey,
+              //           borderRadius: BorderRadius.circular(10.0),
+              //         ),
+              //       ),
+              //       SizedBox(height: 20.0),
+
+              //     ],
+              //   ),
+              // ),
+
+              SizedBox(
+                //height: 90,
+                child: Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: TextFormField(
+                    autofocus: false,
+                    style: const TextStyle(
+                        fontSize: 16,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w600),
+                    keyboardType: TextInputType.number,
+                    cursorColor: Theme.of(context).colorScheme.primary,
+                    textInputAction: TextInputAction.done,
+                    controller: otpController,
+                    decoration: InputDecoration(
+                      contentPadding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
+                      hintText: "Enter OTP",
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: const BorderSide(
+                          width: 0.2,
+                          color: Color.fromRGBO(230, 154, 141, 1),
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(
+                            color: Color.fromRGBO(235, 165, 54, 10), width: 2),
                         borderRadius: BorderRadius.circular(10.0),
                       ),
                     ),
