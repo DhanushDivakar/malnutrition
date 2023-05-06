@@ -41,12 +41,12 @@ class _LoginPageState extends State<LoginPage> {
         body: SingleChildScrollView(
           child: Column(
             children: [
-              SizedBox(
-                height: height * 0.3,
-                width: width * 0.3,
-                child: Image.network(
-                    'https://www.pngitem.com/pimgs/m/191-1914207_mother-and-baby-logo-png-transparent-png.png'),
-              ),
+              // SizedBox(
+              //   height: height * 0.3,
+              //   width: width * 0.3,
+              //   child: Image.network(
+              //       'https://www.pngitem.com/pimgs/m/191-1914207_mother-and-baby-logo-png-transparent-png.png'),
+              // ),
               Padding(
                 padding: const EdgeInsets.all(20.0),
                 child: Text(
@@ -93,10 +93,11 @@ class _LoginPageState extends State<LoginPage> {
                               child: Row(
                                 children: [
                                   SizedBox(
-                                      height: 20,
-                                      width: 20,
-                                      child: Image.network(
-                                          'https://upload.wikimedia.org/wikipedia/en/thumb/4/41/Flag_of_India.svg/800px-Flag_of_India.svg.png')),
+                                    height: 20,
+                                    width: 20,
+                                    child: Image.asset(
+                                        'assets/Flag_of_India.svg.webp'),
+                                  ),
                                   const VerticalDivider(
                                     color: Colors.black26,
                                     thickness: 1,
@@ -147,104 +148,6 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         ),
                       );
-                      // print(phonenum.text);
-                      // FocusScope.of(context).unfocus();
-                      // final isValid = formKey.currentState!.validate();
-                      // if (isValid) {
-                      //   setState(() {
-                      //     showLoading = true;
-                      //   });
-                      //   CollectionReference collectionRef =
-                      //       FirebaseFirestore.instance.collection('users');
-
-                      //   // Get docs from collection reference
-                      //   QuerySnapshot querySnapshot = await collectionRef
-                      //       .where('phoneNumber', isEqualTo: phonenum.text)
-                      //       .get();
-                      //   final allData = querySnapshot.docs
-                      //       .map((doc) => doc.data())
-                      //       .toList();
-                      //   if (allData.isEmpty) {
-                      //     print('new user');
-                      //     Navigator.pushReplacement(
-                      //       context,
-                      //       MaterialPageRoute(
-                      //         builder: (context) => RegisterPage(
-                      //           phoneNumber: phonenum.text,
-                      //         ),
-                      //       ),
-                      //     );
-                      //   } else {
-                      //     print('old user');
-                      //     await auth.verifyPhoneNumber(
-                      //         phoneNumber: '+91${phonenum.text}',
-                      //         verificationCompleted: (_) {
-                      //           setState(() {
-                      //             showLoading = false;
-                      //           });
-                      //         },
-                      //         verificationFailed: (e) {
-                      //           final snackBar = SnackBar(
-                      //             behavior: SnackBarBehavior.floating,
-                      //             backgroundColor: Colors.transparent,
-                      //             elevation: 0,
-                      //             content: Container(
-                      //               padding: const EdgeInsets.all(8),
-                      //               decoration: BoxDecoration(
-                      //                 color: const Color.fromRGBO(
-                      //                     138, 80, 196, 60),
-                      //                 borderRadius: BorderRadius.circular(10),
-                      //               ),
-                      //               child: Row(
-                      //                 mainAxisAlignment:
-                      //                     MainAxisAlignment.center,
-                      //                 children: [
-                      //                   Expanded(
-                      //                     child: Text(
-                      //                       e.toString(),
-                      //                       textAlign: TextAlign.center,
-                      //                       style:
-                      //                           const TextStyle(fontSize: 15),
-                      //                     ),
-                      //                   ),
-                      //                 ],
-                      //               ),
-                      //             ),
-                      //           );
-                      //           ScaffoldMessenger.of(context)
-                      //               .showSnackBar(snackBar);
-                      //           setState(() {
-                      //             showLoading = false;
-                      //           });
-                      //           print(e.message);
-                      //         },
-                      //         codeSent:
-                      //             (String verificationId, int? token) async {
-                      //           Navigator.push(
-                      //             context,
-                      //             MaterialPageRoute(
-                      //               builder: (context) => OtpPage(
-                      //                 verificationId: verificationId,
-                      //               ),
-                      //             ),
-                      //           );
-
-                      //           setState(() {
-                      //             showLoading = false;
-                      //           });
-                      //         },
-                      //         codeAutoRetrievalTimeout: (e) {
-                      //           setState(() {
-                      //             showLoading = false;
-                      //           });
-                      //           print(e);
-                      //         });
-
-                      //     print(allData);
-
-                      //     print(phonenum.text);
-                      //   }
-                      // }
                     },
                     child: showLoading
                         ? const CircularProgressIndicator(
