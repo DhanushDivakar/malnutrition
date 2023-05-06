@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
@@ -6,6 +7,16 @@ import 'auth/login.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+
+// Get a reference to the 'auth' collection
+  CollectionReference<Map<String, dynamic>> authCollection =
+      FirebaseFirestore.instance.collection('auth');
+
+  // Query the collection for the document with isAuthenticated = true
+  QuerySnapshot<Map<String, dynamic>> snapshot = await authCollection
+      .where('isAuthenticated', isEqualTo: true)
+      .limit(1)
+      .get();
 
   runApp(
     const MyApp(),
