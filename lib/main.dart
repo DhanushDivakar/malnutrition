@@ -1,25 +1,19 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:malnutrition/HomeScreen/home_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'auth/login.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-
-// Get a reference to the 'auth' collection
-  CollectionReference<Map<String, dynamic>> authCollection =
-      FirebaseFirestore.instance.collection('auth');
-
-  // Query the collection for the document with isAuthenticated = true
-  QuerySnapshot<Map<String, dynamic>> snapshot = await authCollection
-      .where('isAuthenticated', isEqualTo: true)
-      .limit(1)
-      .get();
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  var phoneNumber = prefs.getString("phoneNumber");
+  print(phoneNumber);
 
   runApp(
-    const MyApp(),
+    phoneNumber == null ? const MyAApp() : const MyApp(),
   );
 }
 
@@ -35,7 +29,24 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.orange,
       ),
-      home: LoginPage(),
+      home: const MyHomePage(),
+    );
+  }
+}
+
+class MyAApp extends StatelessWidget {
+  const MyAApp({super.key});
+
+  // This widget is the root of your application.
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        primarySwatch: Colors.orange,
+      ),
+      home: const LoginPage(),
     );
   }
 }

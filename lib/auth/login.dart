@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:malnutrition/HomeScreen/home_screen.dart';
 import 'package:pinput/pinput.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -51,6 +52,9 @@ class _LoginPageState extends State<LoginPage> {
         // Check if the entered PIN matches the PIN in the document
         if (authData['pin'] == pin) {
           print("Correct pin");
+          SharedPreferences pref = await SharedPreferences.getInstance();
+          pref.setString("phoneNumber", phoneNumber);
+
           setState(() {
             showLoading = false;
           });
