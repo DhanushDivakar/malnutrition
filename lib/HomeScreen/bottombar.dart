@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:malnutrition/HomeScreen/home_screen.dart';
+import 'package:malnutrition/profile/profile.dart';
 import 'package:malnutrition/services/loc_history.dart';
 
 import '../services/data_location.dart';
@@ -18,6 +19,7 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
     MyHomePage(),
     LocHistory(),
     DataBasedOnLocation(),
+    MyProfile(),
   ];
 
   void _onItemTapped(int index) {
@@ -72,6 +74,11 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
               icon: Icon(Icons.search),
               label: 'Search',
               backgroundColor: Colors.yellow),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.menu),
+            label: 'Data Location',
+            backgroundColor: Colors.blue,
+          ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
             label: 'Profile',

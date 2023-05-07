@@ -104,7 +104,7 @@ class _DataBasedOnLocationState extends State<DataBasedOnLocation> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Unique Data'),
+        title: const Text('All in your location'),
       ),
       body: isLoading
           ? const Center(
