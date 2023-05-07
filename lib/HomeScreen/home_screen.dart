@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:malnutrition/auth/login.dart';
-import 'package:malnutrition/services/data_location.dart';
-
 import 'package:malnutrition/services/getlocation.dart';
 import 'package:malnutrition/services/loc_history.dart';
 import 'package:malnutrition/services/malnutrition_checker.dart';
 import 'package:malnutrition/services/update_loc.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key}) : super(key: key);
@@ -48,6 +44,7 @@ class _MyHomePageState extends State<MyHomePage> {
     final height = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         centerTitle: true,
         title: const Text('Malnutrition Monitor'),
       ),
