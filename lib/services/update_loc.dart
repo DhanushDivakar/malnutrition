@@ -129,7 +129,13 @@ class _UpdateLocationState extends State<UpdateLocation> {
     final height = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Search Aadhaar'),
+        title: const Text(
+          'Search Aadhaar',
+          style: TextStyle(
+            fontFamily: 'Montserrat',
+            fontWeight: FontWeight.bold,
+          ),
+        ),
       ),
       body: isLoadingg
           ? const Center(

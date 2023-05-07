@@ -47,7 +47,13 @@ class _MalnutritionCheckerState extends State<MalnutritionChecker> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0.5,
-        title: const Text('Malnutrition Cheker'),
+        title: const Text(
+          'Malnutrition Cheker',
+          style: TextStyle(
+            fontFamily: 'Montserrat',
+            fontWeight: FontWeight.bold,
+          ),
+        ),
       ),
       body: SingleChildScrollView(
         child: Padding(

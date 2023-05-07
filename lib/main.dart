@@ -1,8 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:malnutrition/HomeScreen/bottombar.dart';
-import 'package:malnutrition/HomeScreen/home_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'auth/login.dart';
@@ -29,6 +27,7 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
+        fontFamily: 'Montserrat',
         colorScheme: ColorScheme.fromSwatch().copyWith(
           primary: const Color.fromARGB(255, 251, 64, 104),
           secondary: Colors.white,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:malnutrition/services/data_location.dart';
 import 'package:malnutrition/services/getlocation.dart';
 import 'package:malnutrition/services/loc_history.dart';
 import 'package:malnutrition/services/malnutrition_checker.dart';
@@ -21,7 +22,7 @@ class _MyHomePageState extends State<MyHomePage> {
       page: const MalnutritionChecker(),
     ),
     Box(
-      color: const Color.fromARGB(255, 255, 179, 158),
+      color: Color.fromARGB(255, 255, 186, 158),
       icon: Icons.add_home_work,
       text: 'Add',
       page: const AddChild(),
@@ -38,16 +39,29 @@ class _MyHomePageState extends State<MyHomePage> {
       text: 'View history',
       page: const LocHistory(),
     ),
+    Box(
+      color: Color.fromARGB(255, 255, 163, 163),
+      icon: Icons.add_location_alt_outlined,
+      text: 'All in your location',
+      page: const DataBasedOnLocation(),
+    ),
   ];
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.transparent,
         automaticallyImplyLeading: false,
         centerTitle: true,
         elevation: 0,
-        title: const Text('Malnutrition Monitor'),
+        title: Text(
+          'Malnutrition Monitor',
+          style: TextStyle(
+              fontFamily: 'Montserrat',
+              fontWeight: FontWeight.bold,
+              color: Theme.of(context).colorScheme.primary),
+        ),
       ),
       body: GridView.count(
         crossAxisCount: 2,

@@ -152,11 +152,25 @@ class _AddChildState extends State<AddChild> {
     return Scaffold(
       appBar: isLoading
           ? AppBar(
+              elevation: 0,
               automaticallyImplyLeading: false,
-              title: const Text('Add Child'),
+              title: const Text(
+                'Add Child',
+                style: TextStyle(
+                  fontFamily: 'Montserrat',
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             )
           : AppBar(
-              title: Text('Add Child'),
+              elevation: 0,
+              title: const Text(
+                'Add Child',
+                style: TextStyle(
+                  fontFamily: 'Montserrat',
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ),
       body: isLoading
           ? const Center(
@@ -305,7 +319,10 @@ class _AddChildState extends State<AddChild> {
                         ),
                       ElevatedButton(
                         onPressed: _submitForm,
-                        child: const Text("Add"),
+                        child: const Text(
+                          "Add",
+                          style: TextStyle(fontSize: 20),
+                        ),
                       )
                     ],
                   ),

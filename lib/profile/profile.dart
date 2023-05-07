@@ -62,7 +62,7 @@ class _MyProfileState extends State<MyProfile> {
                       Text(
                         '${userData['name']}',
                         style: const TextStyle(
-                          fontSize: 24.0,
+                          fontSize: 28.0,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -77,6 +77,12 @@ class _MyProfileState extends State<MyProfile> {
                         leading: const Icon(Icons.person_2),
                         title: const Text('Aadhaar Number'),
                         subtitle: Text('${userData['aadhaarNumber']}'),
+                      ),
+                      const Divider(),
+                      const ListTile(
+                        leading: Icon(Icons.verified_user_outlined),
+                        title: Text('Version'),
+                        subtitle: Text('1.0.0'),
                       ),
                       const Divider(),
                       const SizedBox(
