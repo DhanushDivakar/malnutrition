@@ -60,16 +60,27 @@ class _MyProfileState extends State<MyProfile> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       Text(
-                        'Name: ${userData['name']}',
+                        '${userData['name']}',
                         style: const TextStyle(
-                            fontSize: 18.0, fontWeight: FontWeight.bold),
+                          fontSize: 24.0,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                      const SizedBox(height: 8.0),
-                      Text('Phone Number: ${userData['phoneNumber']}'),
-                      const SizedBox(height: 8.0),
-                      Text('Aadhaar Number: ${userData['aadhaarNumber']}'),
+                      const Divider(),
+                      ListTile(
+                        leading: const Icon(Icons.phone_android),
+                        title: const Text('Phone Number'),
+                        subtitle: Text('${userData['phoneNumber']}'),
+                      ),
+                      const Divider(),
+                      ListTile(
+                        leading: const Icon(Icons.person_2),
+                        title: const Text('Aadhaar Number'),
+                        subtitle: Text('${userData['aadhaarNumber']}'),
+                      ),
+                      const Divider(),
                       const SizedBox(
-                        height: 20,
+                        height: 30,
                       ),
                       ElevatedButton(
                         onPressed: () async {
