@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:malnutrition/HomeScreen/home_screen.dart';
+import 'package:malnutrition/services/loc_history.dart';
+
+import '../services/data_location.dart';
 
 class MyNavigationBar extends StatefulWidget {
   const MyNavigationBar({Key? key}) : super(key: key);
@@ -10,18 +15,45 @@ class MyNavigationBar extends StatefulWidget {
 class _MyNavigationBarState extends State<MyNavigationBar> {
   int _selectedIndex = 0;
   static const List<Widget> _widgetOptions = <Widget>[
-    Text('Home Page',
-        style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold)),
-    Text('Search Page',
-        style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold)),
-    Text('Profile Page',
-        style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold)),
+    MyHomePage(),
+    LocHistory(),
+    DataBasedOnLocation(),
   ];
 
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  void requestPermission() async {
+    bool? serviceEnabled;
+    Position? _currentPosition;
+    LocationPermission? permission;
+    await Geolocator.requestPermission();
+
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+
+    if (!serviceEnabled) {
+      Geolocator.requestPermission();
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please turn on location')),
+      );
+    }
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied &&
+        permission == LocationPermission.deniedForever) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Location permissions are denied')));
+      }
+    }
   }
 
   @override

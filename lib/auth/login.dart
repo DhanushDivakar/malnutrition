@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:malnutrition/HomeScreen/bottombar.dart';
 import 'package:malnutrition/HomeScreen/home_screen.dart';
 import 'package:pinput/pinput.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -62,7 +63,7 @@ class _LoginPageState extends State<LoginPage> {
           // ignore: use_build_context_synchronously
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => const MyHomePage()),
+            MaterialPageRoute(builder: (context) => const MyNavigationBar()),
           );
         } else {
           print("wrong pin");
@@ -94,8 +95,8 @@ class _LoginPageState extends State<LoginPage> {
     const borderColor = Colors.black;
 
     final defaultPinTheme = PinTheme(
-      width: 56,
-      height: 56,
+      width: width * .13,
+      height: height * 0.07,
       margin: const EdgeInsets.all(10),
       textStyle: const TextStyle(
         fontSize: 22,
@@ -112,16 +113,19 @@ class _LoginPageState extends State<LoginPage> {
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           elevation: 0,
+          automaticallyImplyLeading: false,
         ),
         body: SingleChildScrollView(
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              // SizedBox(
-              //   height: height * 0.3,
-              //   width: width * 0.3,
-              //   child: Image.network(
-              //       'https://www.pngitem.com/pimgs/m/191-1914207_mother-and-baby-logo-png-transparent-png.png'),
-              // ),
+              SizedBox(
+                height: height * 0.2,
+                width: width * 0.3,
+                // child: Image.network(
+                //     'https://www.pngitem.com/pimgs/m/191-1914207_mother-and-baby-logo-png-transparent-png.png'),
+              ),
               Padding(
                 padding: const EdgeInsets.all(20.0),
                 child: Text(
@@ -134,7 +138,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.all(20.0),
+                padding: const EdgeInsets.only(left: 50, right: 50, top: 20),
                 child: Form(
                   key: formKey,
                   child: TextFormField(
@@ -207,7 +211,7 @@ class _LoginPageState extends State<LoginPage> {
               Form(
                 // key: formKey,
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Directionality(
                       // Specify direction if desired
@@ -265,9 +269,8 @@ class _LoginPageState extends State<LoginPage> {
                   ],
                 ),
               ),
-
               Padding(
-                padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+                padding: const EdgeInsets.fromLTRB(60, 20, 60, 0),
                 child: showLoading
                     ? const CircularProgressIndicator()
                     : Material(

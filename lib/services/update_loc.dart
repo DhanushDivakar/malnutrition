@@ -178,157 +178,142 @@ class _UpdateLocationState extends State<UpdateLocation> {
                         final QuerySnapshot<Map<String, dynamic>>
                             childSnapshot = await getChildData(aadharNumber!);
                         final childData = childSnapshot.docs[0].data();
-                        isLoading
-                            ? const CircularProgressIndicator()
-                            // ignore: use_build_context_synchronously
-                            : showModalBottomSheet(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return SingleChildScrollView(
-                                    child: SizedBox(
-                                      height: height * 0.6,
-                                      child: Form(
-                                        key: _formKey,
-                                        child: Card(
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(20),
-                                          ),
-                                          elevation: 4,
-                                          child: Container(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 16, vertical: 16),
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Row(
+                        // isLoading
+                        //     ? const CircularProgressIndicator()
+                        //     // ignore: use_build_context_synchronously
+                        //     :
+                        // ignore: use_build_context_synchronously
+                        showModalBottomSheet(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return SingleChildScrollView(
+                              child: SizedBox(
+                                height: height * 0.6,
+                                child: Form(
+                                  key: _formKey,
+                                  child: Card(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                    elevation: 4,
+                                    child: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 16, vertical: 16),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Expanded(
+                                                child: Column(
                                                   crossAxisAlignment:
                                                       CrossAxisAlignment.start,
                                                   children: [
-                                                    Expanded(
-                                                      child: Column(
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .start,
-                                                        children: [
-                                                          Text(
-                                                            childData[
-                                                                'childName'],
-                                                            style:
-                                                                const TextStyle(
-                                                              color:
-                                                                  Colors.black,
-                                                              fontSize: 24,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                            ),
-                                                          ),
-                                                          const SizedBox(
-                                                              height: 4),
-                                                          Text(
-                                                            childData['gender'],
-                                                            style:
-                                                                const TextStyle(
-                                                              color:
-                                                                  Colors.black,
-                                                              fontSize: 16,
-                                                            ),
-                                                          ),
-                                                        ],
+                                                    Text(
+                                                      childData['childName'],
+                                                      style: const TextStyle(
+                                                        color: Colors.black,
+                                                        fontSize: 24,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                      ),
+                                                    ),
+                                                    const SizedBox(height: 4),
+                                                    Text(
+                                                      childData['gender'],
+                                                      style: const TextStyle(
+                                                        color: Colors.black,
+                                                        fontSize: 16,
                                                       ),
                                                     ),
                                                   ],
                                                 ),
-                                                const SizedBox(height: 16),
-                                                Text(
-                                                  'Aadhaar Number: ${childData['aadharNumber']}',
-                                                  style: const TextStyle(
-                                                    color: Colors.black,
-                                                    fontSize: 18,
-                                                  ),
-                                                ),
-                                                const SizedBox(height: 8),
-                                                Text(
-                                                  'Guardian Name: ${childData['guardianName']}',
-                                                  style: const TextStyle(
-                                                    color: Colors.black,
-                                                    fontSize: 18,
-                                                  ),
-                                                ),
-                                                const SizedBox(height: 8),
-                                                Text(
-                                                  'Previous Location: ${childData['address']}',
-                                                  style: const TextStyle(
-                                                    color: Colors.black,
-                                                    fontSize: 18,
-                                                  ),
-                                                ),
-                                                const SizedBox(height: 8),
-                                                const Text(
-                                                    'Select the current condition of child'),
-                                                const SizedBox(height: 8),
-                                                DropdownButtonFormField<String>(
-                                                  decoration:
-                                                      const InputDecoration(
-                                                    labelText: 'Condition',
-                                                    border:
-                                                        OutlineInputBorder(),
-                                                  ),
-                                                  validator: (value) {
-                                                    if (_selectedCondition ==
-                                                        null) {
-                                                      return 'Please select an option';
-                                                    }
-                                                    return null;
-                                                  },
-                                                  borderRadius:
-                                                      BorderRadius.circular(10),
-                                                  value: _selectedCondition,
-                                                  enableFeedback: true,
-                                                  items: _condition
-                                                      .map((gender) =>
-                                                          DropdownMenuItem<
-                                                              String>(
-                                                            value: gender,
-                                                            child: Text(gender),
-                                                          ))
-                                                      .toList(),
-                                                  onChanged: (value) {
-                                                    setState(() {
-                                                      _selectedCondition =
-                                                          value;
-                                                    });
-                                                    print(_selectedCondition);
-                                                  },
-                                                  isExpanded: true,
-                                                ),
-                                                const SizedBox(
-                                                  height: 10,
-                                                ),
-                                                Padding(
-                                                  padding: const EdgeInsets.all(
-                                                      15.0),
-                                                  child: Align(
-                                                    alignment:
-                                                        Alignment.centerRight,
-                                                    child: ElevatedButton(
-                                                      onPressed: _submitForm,
-                                                      child:
-                                                          const Text('Update'),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
+                                              ),
+                                            ],
+                                          ),
+                                          const SizedBox(height: 16),
+                                          Text(
+                                            'Aadhaar Number: ${childData['aadharNumber']}',
+                                            style: const TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 18,
                                             ),
                                           ),
-                                        ),
+                                          const SizedBox(height: 8),
+                                          Text(
+                                            'Guardian Name: ${childData['guardianName']}',
+                                            style: const TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 18,
+                                            ),
+                                          ),
+                                          const SizedBox(height: 8),
+                                          Text(
+                                            'Previous Location: ${childData['address']}',
+                                            style: const TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 18,
+                                            ),
+                                          ),
+                                          const SizedBox(height: 8),
+                                          const Text(
+                                              'Select the current condition of child'),
+                                          const SizedBox(height: 8),
+                                          DropdownButtonFormField<String>(
+                                            decoration: const InputDecoration(
+                                              labelText: 'Condition',
+                                              border: OutlineInputBorder(),
+                                            ),
+                                            validator: (value) {
+                                              if (_selectedCondition == null) {
+                                                return 'Please select an option';
+                                              }
+                                              return null;
+                                            },
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            value: _selectedCondition,
+                                            enableFeedback: true,
+                                            items: _condition
+                                                .map((gender) =>
+                                                    DropdownMenuItem<String>(
+                                                      value: gender,
+                                                      child: Text(gender),
+                                                    ))
+                                                .toList(),
+                                            onChanged: (value) {
+                                              setState(() {
+                                                _selectedCondition = value;
+                                              });
+                                              print(_selectedCondition);
+                                            },
+                                            isExpanded: true,
+                                          ),
+                                          const SizedBox(
+                                            height: 10,
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.all(15.0),
+                                            child: Align(
+                                              alignment: Alignment.centerRight,
+                                              child: ElevatedButton(
+                                                onPressed: _submitForm,
+                                                child: const Text('Update'),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     ),
-                                  );
-                                },
-                              );
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        );
                       } else {
                         // ignore: use_build_context_synchronously
                         showDialog(
