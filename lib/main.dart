@@ -29,7 +29,10 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.orange,
+        colorScheme: ColorScheme.fromSwatch().copyWith(
+          primary: const Color.fromARGB(255, 251, 64, 104),
+          secondary: Colors.white,
+        ),
       ),
       home: const MyNavigationBar(),
     );
@@ -46,7 +49,10 @@ class MyAApp extends StatelessWidget {
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.orange,
+        colorScheme: ColorScheme.fromSwatch().copyWith(
+          primary: const Color.fromARGB(255, 251, 64, 104),
+          secondary: Colors.white,
+        ),
       ),
       home: const LoginPage(),
     );

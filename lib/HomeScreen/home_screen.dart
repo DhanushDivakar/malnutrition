@@ -46,6 +46,7 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         centerTitle: true,
+        elevation: 0,
         title: const Text('Malnutrition Monitor'),
       ),
       body: GridView.count(
