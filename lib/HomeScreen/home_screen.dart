@@ -19,40 +19,33 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   final List<Box> boxes = [
     Box(
-      color: Color.fromARGB(240, 165, 224, 255),
+      color: const Color.fromARGB(240, 165, 224, 255),
       icon: Icons.health_and_safety_rounded,
-      text: 'Box 1',
-      onTap: () {
-        print('Box 1 tapped!');
-      },
+      text: 'Check',
+      page: const MalnutritionChecker(),
     ),
     Box(
-      color: Color.fromARGB(255, 255, 179, 158),
+      color: const Color.fromARGB(255, 255, 179, 158),
       icon: Icons.add_home_work,
-      text: 'Box 2',
-      onTap: () {
-        print('Box 2 tapped!');
-      },
+      text: 'Add',
+      page: const AddChild(),
     ),
     Box(
-      color: Color.fromARGB(251, 251, 226, 127),
+      color: const Color.fromARGB(251, 251, 226, 127),
       icon: Icons.update,
-      text: 'Box 3',
-      onTap: () {
-        print('Box 3 tapped!');
-      },
+      text: 'Update',
+      page: const UpdateLocation(),
     ),
     Box(
       color: const Color.fromARGB(255, 232, 193, 255),
       icon: Icons.grid_view,
-      text: 'Box 4',
-      onTap: () {
-        print('Box 4 tapped!');
-      },
+      text: 'View history',
+      page: const LocHistory(),
     ),
   ];
   @override
   Widget build(BuildContext context) {
+    final height = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -60,7 +53,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: GridView.count(
         crossAxisCount: 2,
-        children: boxes.map((box) => buildBoxCard(box)).toList(),
+        children: boxes.map((box) => buildBoxCard(context, box)).toList(),
       ),
       // SingleChildScrollView(
       //   child: Center(
@@ -129,9 +122,18 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
-Widget buildBoxCard(Box box) {
+Widget buildBoxCard(BuildContext context, Box box) {
   return GestureDetector(
-    onTap: box.onTap,
+    onTap: () {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) {
+            return box.page;
+          },
+        ),
+      );
+    },
     child: Container(
       //padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
       margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
@@ -146,13 +148,16 @@ Widget buildBoxCard(Box box) {
           children: [
             Icon(
               box.icon,
-              size: 50,
-              color: Color.fromARGB(255, 30, 30, 30),
+              size: 70,
+              color: const Color.fromARGB(255, 30, 30, 30),
             ),
             const SizedBox(height: 10),
             Text(
               box.text,
-              style: const TextStyle(fontSize: 16),
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ],
         ),
@@ -164,12 +169,13 @@ Widget buildBoxCard(Box box) {
 class Box {
   final IconData icon;
   final String text;
-  final VoidCallback onTap;
+
   final Color color;
+  final Widget page;
 
   Box(
       {required this.icon,
       required this.text,
-      required this.onTap,
-      required this.color});
+      required this.color,
+      required this.page});
 }
