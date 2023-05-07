@@ -233,30 +233,6 @@ class _MalnutritionCheckerState extends State<MalnutritionChecker> {
                   ],
                 ),
                 const SizedBox(height: 20),
-                // Row(
-                //   mainAxisAlignment: MainAxisAlignment.center,
-                //   children: [
-                //     SizedBox(
-                //       width: MediaQuery.of(context).size.width / 3,
-                //       child: Text(
-                //         'BMI: ',
-                //         style: TextStyle(
-                //           fontSize: height * 0.025,
-                //         ),
-                //       ),
-                //     ),
-                //     const SizedBox(width: 10),
-                //     Flexible(
-                //       child: TextField(
-                //         controller: _bmiController,
-                //         keyboardType: TextInputType.number,
-                //         decoration: const InputDecoration(
-                //           border: OutlineInputBorder(),
-                //         ),
-                //       ),
-                //     ),
-                //   ],
-                // ),
                 const SizedBox(height: 20),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
