@@ -437,15 +437,22 @@ class _MalnutritionCheckerState extends State<MalnutritionChecker> {
     double skinFoldZScore =
         getTricepsSkinfoldThicknessZScore(skinfoldThickness, ageMonths, gender);
     print('skinFoldZScore = $skinFoldZScore');
-
+    double compositeZScore = (wfaZScore +
+            hfaZScore +
+            wfhZScore +
+            muacZScore +
+            headZScore +
+            skinFoldZScore) /
+        math.sqrt(6);
+    print('compositeZScore $compositeZScore');
     // Determine the overall z-score
-    double zScore = (wfaZScore * 0.3 +
-        hfaZScore * 0.3 +
-        wfhZScore * 0.2 +
-        muacZScore * 0.1 +
-        headZScore * 0.05 +
-        skinFoldZScore * 0.05);
-    print('zscore = $zScore');
+    // double zScore = (wfaZScore * 0.3 +
+    //     hfaZScore * 0.3 +
+    //     wfhZScore * 0.2 +
+    //     muacZScore * 0.1 +
+    //     headZScore * 0.05 +
+    //     skinFoldZScore * 0.05);
+    // print('zscore = $zScore');
 
     // Determine the malnutrition status based on the z-score
     //   if (combinedZScore < -2) {
@@ -457,12 +464,10 @@ class _MalnutritionCheckerState extends State<MalnutritionChecker> {
 //   } else {
 //     return 'Healthy';
 //   }
-    if (zScore < -2) {
+    if (compositeZScore < -2) {
       return 'Severe malnutrition';
-    } else if (zScore < -1) {
+    } else if (compositeZScore < -1) {
       return 'Moderate malnutrition';
-    } else if (zScore < 1) {
-      return 'Mild malnutrition';
     } else {
       return 'Normal';
     }
