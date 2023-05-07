@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:malnutrition/HomeScreen/bottombar.dart';
 import 'package:malnutrition/HomeScreen/home_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -29,7 +30,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.orange,
       ),
-      home: const MyHomePage(),
+      home: const MyNavigationBar(),
     );
   }
 }
