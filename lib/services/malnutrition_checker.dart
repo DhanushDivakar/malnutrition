@@ -44,7 +44,6 @@ class _MalnutritionCheckerState extends State<MalnutritionChecker> {
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
-    final width = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
         elevation: 0.5,
