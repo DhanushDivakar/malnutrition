@@ -42,7 +42,14 @@ class _MyProfileState extends State<MyProfile> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('User Profile'),
+        elevation: 0,
+        title: const Text(
+          'User Profile',
+          style: TextStyle(
+            fontFamily: 'Montserrat',
+            fontWeight: FontWeight.bold,
+          ),
+        ),
       ),
       body: isLoading
           ? const Center(
@@ -88,18 +95,29 @@ class _MyProfileState extends State<MyProfile> {
                       const SizedBox(
                         height: 30,
                       ),
-                      ElevatedButton(
-                        onPressed: () async {
-                          SharedPreferences pref =
-                              await SharedPreferences.getInstance();
-                          pref.remove("phoneNumber");
-                          // ignore: use_build_context_synchronously
-                          Navigator.push(context,
-                              MaterialPageRoute(builder: (context) {
-                            return const LoginPage();
-                          }));
-                        },
-                        child: const Text("Logout"),
+                      Container(
+                        padding: EdgeInsets.symmetric(horizontal: 60),
+                        width: MediaQuery.of(context).size.width,
+                        child: ElevatedButton(
+                          onPressed: () async {
+                            SharedPreferences pref =
+                                await SharedPreferences.getInstance();
+                            pref.remove("phoneNumber");
+                            // ignore: use_build_context_synchronously
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (context) {
+                              return const LoginPage();
+                            }));
+                          },
+                          child: const Text(
+                            "Logout",
+                            style: TextStyle(
+                              fontFamily: 'Montserrat',
+                              fontSize: 20,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
                       ),
                     ],
                   ),

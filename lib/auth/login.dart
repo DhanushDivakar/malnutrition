@@ -36,43 +36,47 @@ class _LoginPageState extends State<LoginPage> {
       setState(() {
         showLoading = true;
       });
-      // Get a reference to the 'auth' collection
-      CollectionReference<Map<String, dynamic>> authCollection =
-          FirebaseFirestore.instance.collection('auth');
+      FocusScope.of(context).unfocus();
+      if (formKey.currentState!.validate()) {
+        formKey.currentState!.save();
+        // Get a reference to the 'auth' collection
+        CollectionReference<Map<String, dynamic>> authCollection =
+            FirebaseFirestore.instance.collection('auth');
 
-      // Query the collection for a document with the entered phone number
-      QuerySnapshot<Map<String, dynamic>> snapshot = await authCollection
-          .where('phoneNumber', isEqualTo: phoneNumber)
-          .get();
+        // Query the collection for a document with the entered phone number
+        QuerySnapshot<Map<String, dynamic>> snapshot = await authCollection
+            .where('phoneNumber', isEqualTo: phoneNumber)
+            .get();
 
-      // Check if a document with the entered phone number exists
-      if (snapshot.docs.isNotEmpty) {
-        // Get the document data
-        Map<String, dynamic> authData = snapshot.docs[0].data();
+        // Check if a document with the entered phone number exists
+        if (snapshot.docs.isNotEmpty) {
+          // Get the document data
+          Map<String, dynamic> authData = snapshot.docs[0].data();
 
-        // Check if the entered PIN matches the PIN in the document
-        if (authData['pin'] == pin) {
-          print("Correct pin");
-          SharedPreferences pref = await SharedPreferences.getInstance();
-          pref.setString("phoneNumber", phoneNumber);
+          // Check if the entered PIN matches the PIN in the document
+          if (authData['pin'] == pin) {
+            print("Correct pin");
+            SharedPreferences pref = await SharedPreferences.getInstance();
+            pref.setString("phoneNumber", phoneNumber);
 
-          setState(() {
-            showLoading = false;
-          });
-          // Authentication successful
-          // ignore: use_build_context_synchronously
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => const MyNavigationBar()),
-          );
-        } else {
-          print("wrong pin");
-          setState(() {
-            showLoading = false;
-          });
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Incorrect pin')),
-          );
+            setState(() {
+              showLoading = false;
+            });
+            // Authentication successful
+            // ignore: use_build_context_synchronously
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => const MyNavigationBar()),
+            );
+          } else {
+            print("wrong pin");
+            setState(() {
+              showLoading = false;
+            });
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Incorrect pin')),
+            );
+          }
         }
       }
     } catch (e) {
@@ -90,7 +94,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
-    const focusedBorderColor = Colors.orange;
+    const focusedBorderColor = Color.fromARGB(255, 251, 64, 104);
     const fillColor = Color.fromARGB(0, 198, 133, 77);
     const borderColor = Colors.black;
 
