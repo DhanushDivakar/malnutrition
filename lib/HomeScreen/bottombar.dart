@@ -68,7 +68,9 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-              icon: Icon(Icons.home),
+              icon: Icon(
+                Icons.home,
+              ),
               label: 'Home',
               backgroundColor: Colors.green),
           BottomNavigationBarItem(
@@ -88,9 +90,16 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
         ],
         type: BottomNavigationBarType.fixed,
         currentIndex: _selectedIndex,
-        selectedItemColor: Colors.black,
+        selectedItemColor: Theme.of(context).colorScheme.primary,
         onTap: _onItemTapped,
         elevation: 5,
+        selectedLabelStyle: const TextStyle(
+          fontFamily: 'Montserrat',
+          fontWeight: FontWeight.bold,
+        ),
+        unselectedLabelStyle: const TextStyle(
+          fontFamily: 'Montserrat',
+        ),
       ),
     );
   }

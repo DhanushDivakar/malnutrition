@@ -124,20 +124,25 @@ class _DataBasedOnLocationState extends State<DataBasedOnLocation> {
                     data['time'].seconds * 1000);
                 String formattedDate =
                     DateFormat('dd MMM yyyy hh:mm a').format(date);
-                return ListTile(
-                  isThreeLine: true,
-                  subtitle: Text(
-                    'address: ${data['address']}',
-                    style: const TextStyle(color: Colors.black),
-                  ),
-                  title: Text(
-                    'Aadhar Number: ${data['aadharNumber']}',
-                    style: const TextStyle(color: Colors.black),
-                  ),
-                  trailing: Text(
-                    'time: $formattedDate',
-                    style: const TextStyle(color: Colors.black),
-                  ),
+                return Column(
+                  children: [
+                    ListTile(
+                      isThreeLine: true,
+                      subtitle: Text(
+                        'address: ${data['address']}',
+                        style: const TextStyle(color: Colors.black),
+                      ),
+                      title: Text(
+                        'Aadhar Number: ${data['aadharNumber']}',
+                        style: const TextStyle(color: Colors.black),
+                      ),
+                      trailing: Text(
+                        'time: $formattedDate',
+                        style: const TextStyle(color: Colors.black),
+                      ),
+                    ),
+                    const Divider(),
+                  ],
                 );
               },
             ),
