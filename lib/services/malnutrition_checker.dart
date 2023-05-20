@@ -1,4 +1,4 @@
-// ignore_for_file: constant_identifier_names
+// ignore_for_file: constant_identifier_names, library_private_types_in_public_api
 
 import 'package:flutter/material.dart';
 import "dart:math" as math;
@@ -57,13 +57,21 @@ class _MalnutritionCheckerState extends State<MalnutritionChecker> {
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
           child: Form(
             key: formKey,
             child: Column(
               //mainAxisAlignment: MainAxisAlignment.center,
               //crossAxisAlignment: CrossAxisAlignment.center,
+
               children: [
+                // const Text(
+                //   'For age 0 - 5 years',
+                //   style: TextStyle(fontFamily: 'Montserrat', fontSize: 20),
+                // ),
+                // const SizedBox(
+                //   height: 20,
+                // ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -84,6 +92,9 @@ class _MalnutritionCheckerState extends State<MalnutritionChecker> {
                         validator: (value) {
                           if (value!.isEmpty) {
                             return 'Please enter age ';
+                          }
+                          if (int.parse(value) > 61) {
+                            return 'Enter values lesser than 5 years';
                           }
 
                           return null;
@@ -161,6 +172,12 @@ class _MalnutritionCheckerState extends State<MalnutritionChecker> {
                           if (value!.isEmpty) {
                             return 'Please enter a weight';
                           }
+                          if (double.parse(value) > 18.336) {
+                            return 'Enter values between 3.3kg to 18.3';
+                          }
+                          if (double.parse(value) < 3.2) {
+                            return 'Enter values between 3.3kg to 18.3';
+                          }
 
                           return null;
                         },
@@ -193,6 +210,12 @@ class _MalnutritionCheckerState extends State<MalnutritionChecker> {
                           if (value!.isEmpty) {
                             return 'Please enter a height';
                           }
+                          if (double.parse(value) > 120) {
+                            return 'Enter values between 45cm to 120cm';
+                          }
+                          if (double.parse(value) < 45) {
+                            return 'Enter values between 45cm to 120cm';
+                          }
 
                           return null;
                         },
@@ -224,6 +247,12 @@ class _MalnutritionCheckerState extends State<MalnutritionChecker> {
                         validator: (value) {
                           if (value!.isEmpty) {
                             return 'Please enter a Arm Circumference';
+                          }
+                          if (double.parse(value) > 16.5) {
+                            return 'Values between 12.8cm to 16.5cm';
+                          }
+                          if (double.parse(value) < 12.8) {
+                            return 'Values between 12.8cm to 16.5cm';
                           }
 
                           return null;
@@ -258,6 +287,12 @@ class _MalnutritionCheckerState extends State<MalnutritionChecker> {
                           if (value!.isEmpty) {
                             return 'Please enter a head circumference';
                           }
+                          if (double.parse(value) > 50.8) {
+                            return 'Enter values between 33.5cm to 50cm';
+                          }
+                          if (double.parse(value) < 33.5) {
+                            return 'Enter values between 33.5cm to 51cm';
+                          }
 
                           return null;
                         },
@@ -289,6 +324,12 @@ class _MalnutritionCheckerState extends State<MalnutritionChecker> {
                         validator: (value) {
                           if (value!.isEmpty) {
                             return 'Please enter a Triceps SkinFold thickness';
+                          }
+                          if (double.parse(value) > 10.4) {
+                            return 'Enter values between 7.4cm to 10.4cm';
+                          }
+                          if (double.parse(value) < 7.4) {
+                            return 'Enter values between 7.4cm to 10.4cm';
                           }
 
                           return null;
@@ -329,7 +370,6 @@ class _MalnutritionCheckerState extends State<MalnutritionChecker> {
                         print('height : $height');
                         print('age : $age');
                         print('gender : $gender');
-//  print(getMalnutritionStatus(ageMonths : 45,gender: 'female',weightKg:18,heightCm: 110,armCircum: 15,headCm: 50,skinfoldThickness: 10));
 
                         malnutritionStatus = getMalnutritionStatus(
                           ageMonths: age,
@@ -353,32 +393,34 @@ class _MalnutritionCheckerState extends State<MalnutritionChecker> {
                         print(malnutritionStatus);
 
                         showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return AlertDialog(
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10)),
-                                title: Text('Result'),
-                                content: Text(
-                                  getMalnutritionStatus(
-                                    ageMonths: age,
-                                    gender: gender,
-                                    weightKg: weight,
-                                    heightCm: height,
-                                    armCircum: armCircum,
-                                    headCm: headCircum,
-                                    skinfoldThickness: skinfoldThickness,
-                                  ),
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10)),
+                              title: Text('Result'),
+                              content: Text(
+                                getMalnutritionStatus(
+                                  ageMonths: age,
+                                  gender: gender,
+                                  weightKg: weight,
+                                  heightCm: height,
+                                  armCircum: armCircum,
+                                  headCm: headCircum,
+                                  skinfoldThickness: skinfoldThickness,
                                 ),
-                                actions: [
-                                  ElevatedButton(
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                      },
-                                      child: Text('Ok'))
-                                ],
-                              );
-                            });
+                              ),
+                              actions: [
+                                ElevatedButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: const Text('Ok'),
+                                )
+                              ],
+                            );
+                          },
+                        );
                       }
                     },
                     child: const Padding(
@@ -450,29 +492,23 @@ class _MalnutritionCheckerState extends State<MalnutritionChecker> {
             skinFoldZScore) /
         math.sqrt(6);
     print('compositeZScore $compositeZScore');
-    // Determine the overall z-score
-    // double zScore = (wfaZScore * 0.3 +
-    //     hfaZScore * 0.3 +
-    //     wfhZScore * 0.2 +
-    //     muacZScore * 0.1 +
-    //     headZScore * 0.05 +
-    //     skinFoldZScore * 0.05);
-    // print('zscore = $zScore');
 
-    // Determine the malnutrition status based on the z-score
-    //   if (combinedZScore < -2) {
-//     return 'Severe malnutrition';
-//   } else if (combinedZScore < -1) {
-//     return 'Moderate malnutrition';
-//   } else if (combinedZScore < 1) {
-//     return 'Mild malnutrition';
-//   } else {
-//     return 'Healthy';
-//   }
+    // if (compositeZScore < -2) {
+    //   return 'Severe malnutrition';
+    // } else if (compositeZScore < -1) {
+    //   return 'Moderate malnutrition';
+    // } else {
+    //   return 'Normal';
+    // }
+
     if (compositeZScore < -2) {
       return 'Severe malnutrition';
     } else if (compositeZScore < -1) {
       return 'Moderate malnutrition';
+    } else if (compositeZScore > 2) {
+      return 'Severe overnutrition';
+    } else if (compositeZScore > 1) {
+      return 'Moderate overnutrition';
     } else {
       return 'Normal';
     }
@@ -4662,15 +4698,19 @@ class _GenderInputState extends State<GenderInput> {
                 underline: const SizedBox(),
                 value: _selectedGender,
                 items: _genders
-                    .map((gender) => DropdownMenuItem<String>(
-                          value: gender,
-                          child: Text(gender),
-                        ))
+                    .map(
+                      (gender) => DropdownMenuItem<String>(
+                        value: gender,
+                        child: Text(gender),
+                      ),
+                    )
                     .toList(),
                 onChanged: (value) {
-                  setState(() {
-                    _selectedGender = value;
-                  });
+                  setState(
+                    () {
+                      _selectedGender = value;
+                    },
+                  );
                 },
                 borderRadius: BorderRadius.circular(10),
                 isExpanded: true,
