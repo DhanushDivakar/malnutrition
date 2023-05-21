@@ -7,7 +7,6 @@ class MalnutritionChecker extends StatefulWidget {
   const MalnutritionChecker({super.key});
 
   @override
-  // ignore: library_private_types_in_public_api
   _MalnutritionCheckerState createState() => _MalnutritionCheckerState();
 }
 
@@ -61,17 +60,7 @@ class _MalnutritionCheckerState extends State<MalnutritionChecker> {
           child: Form(
             key: formKey,
             child: Column(
-              //mainAxisAlignment: MainAxisAlignment.center,
-              //crossAxisAlignment: CrossAxisAlignment.center,
-
               children: [
-                // const Text(
-                //   'For age 0 - 5 years',
-                //   style: TextStyle(fontFamily: 'Montserrat', fontSize: 20),
-                // ),
-                // const SizedBox(
-                //   height: 20,
-                // ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -151,7 +140,6 @@ class _MalnutritionCheckerState extends State<MalnutritionChecker> {
                     ),
                   ],
                 ),
-
                 const SizedBox(height: 20),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -398,7 +386,7 @@ class _MalnutritionCheckerState extends State<MalnutritionChecker> {
                             return AlertDialog(
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10)),
-                              title: Text('Result'),
+                              title: const Text('Result'),
                               content: Text(
                                 getMalnutritionStatus(
                                   ageMonths: age,
@@ -435,15 +423,6 @@ class _MalnutritionCheckerState extends State<MalnutritionChecker> {
                     ),
                   ),
                 ),
-                // const SizedBox(height: 20),
-                // Text(
-                //   'Result:  $malnutritionStatus',
-                //   style: const TextStyle(
-                //     fontSize: 20,
-                //     fontWeight: FontWeight.bold,
-                //     color: Colors.black,
-                //   ),
-                // ),
               ],
             ),
           ),
@@ -492,14 +471,6 @@ class _MalnutritionCheckerState extends State<MalnutritionChecker> {
             skinFoldZScore) /
         math.sqrt(6);
     print('compositeZScore $compositeZScore');
-
-    // if (compositeZScore < -2) {
-    //   return 'Severe malnutrition';
-    // } else if (compositeZScore < -1) {
-    //   return 'Moderate malnutrition';
-    // } else {
-    //   return 'Normal';
-    // }
 
     if (compositeZScore < -2) {
       return 'Severe malnutrition';
@@ -4208,7 +4179,6 @@ class _MalnutritionCheckerState extends State<MalnutritionChecker> {
     // Calculate the weight-for-age z-score using the L, S, and M values at the closest index
     print(index);
     double L = lValues[index];
-
     double S = sValues[index];
     double M = mValues[index];
     print(L);
